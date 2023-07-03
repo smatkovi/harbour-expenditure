@@ -1,0 +1,8 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: Expenditure
+Upstream-Contact: Mirian Margiani <mixosaurus+ichthyo@pm.me>
+Source: https://github.com/ichthyosaurus/harbour-expenditure
+
+Files: *.desktop *.pro dist/* icons/* qml/* rpm/* src/* translations/*
+Copyright: 2022 Tobias Planitzer
+License: GPL-3.0-or-later
