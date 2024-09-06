@@ -37,7 +37,6 @@ Page {
         loadActiveProjectInfos_FromDB(activeProjectID_unixtime)
     }
 
-
     // XXX this is the new attached page
     // used to add the WritePage for a new entry
     /**
@@ -501,37 +500,13 @@ Page {
 
         section {
             property: "section_date"
-            delegate: Item {
-                width: parent.width
-                height: childrenRect.height + Theme.paddingSmall
-
-                Label {
-                    id: label
-                    width: parent.width
-                    horizontalAlignment: Text.AlignHCenter
-                    truncationMode: TruncationMode.Fade
-                    color: Theme.highlightColor
-                    // XXX translate
-                    text: new Date(section).toLocaleString(Qt.locale(), 'ddd, d. MMM yyyy') // formatDate(section, fullDateFormat)
-                }
-                Separator {
-                    anchors {
-                        horizontalCenter: parent.horizontalCenter
-                        top: label.baseline
-                        topMargin: 8
-                    }
-                    width: parent.width-2*Theme.horizontalPageMargin
-                    horizontalAlignment: Qt.AlignHCenter
-                    color: Theme.highlightColor
-                }
+            delegate: SectionHeader {
+                text: new Date(section).toLocaleString(Qt.locale(), 'dddd, d. MMM yyyy') // formatDate(section, fullDateFormat)
             }
         }
 
         footer: Item { width: parent.width; height: Theme.horizontalPageMargin }
-    } // end SilicaListView
-
-
-
+    }
 
     function generateAllProjectsList_FromDB() {
         listModel_allProjects.clear()
