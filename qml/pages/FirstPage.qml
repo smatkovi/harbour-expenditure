@@ -187,6 +187,8 @@ Page {
         id: idSilicaListView
         anchors.fill: parent
 
+        property date currentSectionDate: new Date(currentSection)
+
         header: PageHeader {
             title: qsTr("Expenses")
             description: activeProjectID_unixtime !== 0 ?
@@ -257,8 +259,8 @@ Page {
                     import QtQuick 2.0
                     import %1 1.0 as Private
                     Private.Scrollbar {
-                        text: new Date(idSilicaListView.currentSection).toLocaleString(Qt.locale(), 'ddd, d. MMM') // appWindow.formatDate(root.currentSection, appWindow.dateNoYearFormat)
-                        description: new Date(idSilicaListView.currentSection).toLocaleString(Qt.locale(), 'yyyy') // appWindow.formatDate(root.currentSection, 'yyyy')
+                        text: idSilicaListView.currentSectionDate.toLocaleString(Qt.locale(), 'd. MMM') // appWindow.formatDate(root.currentSection, appWindow.dateNoYearFormat)
+                        description: idSilicaListView.currentSectionDate.toLocaleString(Qt.locale(), 'yyyy') // appWindow.formatDate(root.currentSection, 'yyyy')
                         headerHeight: idSilicaListView.headerItem ? idSilicaListView.headerItem.height : 0
                     }".arg("Sailfish.Silica.private"), idSilicaListView, 'Scrollbar')
             } catch (e) {
@@ -496,7 +498,7 @@ Page {
         *** */
 
         section {
-            property: "section_date"
+            property: "section_string"
             delegate: SectionHeader {
                 text: new Date(section).toLocaleString(Qt.locale(), 'dddd, d. MMM yyyy') // formatDate(section, fullDateFormat)
             }
@@ -556,7 +558,7 @@ Page {
                         listModel_activeProjectExpenses.append({
                             id_unixtime_created : Number(currentProjectEntries[i][0]).toFixed(0),
                             date_time : Number(currentProjectEntries[i][1]).toFixed(0),
-                            section_date: new Date(Number(currentProjectEntries[i][1])).toLocaleString(Qt.locale(), 'yyyy-MM-dd'),
+                            section_string: new Date(Number(currentProjectEntries[i][1])).toLocaleString(Qt.locale(), 'yyyy-MM-dd'),
                             expense_name : currentProjectEntries[i][2],
                             expense_sum : Number(currentProjectEntries[i][3]).toFixed(2),
                             expense_currency : currentProjectEntries[i][4],
