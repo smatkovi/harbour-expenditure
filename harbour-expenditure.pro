@@ -1,5 +1,8 @@
-# NOTICE:
-#
+# This file is part of Expenditure.
+# SPDX-License-Identifier: GPL-3.0-or-later
+# SPDX-FileCopyrightText: 2022 Tobias Planitzer
+# SPDX-FileCopyrightText: 2023-2024 Mirian Margiani
+
 # Application name defined in TARGET has a corresponding QML filename.
 # If name defined in TARGET is changed, the following needs to be done
 # to match new name:
@@ -8,25 +11,31 @@
 #   - desktop filename must be changed
 #   - icon definition filename in desktop file must be changed
 #   - translation filenames have to be changed
-
-# The name of your application
 TARGET = harbour-expenditure
 
 CONFIG += sailfishapp
 
-SOURCES += src/harbour-expenditure.cpp \
+# Note: version number is configured in yaml
+DEFINES += APP_VERSION=\\\"$$VERSION\\\"
+DEFINES += APP_RELEASE=\\\"$$RELEASE\\\"
+include(libs/opal-cached-defines.pri)
+
+QML_IMPORT_PATH += qml/modules
+
+SOURCES += \
+    src/harbour-expenditure.cpp \
     src/File.cpp
 
-DISTFILES += qml/harbour-expenditure.qml \
-    qml/cover/CoverPage.qml \
-    qml/pages/AboutPage.qml \
-    qml/pages/Banner2ButtonsChoice.qml \
-    qml/pages/BannerAddProject.qml \
-    qml/pages/CalcPage.qml \
-    qml/pages/FirstPage.qml \
-    qml/pages/SettingsPage.qml \
-    rpm/harbour-expenditure.changes.in \
-    rpm/harbour-expenditure.changes.run.in \
+HEADERS += \
+    src/File.h
+
+DISTFILES += \
+    qml/*.qml \
+    qml/js/*.js \
+    qml/cover/*.qml \
+    qml/pages/*.qml \
+    qml/components/*.qml \
+    rpm/harbour-expenditure.changes \
     rpm/harbour-expenditure.spec \
     rpm/harbour-expenditure.yaml \
     translations/*.ts \
@@ -38,11 +47,4 @@ SAILFISHAPP_ICONS = 86x86 108x108 128x128 172x172
 # following CONFIG line
 CONFIG += sailfishapp_i18n
 
-# German translation is enabled as an example. If you aren't
-# planning to localize your app, remember to comment out the
-# following TRANSLATIONS line. And also do not forget to
-# modify the localized app name in the the .desktop file.
-TRANSLATIONS += translations/harbour-expenditure-de.ts
-
-HEADERS += \
-    src/File.h
+TRANSLATIONS += translations/harbour-lovegame-*.ts
