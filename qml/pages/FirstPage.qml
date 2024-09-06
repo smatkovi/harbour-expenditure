@@ -321,18 +321,19 @@ Page {
             id: idListItem
             title: new Date(Number(date_time)).toLocaleString(Qt.locale(), "hh:mm 'Uhr'") // XXX translate
             text: expense_name
-            // XXX translate
-            description: (expense_info + "\n" + (qsTr("für:")  + " " + (expense_members == activeProjectAllMembers ? "alle" : expense_members.split(" ||| ").join(", ")))).trim()
-
-            titleLabel {
-                font.pixelSize: Theme.fontSizeExtraSmall
+            description: {
+                (expense_info + "\n" +
+                (expense_members === activeProjectAllMembers ?
+                     "for everyone" :
+                     "for %2".arg(expense_members.split(" ||| ").join(", "))
+                )).trim()
             }
 
+            titleLabel.font.pixelSize: Theme.fontSizeExtraSmall
             textLabel {
                 wrapped: true
                 font.pixelSize: Theme.fontSizeSmall
             }
-
             descriptionLabel {
                 wrapped: true
                 font.pixelSize: Theme.fontSizeExtraSmall
@@ -340,10 +341,9 @@ Page {
 
             rightItem: D.DelegateInfoItem {
                 title: expense_payer
-                text: Number(expense_sum).toLocaleString(Qt.locale("de_CH")) // Fixed(2)
+                text: Number(expense_sum).toLocaleString(Qt.locale("de_CH")) // XXX translate
                 description: expense_currency.toString()
-                // fixedWidth: Theme.itemSizeMedium
-
+                minWidth: 1.2 * Theme.itemSizeMedium
                 textLabel.font.pixelSize: Theme.fontSizeMedium
             }
 
