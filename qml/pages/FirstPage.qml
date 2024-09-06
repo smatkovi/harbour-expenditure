@@ -8,6 +8,8 @@ import QtQuick 2.6
 import Sailfish.Silica 1.0
 import Sailfish.Share 1.0 // ToDo: instead of copy to clipboard, send to app
 
+import "../modules/Opal/Delegates" as D
+
 Page {
     id: page
     allowedOrientations: Orientation.All
@@ -18,7 +20,7 @@ Page {
     property int activeProjectID_listIndex
     property string activeProjectName
     property string activeProjectCurrency : "EUR"
-
+    property string activeProjectAllMembers: ""
 
     // program specific global variables
     property int sortOrderExpenses : Number(storageItem.getSettings("sortOrderExpensesIndex", 0)) // 0=descending, 1=ascending
@@ -37,6 +39,19 @@ Page {
         loadActiveProjectInfos_FromDB(activeProjectID_unixtime)
     }
 
+
+    // XXX this is the new attached page
+    // used to add the WritePage for a new entry
+    /**
+    forwardNavigation: true
+
+    onStatusChanged: {
+        if (status == PageStatus.Active) {
+            pageStack.pushAttached(Qt.resolvedUrl("ExpenseDialog.qml"),
+                                   {'acceptDestination': Qt.resolvedUrl("FirstPage.qml")})
+        }
+    }
+    **/
 
 
     // other items, components and pages
@@ -182,6 +197,15 @@ Page {
     SilicaListView {
         id: idSilicaListView
         anchors.fill: parent
+
+        header: PageHeader {
+            title: qsTr("Expenses")
+            description: activeProjectID_unixtime !== 0 ?
+                            "%1 [%2]".arg(activeProjectName).arg(activeProjectCurrency) :
+                            ""
+        }
+
+        /****
         header: Row {
             width: (interativeScrollbarMode === 0) ? (parent.width) : ((isPortrait) ? (parent.width) : (parent.width - Theme.paddingLarge*2))
             visible: activeProjectID_unixtime !== 0
@@ -220,17 +244,49 @@ Page {
                 }
             }
         }
-        footer: Item {
-            width: parent.width
-            height: Theme.itemSizeSmall
-        }
+        // footer: Item {
+        //    width: parent.width
+        //    height: Theme.itemSizeSmall
+        // }
+        //
+        *****/
+
         spacing: Theme.paddingMedium
         quickScroll: (interativeScrollbarMode === 0) ? (true) : (false)
 
+        // XXX this is the new scrollbar
+        property Item _scrollbar: null
+
+        VerticalScrollDecorator {
+            flickable: idSilicaListView //root
+            visible: !idSilicaListView._scrollbar
+        }
+
+        Component.onCompleted: {
+            try {
+                _scrollbar = Qt.createQmlObject("
+                    import QtQuick 2.0
+                    import %1 1.0 as Private
+                    Private.Scrollbar {
+                        text: new Date(idSilicaListView.currentSection).toLocaleString(Qt.locale(), 'ddd, d. MMM') // appWindow.formatDate(root.currentSection, appWindow.dateNoYearFormat)
+                        description: new Date(idSilicaListView.currentSection).toLocaleString(Qt.locale(), 'yyyy') // appWindow.formatDate(root.currentSection, 'yyyy')
+                        headerHeight: idSilicaListView.headerItem ? idSilicaListView.headerItem.height : 0
+                    }".arg("Sailfish.Silica.private"), idSilicaListView, 'Scrollbar')
+            } catch (e) {
+                if (!_scrollbar) {
+                    console.warn(e)
+                    console.warn('[BUG] failed to load customized scrollbar')
+                    console.warn('[BUG] this probably means the private API has changed')
+                }
+            }
+        }
+
+        /* ***
         VerticalScrollDecorator {
             enabled: (interativeScrollbarMode === 0) ? (true) : (false)
             visible: enabled
         }
+        *** */
         ScrollBar {
             id: idScrollBarDate
             enabled: (interativeScrollbarMode === 0) ? false : true
@@ -240,6 +296,7 @@ Page {
             labelModelTag: "date_time"
             visible: (interativeScrollbarMode === 0) ? (false) : (idPulldownMenu.active === false) && (delegateMenuOpen === false)
         }
+
         PullDownMenu {
             id: idPulldownMenu
             quickSelect: true
@@ -270,6 +327,65 @@ Page {
         }
 
         model: listModel_activeProjectExpenses
+
+        delegate: D.ThreeLineDelegate {
+            id: idListItem
+            title: new Date(Number(date_time)).toLocaleString(Qt.locale(), "hh:mm 'Uhr'") // XXX translate
+            text: expense_name
+            // XXX translate
+            description: (expense_info + "\n" + (qsTr("für:")  + " " + (expense_members == activeProjectAllMembers ? "alle" : expense_members.split(" ||| ").join(", ")))).trim()
+
+            titleLabel {
+                font.pixelSize: Theme.fontSizeExtraSmall
+            }
+
+            textLabel {
+                wrapped: true
+                font.pixelSize: Theme.fontSizeSmall
+            }
+
+            descriptionLabel {
+                wrapped: true
+                font.pixelSize: Theme.fontSizeExtraSmall
+            }
+
+            rightItem: D.DelegateInfoItem {
+                title: expense_payer
+                text: Number(expense_sum).toLocaleString(Qt.locale("de_CH")) // Fixed(2)
+                description: expense_currency.toString()
+                // fixedWidth: Theme.itemSizeMedium
+
+                textLabel.font.pixelSize: Theme.fontSizeMedium
+            }
+
+            onClicked: openMenu()
+
+            menu: ContextMenu {
+                id: idContextMenu
+
+                MenuItem {
+                    text: qsTr("Edit")
+                    onClicked: {
+                        bannerAddExpense.notify( Theme.rgba(Theme.highlightDimmerColor, 1), Theme.itemSizeLarge, "edit", activeProjectID_unixtime, id_unixtime_created )
+                    }
+                }
+                MenuItem {
+                    text: qsTr("Remove")
+                    onClicked: {
+                        idRemorseDelete.execute(idListItem, qsTr("Remove entry?"), function() {
+                            storageItem.deleteExpense(activeProjectID_unixtime, id_unixtime_created )
+                            listModel_activeProjectExpenses.remove(index)
+                        } )
+                    }
+                }
+            }
+
+            RemorseItem {
+                id: idRemorseDelete
+            }
+        }
+
+        /* ****
         delegate: ListItem {
             id: idListItem
             contentHeight: idListLabelsQML.height
@@ -388,6 +504,37 @@ Page {
                 }
             }
         }
+        *** */
+
+        section {
+            property: "section_date"
+            delegate: Item {
+                width: parent.width
+                height: childrenRect.height + Theme.paddingSmall
+
+                Label {
+                    id: label
+                    width: parent.width
+                    horizontalAlignment: Text.AlignHCenter
+                    truncationMode: TruncationMode.Fade
+                    color: Theme.highlightColor
+                    // XXX translate
+                    text: new Date(section).toLocaleString(Qt.locale(), 'ddd, d. MMM yyyy') // formatDate(section, fullDateFormat)
+                }
+                Separator {
+                    anchors {
+                        horizontalCenter: parent.horizontalCenter
+                        top: label.baseline
+                        topMargin: 8
+                    }
+                    width: parent.width-2*Theme.horizontalPageMargin
+                    horizontalAlignment: Qt.AlignHCenter
+                    color: Theme.highlightColor
+                }
+            }
+        }
+
+        footer: Item { width: parent.width; height: Theme.horizontalPageMargin }
     } // end SilicaListView
 
 
@@ -426,6 +573,7 @@ Page {
 
                 // generate active project members list
                 var activeProjectMembersArray = (listModel_allProjects.get(j).project_members).split(" ||| ")
+                activeProjectAllMembers = listModel_allProjects.get(j).project_members
                 var activeProjectRecentPayerBoolArray = (listModel_allProjects.get(j).project_recent_payer_boolarray).split(" ||| ")
                 var activeProjectRecentBeneficiariesBoolArray = (listModel_allProjects.get(j).project_recent_beneficiaries_boolarray).split(" ||| ")
                 for (var i = 0; i < activeProjectMembersArray.length ; i++) {
@@ -443,6 +591,7 @@ Page {
                         listModel_activeProjectExpenses.append({
                             id_unixtime_created : Number(currentProjectEntries[i][0]).toFixed(0),
                             date_time : Number(currentProjectEntries[i][1]).toFixed(0),
+                            section_date: new Date(Number(currentProjectEntries[i][1])).toLocaleString(Qt.locale(), 'yyyy-MM-dd'),
                             expense_name : currentProjectEntries[i][2],
                             expense_sum : Number(currentProjectEntries[i][3]).toFixed(2),
                             expense_currency : currentProjectEntries[i][4],
