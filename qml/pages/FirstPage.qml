@@ -196,8 +196,6 @@ Page {
                             ""
         }
 
-        spacing: Theme.paddingMedium
-
         // XXX this is the new scrollbar
         property Item _scrollbar: null
 
@@ -260,6 +258,7 @@ Page {
 
         delegate: D.ThreeLineDelegate {
             id: idListItem
+            minContentHeight: Theme.itemSizeExtraLarge
 
             title: new Date(Number(date_time)).toLocaleString(Qt.locale(), Dates.timeFormat)
             text: expense_name
