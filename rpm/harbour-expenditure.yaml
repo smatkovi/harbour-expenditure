@@ -20,7 +20,7 @@ Sources:
 Description: |
   A simple app for tracking expenses in groups.
 
-  %if 0%{?_chum
+  %if 0%{?_chum}
   Title: Expenditure
   Type: desktop-application
   DeveloperName: ichthyosaurus
