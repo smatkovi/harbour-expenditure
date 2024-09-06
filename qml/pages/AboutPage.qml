@@ -1,149 +1,107 @@
-import QtQuick 2.6
-import Sailfish.Silica 1.0
+/*
+ * This file is part of harbour-expenditure.
+ * SPDX-FileCopyrightText: 2024 Mirian Margiani
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
 
+/*
+ * Translators:
+ * Please add yourself to the list of contributors below. If your language is already
+ * in the list, add your name to the 'entries' field. If you added a new translation,
+ * create a new section at the top of the list.
+ *
+ * Other contributors:
+ * Please add yourself to the relevant list of contributors.
+ *
+ * <...>
+ *  ContributionGroup {
+ *      title: qsTr("Your language")
+ *      entries: ["Existing contributor", "YOUR NAME HERE"]
+ *  },
+ * <...>
+ *
+ */
 
-Page {
+import QtQuick 2.0
+import Sailfish.Silica 1.0 as S
+import Opal.About 1.0 as A
+import "../modules/Opal/Attributions"
+
+A.AboutPageBase {
     id: page
-    allowedOrientations: Orientation.Portrait //All
 
-    SilicaFlickable {
-        id: listView
-        anchors.fill: parent
-        contentHeight: idColumn.height  // Tell SilicaFlickable the height of its content.
+    appName: appWindow.appName
+    appIcon: Qt.resolvedUrl("../images/%1.png".arg("harbour-" + Qt.application.name))
+    appVersion: APP_VERSION
+    appRelease: APP_RELEASE
 
-        VerticalScrollDecorator {}
+    allowDownloadingLicenses: false
+    sourcesUrl: "https://github.com/ichthyosaurus/%1".arg("harbour-" + Qt.application.name)
+    homepageUrl: "https://forum.sailfishos.org/t/apps-by-ichthyosaurus/15753"
+    translationsUrl: "https://hosted.weblate.org/projects/%1".arg("harbour-" + Qt.application.name)
+    changelogList: Qt.resolvedUrl("../Changelog.qml")
+    licenses: A.License { spdxId: "GPL-3.0-or-later" }
 
-        Column {
-            id: idColumn
-            x: Theme.paddingLarge
-            width: parent.width - 2*x
-
-            SectionHeader{
-                text: qsTr("About")
-            }
-
-            Image {
-                id: logo
-                source: "/usr/share/icons/hicolor/172x172/apps/harbour-expenditure.png"
-                smooth: true
-                height: parent.width / 2
-                width: parent.width / 2
-                anchors.horizontalCenter: parent.horizontalCenter
-            }
-            Label {
-                width: parent.width
-                height: Theme.itemSizeLarge
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                font.pixelSize: Theme.fontSizeLarge
-                color: Theme.primaryColor
-                text: qsTr("Expenditure")
-            }
-            Item {
-                width: parent.width
-                height: Theme.paddingLarge
-            }
-            Item {
-                width: parent.width
-                height: Theme.paddingLarge * 2.5
-            }
-            Label {
-                x: Theme.paddingMedium
-                width: parent.width - 2*x
-                horizontalAlignment: Text.AlignHCenter
-                font.pixelSize: Theme.fontSizeExtraSmall
-                wrapMode: Text.Wrap
-                text: qsTr("Expenditure is a tool to track and split bills, project or trip expenses in multiple currencies among groups.")
-
-            }
-            Label {
-                x: Theme.paddingMedium
-                width: parent.width - 2*x
-                horizontalAlignment: Text.AlignHCenter
-                font.pixelSize: Theme.fontSizeExtraSmall
-                wrapMode: Text.Wrap
-                text: qsTr("Thanksgiving, feedback and support is always welcome.")
-                bottomPadding: Theme.paddingLarge * 2
-            }
-            SectionHeader{
-                text: qsTr("Troubleshooting")
-            }
-
-            Label {
-                x: Theme.paddingMedium
-                width: parent.width - 2*x
-                horizontalAlignment: Text.AlignHCenter
-                font.pixelSize: Theme.fontSizeExtraSmall
-                wrapMode: Text.Wrap
-                text: qsTr("In case of any database error tap 10x on the word 'Settings' for cleanup options.")
-                bottomPadding: Theme.paddingLarge * 2
-            }
-            SectionHeader {
-                text: qsTr("Source code")
-            }
-
-            Label {
-                x: Theme.paddingMedium
-                width: parent.width - 2*x
-                horizontalAlignment: Text.AlignHCenter
-                font.pixelSize: Theme.fontSizeExtraSmall
-                wrapMode: Text.Wrap
-                text: qsTr("Thanksgiving, feedback and support is always welcome.")
-                bottomPadding: Theme.paddingLarge * 2
-                onLinkActivated: Qt.openUrlExternally(link)
-            }
-            SectionHeader {
-                text: qsTr("Translations")
-            }
-
-            Label {
-                x: Theme.paddingMedium
-                width: parent.width - 2*x
-                horizontalAlignment: Text.AlignHCenter
-                font.pixelSize: Theme.fontSizeExtraSmall
-                wrapMode: Text.Wrap
-                text: qsTr("Swedish translation by eson57. Thank you :)")
-                bottomPadding: Theme.paddingLarge * 2
-                onLinkActivated: Qt.openUrlExternally(link)
-            }
-            BackgroundItem{
-                            width: parent.width
-                            height: Theme.itemSizeMedium
-                            Row{
-                                width:parent.width - 2 * x
-                                height: parent.height
-                                x:Theme.horizontalPageMargin
-                                spacing:Theme.paddingLarge
-
-                                Label{
-                                    width: parent.width - parent.spacing
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    wrapMode: Text.WrapAnywhere
-                                    font.pixelSize: Theme.fontSizeSmall
-
-                                    text: "https://github.com/yajo10/harbour-expenditure"
-                                    color: parent.parent.pressed ? Theme.highlightColor : Theme.primaryColor
-
-                                }
-                            }
-                            onClicked: Qt.openUrlExternally("https://github.com/yajo10/harbour-expenditure")
-                        }
-
-            Label {
-                width: parent.width
-                horizontalAlignment: Text.AlignHCenter
-                font.pixelSize: Theme.fontSizeExtraSmall
-                color: Theme.secondaryColor
-                wrapMode: Text.Wrap
-                text: qsTr("First author:")
-                + "\n" + qsTr("Tobias Planitzer")
-                + "\n" + ("tp.labs@protonmail.com")
-                + "\n" + qsTr("License: GPL v3")
-            }
-            Item {
-                width: parent.width
-                height: Theme.paddingLarge * 2.5
-            }
+    donations.text: donations.defaultTextCoffee
+    donations.services: [
+        A.DonationService {
+            name: "Liberapay"
+            url: "https://liberapay.com/ichthyosaurus"
         }
-    } // end Silica Flickable
+    ]
+
+    description: qsTr("A simple app for tracking expenses in groups.")
+    mainAttributions: ["2023-%1 Mirian Margiani".arg((new Date()).getFullYear()), "2022 Tobias Planitzer"]
+
+    attributions: [
+        A.Attribution {
+            name: "PyOtherSide"
+            entries: ["2011, 2013-2020 Thomas Perl"]
+            licenses: A.License { spdxId: "ISC" }
+            sources: "https://github.com/thp/pyotherside"
+            homepage: "https://thp.io/2011/pyotherside/"
+        },
+        OpalAboutAttribution {},
+        OpalDelegatesAttribution {},
+        OpalSupportMeAttribution {},
+        OpalInfoComboAttribution {},
+        OpalComboDataAttribution {},
+        OpalLinkHandlerAttribution {}
+    ]
+
+    extraSections: [
+        A.InfoSection {
+            title: qsTr("Troubleshooting")
+            smallPrint: qsTr("In case of any database error tap 10x on the word 'Settings' for cleanup options.")
+        }
+    ]
+
+    contributionSections: [
+        A.ContributionSection {
+            title: qsTr("Development")
+            groups: [
+                A.ContributionGroup {
+                    title: qsTr("Programming")
+                    entries: ["Mirian Margiani", "Tobias Planitzer", "yajo10"]
+                },
+                A.ContributionGroup {
+                    title: qsTr("Icon Design")
+                    entries: ["Tobias Planitzer"]
+                }
+            ]
+        },
+        A.ContributionSection {
+            title: qsTr("Translations")
+            groups: [
+                A.ContributionGroup {
+                    title: qsTr("Swedish")
+                    entries: ["Åke Engelbrektson"]
+                },
+                A.ContributionGroup {
+                    title: qsTr("German")
+                    entries: ["Tobias Planitzer", "Mirian Margiani"]
+                }
+            ]
+        }
+    ]
 }
