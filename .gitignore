@@ -1,0 +1,18 @@
+# This file is part of Expenditure.
+# SPDX-License-Identifier: GPL-3.0-or-later
+# SPDX-FileCopyrightText: 2022 Tobias Planitzer
+# SPDX-FileCopyrightText: 2023-2024 Mirian Margiani
+
+*.user*
+*~
+*.~*
+.directory
+.gitignore
+build*
+dist-old*
+tmp*
+icons-src/raw
+TODO
+
+libs/opal-translations
+libs/opal-docs
