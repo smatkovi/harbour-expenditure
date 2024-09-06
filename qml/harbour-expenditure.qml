@@ -8,13 +8,39 @@
 import QtQuick 2.6
 import Sailfish.Silica 1.0
 import QtQuick.LocalStorage 2.0
+
+import Opal.About 1.0 as A
+import Opal.SupportMe 1.0 as M
+
 import "pages"
 
 ApplicationWindow {
-    id: main
-    initialPage: Component { FirstPage { } }
+    id: appWindow
+
+    readonly property string appName: "Expenditure"
+
+    initialPage: Component { FirstPage {} }
     cover: Qt.resolvedUrl("cover/CoverPage.qml")
-    allowedOrientations: defaultAllowedOrientations
+
+    // We have to explicitly set the \c _defaultPageOrientations property
+    // to \c Orientation.All so the page stack's default placeholder page
+    // will be allowed to be in landscape mode. (The default value is
+    // \c Orientation.Portrait.) Without this setting, pushing multiple pages
+    // to the stack using \c animatorPush() while in landscape mode will cause
+    // the view to rotate back and forth between orientations.
+    // [as of 2021-02-17, SFOS 3.4.0.24, sailfishsilica-qt5 version 1.1.110.3-1.33.3.jolla]
+    _defaultPageOrientations: Orientation.All
+    allowedOrientations: Orientation.All
+
+    A.ChangelogNews {
+        changelogList: Qt.resolvedUrl("Changelog.qml")
+    }
+
+    M.AskForSupport {
+        contents: Component {
+            MySupportDialog {}
+        }
+    }
 
     Item {
         id: storageItem
