@@ -14,5 +14,7 @@ tmp*
 icons-src/raw
 TODO
 
+databases/
+
 libs/opal-translations
 libs/opal-docs
