@@ -6,6 +6,7 @@
 
 import QtQuick 2.6
 import Sailfish.Silica 1.0
+import "../js/dates.js" as Dates
 
 import "../modules/Opal/Delegates" as D
 
@@ -210,9 +211,10 @@ Page {
                 _scrollbar = Qt.createQmlObject("
                     import QtQuick 2.0
                     import %1 1.0 as Private
+                    import '../js/dates.js' as Dates
                     Private.Scrollbar {
-                        text: idSilicaListView.currentSectionDate.toLocaleString(Qt.locale(), 'd. MMM') // appWindow.formatDate(root.currentSection, appWindow.dateNoYearFormat)
-                        description: idSilicaListView.currentSectionDate.toLocaleString(Qt.locale(), 'yyyy') // appWindow.formatDate(root.currentSection, 'yyyy')
+                        text: idSilicaListView.currentSectionDate.toLocaleString(Qt.locale(), Dates.dateNoYearFormat)
+                        description: idSilicaListView.currentSectionDate.toLocaleString(Qt.locale(), 'yyyy')
                         headerHeight: idSilicaListView.headerItem ? idSilicaListView.headerItem.height : 0
                     }".arg("Sailfish.Silica.private"), idSilicaListView, 'Scrollbar')
             } catch (e) {
@@ -259,7 +261,7 @@ Page {
         delegate: D.ThreeLineDelegate {
             id: idListItem
 
-            title: new Date(Number(date_time)).toLocaleString(Qt.locale(), "hh:mm 'Uhr'") // XXX translate
+            title: new Date(Number(date_time)).toLocaleString(Qt.locale(), Dates.timeFormat)
             text: expense_name
             description: {
                 (expense_info + "\n" +
@@ -313,7 +315,7 @@ Page {
         section {
             property: "section_string"
             delegate: SectionHeader {
-                text: new Date(section).toLocaleString(Qt.locale(), 'dddd, d. MMM yyyy') // formatDate(section, fullDateFormat)
+                text: new Date(section).toLocaleString(Qt.locale(), Dates.fullDateFormat)
             }
         }
 

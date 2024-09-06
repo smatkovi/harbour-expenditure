@@ -16,11 +16,11 @@ import "pages"
 
 ApplicationWindow {
     id: appWindow
-
-    readonly property string appName: "Expenditure"
-
     initialPage: Component { FirstPage {} }
     cover: Qt.resolvedUrl("cover/CoverPage.qml")
+
+    property bool loading: true  // only true during startup
+    readonly property string appName: "Expenditure"
 
     // We have to explicitly set the \c _defaultPageOrientations property
     // to \c Orientation.All so the page stack's default placeholder page
