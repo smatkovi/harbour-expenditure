@@ -163,9 +163,6 @@ Page {
             qsort(0,count)
         }
     }
-    AboutPage {
-        id: aboutPage
-    }
 
     SettingsPage {
         id: settingsPage
@@ -295,7 +292,7 @@ Page {
 
             MenuItem {
                 text: qsTr("About")
-                onClicked: pageStack.push(aboutPage)
+                onClicked: pageStack.push(Qt.resolvedUrl("AboutPage.qml"))
             }
             MenuItem {
                 text: qsTr("Settings")
