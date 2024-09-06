@@ -34,7 +34,6 @@ Dialog {
         }
         idComboboxSortingExpenses.currentIndex = Number(storageItem.getSettings("sortOrderExpensesIndex", 0)) // 0=descending, 1=ascending
         idComboboxExchangeRateMode.currentIndex = Number(storageItem.getSettings("exchangeRateModeIndex", 0)) // 0=collective, 1=individual
-        idComboboxShowInteractiveScrollbar.currentIndex = Number(storageItem.getSettings("interativeScrollbarMode", 0)) //0=standard, 1=interactive
         notificationString = ""
     }
     onDone: {
@@ -236,19 +235,7 @@ Dialog {
                     }
                 }
             }
-            ComboBox {
-                id: idComboboxShowInteractiveScrollbar
-                width: parent.width
-                label: qsTr("Scrollbar")
-                menu: ContextMenu {
-                    MenuItem {
-                        text: qsTr("normal")
-                    }
-                    MenuItem {
-                        text: qsTr("interactive (beta)")
-                    }
-                }
-            }
+
             Column {
                 visible: showMaintenanceButtonsCounter > 9
                 width: parent.width
@@ -321,9 +308,6 @@ Dialog {
 
         storageItem.setSettings("exchangeRateModeIndex", idComboboxExchangeRateMode.currentIndex)
         exchangeRateMode = idComboboxExchangeRateMode.currentIndex
-
-        storageItem.setSettings("interativeScrollbarMode", idComboboxShowInteractiveScrollbar.currentIndex)
-        interativeScrollbarMode = idComboboxShowInteractiveScrollbar.currentIndex
 
         if (listModel_allProjects.count > 0) { // only works if a project is actually created and loaded, otherwise this gets triggered directly in BannerAddProject.qml
             storageItem.setSettings("activeProjectID_unixtime", Number(listModel_allProjects.get(idComboboxProject.currentIndex).project_id_timestamp))

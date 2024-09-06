@@ -23,7 +23,6 @@ Page {
     // program specific global variables
     property int sortOrderExpenses : Number(storageItem.getSettings("sortOrderExpensesIndex", 0)) // 0=descending, 1=ascending
     property int exchangeRateMode : Number(storageItem.getSettings("exchangeRateModeIndex", 0)) // 0=collective, 1=individual
-    property int interativeScrollbarMode : Number(storageItem.getSettings("interativeScrollbarMode", 0)) // 0=standard, 1=interactive
     property string recentlyUsedCurrency : storageItem.getSettings("recentlyUsedCurrency", activeProjectCurrency)
 
     // navigation specific blocking
@@ -196,54 +195,7 @@ Page {
                             ""
         }
 
-        /****
-        header: Row {
-            width: (interativeScrollbarMode === 0) ? (parent.width) : ((isPortrait) ? (parent.width) : (parent.width - Theme.paddingLarge*2))
-            visible: activeProjectID_unixtime !== 0
-            topPadding: Theme.paddingLarge
-            bottomPadding: Theme.paddingLarge
-
-
-            Item {
-                id: idLeftSpacer
-                width: Theme.paddingSmall +  Theme.paddingMedium
-                height: 1
-            }
-            Column {
-                id: idHeaderInfoColumn
-                width: parent.width - idLeftSpacer.width
-                bottomPadding: Theme.paddingSmall
-
-                Label {
-                    x: Theme.paddingMedium
-                    width: parent.width - 2*x
-                    horizontalAlignment: Text.AlignRight
-                    font.pixelSize: Theme.fontSizeLarge
-                    color: Theme.highlightColor
-                    wrapMode: Text.WordWrap
-                    text: qsTr("Expenses")
-                }
-                Label {
-                    x: Theme.paddingMedium
-                    width: parent.width - 2*x
-                    horizontalAlignment: Text.AlignRight
-                    font.pixelSize: Theme.fontSizeSmall
-                    color: Theme.highlightColor
-                    wrapMode: Text.WordWrap
-                    //text: "ID_" + activeProjectID_unixtime + " [" + activeProjectCurrency + "]"
-                    text: activeProjectName + " [" + activeProjectCurrency + "]"
-                }
-            }
-        }
-        // footer: Item {
-        //    width: parent.width
-        //    height: Theme.itemSizeSmall
-        // }
-        //
-        *****/
-
         spacing: Theme.paddingMedium
-        quickScroll: (interativeScrollbarMode === 0) ? (true) : (false)
 
         // XXX this is the new scrollbar
         property Item _scrollbar: null
@@ -272,22 +224,6 @@ Page {
             }
         }
 
-        /* ***
-        VerticalScrollDecorator {
-            enabled: (interativeScrollbarMode === 0) ? (true) : (false)
-            visible: enabled
-        }
-        *** */
-        ScrollBar {
-            id: idScrollBarDate
-            enabled: (interativeScrollbarMode === 0) ? false : true
-            labelVisible: true
-            topPadding: (isPortrait) ? (Theme.itemSizeLarge + Theme.paddingLarge) : (0)
-            bottomPadding: (isPortrait) ? Theme.itemSizeSmall : 0
-            labelModelTag: "date_time"
-            visible: (interativeScrollbarMode === 0) ? (false) : (idPulldownMenu.active === false) && (delegateMenuOpen === false)
-        }
-
         PullDownMenu {
             id: idPulldownMenu
             quickSelect: true
@@ -311,6 +247,7 @@ Page {
                 onClicked: bannerAddExpense.notify( Theme.rgba(Theme.highlightDimmerColor, 1), Theme.itemSizeLarge, "new", activeProjectID_unixtime, 0 )
             }
         }
+
         ViewPlaceholder {
             enabled: activeProjectID_unixtime === 0 // listModel_allProjects.count === 0
             text: qsTr("Create new project.")
@@ -321,6 +258,7 @@ Page {
 
         delegate: D.ThreeLineDelegate {
             id: idListItem
+
             title: new Date(Number(date_time)).toLocaleString(Qt.locale(), "hh:mm 'Uhr'") // XXX translate
             text: expense_name
             description: {
@@ -331,15 +269,11 @@ Page {
                 )).trim()
             }
 
+            textLabel.wrapped: true
+            descriptionLabel.wrapped: true
             titleLabel.font.pixelSize: Theme.fontSizeExtraSmall
-            textLabel {
-                wrapped: true
-                font.pixelSize: Theme.fontSizeSmall
-            }
-            descriptionLabel {
-                wrapped: true
-                font.pixelSize: Theme.fontSizeExtraSmall
-            }
+            textLabel.font.pixelSize: Theme.fontSizeSmall
+            descriptionLabel.font.pixelSize: Theme.fontSizeExtraSmall
 
             rightItem: D.DelegateInfoItem {
                 title: expense_payer
@@ -375,127 +309,6 @@ Page {
                 id: idRemorseDelete
             }
         }
-
-        /* ****
-        delegate: ListItem {
-            id: idListItem
-            contentHeight: idListLabelsQML.height
-            contentWidth: (interativeScrollbarMode === 0) ? (parent.width) : (parent.width - idScrollBarDate.width)
-            //contentWidth: (idSilicaListView.visibleArea.heightRatio < 1.0 && idPulldownMenu.active === false) ? (parent.width - idScrollBarDate.width) : (parent.width)
-            menu: ContextMenu {
-                id: idContextMenu
-
-                MenuItem {
-                    text: qsTr("Edit")
-                    onClicked: {
-                        bannerAddExpense.notify( Theme.rgba(Theme.highlightDimmerColor, 1), Theme.itemSizeLarge, "edit", activeProjectID_unixtime, id_unixtime_created )
-                    }
-                }
-                MenuItem {
-                    text: qsTr("Remove")
-                    onClicked: {
-                        idRemorseDelete.execute(idListItem, qsTr("Remove entry?"), function() {
-                            storageItem.deleteExpense(activeProjectID_unixtime, id_unixtime_created )
-                            listModel_activeProjectExpenses.remove(index)
-                        } )
-                    }
-                }
-            }
-            onMenuOpenChanged: {
-                // set variable to disable scrollBar visibility
-                if (menuOpen === true) {
-                    delegateMenuOpen = true
-                } else {
-                    delegateMenuOpen = false
-                }
-            }
-
-            RemorseItem {
-                id: idRemorseDelete
-            }
-            Row {
-                width: parent.width
-
-                Rectangle {
-                    width: Theme.paddingSmall
-                    height: idListLabelsQML.height
-                    color: Theme.rgba(Theme.highlightBackgroundColor, 0.4)
-                }
-                Item {
-                    width: Theme.paddingMedium
-                    height: 1
-                }
-                Column {
-                    id: idListLabelsQML
-                    width: parent.width - Theme.paddingSmall - 2*Theme.paddingMedium
-
-                    Row {
-                        width: parent.width
-
-                        Label {
-                            width: parent.width/3*2- Theme.paddingLarge/2
-                            wrapMode: Text.WordWrap
-                            font.pixelSize: Theme.fontSizeSmall
-                            text: new Date(Number(date_time)).toLocaleString(Qt.locale(), "ddd dd.MM.yyyy - hh:mm")
-                        }
-                        Item {
-                            width: Theme.paddingLarge
-                            height: 1
-                        }
-                        Label {
-                            width: parent.width/3 - Theme.paddingLarge/2
-                            wrapMode: Text.WordWrap
-                            font.pixelSize: Theme.fontSizeSmall
-                            horizontalAlignment: Text.AlignRight
-                            text: expense_payer
-                        }
-                    }
-                    Row {
-                        width: parent.width
-
-                        Label {
-                            width: parent.width/3*2 - Theme.paddingLarge/2
-                            wrapMode: Text.WordWrap
-                            font.pixelSize: Theme.fontSizeSmall
-                            text: expense_name
-                        }
-                        Item {
-                            width: Theme.paddingLarge
-                            height: 1
-                        }
-                        Label {
-                            width: parent.width/3 - Theme.paddingLarge/2
-                            wrapMode: Text.WordWrap
-                            horizontalAlignment: Text.AlignRight
-                            font.pixelSize: Theme.fontSizeSmall
-                            text: Number(expense_sum).toFixed(2) + " " + expense_currency.toString()
-                        }
-                    }
-                    Label {
-                        id: idLabelExpenseInfo
-                        visible: idLabelExpenseInfo.text.length > 0
-                        width: parent.width
-                        wrapMode: Text.WordWrap
-                        font.pixelSize: Theme.fontSizeTiny
-                        color: Theme.secondaryColor
-                        text: expense_info
-                    }
-                    Label {
-                        id: idLabelBeneficiaries
-                        width: parent.width
-                        wrapMode: Text.WordWrap
-                        font.pixelSize: Theme.fontSizeTiny
-                        color: Theme.secondaryColor
-                        text: qsTr("group:")  + " " + expense_members.split(" ||| ").join(", ")
-                    }
-                    Item {
-                        width: parent.width
-                        height: Theme.paddingSmall
-                    }
-                }
-            }
-        }
-        *** */
 
         section {
             property: "section_string"
