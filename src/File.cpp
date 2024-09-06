@@ -1,3 +1,9 @@
+/*
+ * This file is part of Expenditure.
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ * SPDX-FileCopyrightText: 2022 Tobias Planitzer
+ */
+
 #include "File.h"
 
 #include <QFile>

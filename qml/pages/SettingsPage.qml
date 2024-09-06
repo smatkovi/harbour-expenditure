@@ -1,3 +1,9 @@
+/*
+ * This file is part of harbour-expenditure.
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ * SPDX-FileCopyrightText: 2022 Tobias Planitzer
+ */
+
 import QtQuick 2.6
 import Sailfish.Silica 1.0
 import Sailfish.Pickers 1.0

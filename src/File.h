@@ -1,3 +1,9 @@
+/*
+ * This file is part of Expenditure.
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ * SPDX-FileCopyrightText: 2022 Tobias Planitzer
+ */
+
 #ifndef QT_HUB_FILE_H
 #define QT_HUB_FILE_H
 
