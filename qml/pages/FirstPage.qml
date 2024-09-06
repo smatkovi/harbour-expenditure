@@ -6,14 +6,12 @@
 
 import QtQuick 2.6
 import Sailfish.Silica 1.0
-import Sailfish.Share 1.0 // ToDo: instead of copy to clipboard, send to app
 
 import "../modules/Opal/Delegates" as D
 
 Page {
     id: page
     allowedOrientations: Orientation.All
-
 
     // project specific global variables, loaded when activating a new project
     property double activeProjectID_unixtime : Number(storageItem.getSettings("activeProjectID_unixtime", 0))
@@ -187,11 +185,6 @@ Page {
         id: timePickerComponent
         TimePickerDialog {}
     }
-    ShareAction {
-        id: shareActionText
-    }
-
-
 
     // main page, current project
     SilicaListView {

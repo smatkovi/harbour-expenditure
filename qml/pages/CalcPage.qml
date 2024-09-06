@@ -6,7 +6,7 @@
 
 import QtQuick 2.6
 import Sailfish.Silica 1.0
-
+import Sailfish.Share 1.0
 
 Page {
     id: pageResults
@@ -18,6 +18,10 @@ Page {
             generateExchangeRateListFromExpenses()
             addExchangeRates_listmodelActiveProjectExpenses()
         }
+    }
+
+    ShareAction {
+        id: shareActionText
     }
 
     property real totalSpendingAmount_baseCurrency : 0
