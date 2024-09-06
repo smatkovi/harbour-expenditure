@@ -1,0 +1,24 @@
+# This file is part of Expenditure.
+# SPDX-License-Identifier: GPL-3.0-or-later
+# SPDX-FileCopyrightText: 2024 Mirian Margiani
+#
+# FORMAT:
+# * date Author's Name <author's email> version-release
+# - Summary of changes
+
+* Fri Sep 06 2024 Mirian Margiani <mixosaurus+ichthyo@pm.me> 0.9.0-1
+- Completely reworked user interface
+- Added changelog
+- Added support for backups using MyBackup
+- Updated readme with details on required permissions
+
+* Sat Dec 16 2023 yajo10 <yajo10@posteo.de> 0.4-1
+- Added translations: Swedish
+- Improved handling of decimal separators when adding a new entry
+
+* Sat Nov 25 2023 yajo10 <yajo10@posteo.de> 0.3-1
+- Added Chum packaging
+- Added more details on the About page
+
+* Sat Jan 01 2022 Tobias Planitzer <tp.labs@protonmail.com> 0.2-1
+- Last release by the original author

@@ -1,19 +1,54 @@
+# This file is part of Expenditure.
+# SPDX-License-Identifier: GPL-3.0-or-later
+# SPDX-FileCopyrightText: 2022 Tobias Planitzer
+# SPDX-FileCopyrightText: 2023 yajo10
+# SPDX-FileCopyrightText: 2023-2024 Mirian Margiani
+
 Name: harbour-expenditure
 Summary: Expenditure
-Version: 0.4
-Release: 2
+Version: 0.9.0
+Release: 1
 # The contents of the Group field should be one of the groups listed here:
 # https://github.com/mer-tools/spectacle/blob/master/data/GROUPS
-Group: Qt/Qt
-URL: http://example.org/
-License: LICENSE
+Group: Applications/Productivity
+URL: https://github.com/ichthyosaurus/harbour-expenditure
+License: GPL-3.0-or-later
 # This must be generated before uploading a package to a remote build service.
 # Usually this line does not need to be modified.
 Sources:
 - '%{name}-%{version}.tar.bz2'
 Description: |
-  Short description of my Sailfish OS Application
+  A simple app for tracking expenses in groups.
+
+  %if 0%{?_chum
+  Title: Expenditure
+  Type: desktop-application
+  DeveloperName: ichthyosaurus
+  Categories:
+  - Office
+  Custom:
+    Repo: https://github.com/ichthyosaurus/harbour-expenditure
+  PackageIcon: https://github.com/ichthyosaurus/harbour-expenditure/raw/main/icons/172x172/harbour-expenditure.png
+  Screenshots:
+  - https://github.com/ichthyosaurus/harbour-expenditure/raw/main/dist/screenshots-openrepos/screenshot-01.jpg
+  - https://github.com/ichthyosaurus/harbour-expenditure/raw/main/dist/screenshots-openrepos/screenshot-02.jpg
+  - https://github.com/ichthyosaurus/harbour-expenditure/raw/main/dist/screenshots-openrepos/screenshot-03.jpg
+  - https://github.com/ichthyosaurus/harbour-expenditure/raw/main/dist/screenshots-openrepos/screenshot-04.jpg
+  Links:
+    Homepage: https://github.com/ichthyosaurus/harbour-expenditure
+    Help: https://forum.sailfishos.org/t/apps-by-ichthyosaurus/15753
+    Bugtracker: https://github.com/ichthyosaurus/harbour-expenditure/issues
+    Donation: https://liberapay.com/ichthyosaurus
+  %endif
+
+Configure: none
 Builder: qmake5
+QMakeOptions:
+    - VERSION=%{version}
+    - RELEASE=%{release}
+
+Macros:
+    - __provides_exclude_from;^%{_datadir}/.*$
 
 # This section specifies build dependencies that are resolved using pkgconfig.
 # This is the preferred way of specifying build dependencies for your package.
@@ -29,7 +64,8 @@ PkgConfigBR:
 
 # Runtime dependencies which are not automatically detected
 Requires:
-  - sailfishsilica-qt5 >= 0.10.9 
+  - sailfishsilica-qt5 >= 0.10.9
+  - pyotherside-qml-plugin-python3-qt5 >= 1.5.0
 
 # All installed files
 Files:
