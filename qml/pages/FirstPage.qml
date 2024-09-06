@@ -263,6 +263,7 @@ Page {
             title: new Date(Number(date_time)).toLocaleString(Qt.locale(), Dates.timeFormat)
             text: expense_name
             description: {
+                // FIXME linebreak causes binding loop on "height"
                 (expense_info + "\n" +
                 (expense_members === activeProjectAllMembers ?
                      "for everyone" :
@@ -298,16 +299,14 @@ Page {
                 MenuItem {
                     text: qsTr("Remove")
                     onClicked: {
-                        idRemorseDelete.execute(idListItem, qsTr("Remove entry?"), function() {
-                            storageItem.deleteExpense(activeProjectID_unixtime, id_unixtime_created )
-                            listModel_activeProjectExpenses.remove(index)
-                        } )
+                        var ident = id_unixtime_created
+                        var idx = index
+                        idListItem.remorseDelete(function() {
+                            storageItem.deleteExpense(activeProjectID_unixtime, ident)
+                            listModel_activeProjectExpenses.remove(idx)
+                        })
                     }
                 }
-            }
-
-            RemorseItem {
-                id: idRemorseDelete
             }
         }
 
