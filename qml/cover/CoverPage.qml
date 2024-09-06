@@ -27,6 +27,8 @@ CoverBackground {
         sourceSize.height: height
         fillMode: Image.PreserveAspectFit
     }
+
+    /*
     BannerAddExpense {
         id: bannerAddExpense
     }
@@ -38,7 +40,7 @@ CoverBackground {
         CoverAction {
             onTriggered: {
                 if(Number(storageItem.getSettings("activeProjectID_unixtime", 0)) !== 0) {
-                    main.activate()
+                    appWindow.activate()
                     bannerAddExpense.notify( Theme.rgba(Theme.highlightDimmerColor, 1), Theme.itemSizeLarge, "new", activeProjectID_unixtime, 0 )
                 }
 
@@ -47,4 +49,5 @@ CoverBackground {
             iconSource: "image://theme/icon-cover-add"
         }
     }
+    */
 }
