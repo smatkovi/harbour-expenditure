@@ -50,25 +50,6 @@ function removeFullTable(tableName) {
     DB.simpleQuery('DROP TABLE IF EXISTS ?', [tableName]);
 }
 
-//function getTableCount(tableName, default_value) {
-//    var db = getDatabase();
-//    var res="";
-//    try {
-//        db.transaction(function(tx) {
-//            var rs = tx.executeSql('SELECT count(*) AS some_info FROM ' + tableName + ';');
-//            if (rs.rows.length > 0) {
-//                res = rs.rows.item(0).some_info;
-
-//            } else {
-//                res = default_value;
-//            }
-//        })
-//    } catch (err) {
-//        //console.log("Database " + err);
-//        res = default_value;
-//    };
-//    return res
-//}
 
 //
 // BEGIN Settings
