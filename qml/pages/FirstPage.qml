@@ -18,7 +18,6 @@ Page {
 
     // project specific global variables, loaded when activating a new project
     property double activeProjectID_unixtime : Number(Storage.getSettings("activeProjectID_unixtime", 0))
-    property int activeProjectID_listIndex
     property string activeProjectName
     property string activeProjectCurrency : "EUR"
     property string activeProjectAllMembers: ""
@@ -30,7 +29,6 @@ Page {
 
     // navigation specific blocking
     property bool updateEvenWhenCanceled : false
-    property bool delegateMenuOpen : false
 
 
     // autostart
@@ -328,7 +326,6 @@ Page {
             if ( Number(listModel_allProjects.get(j).project_id_timestamp) === Number(activeProjectID_unixtime) ) {
                 // find active project name and currency
                 activeProjectName = listModel_allProjects.get(j).project_name
-                activeProjectID_listIndex = j
                 activeProjectCurrency = listModel_allProjects.get(j).project_base_currency
 
                 // generate active project members list
