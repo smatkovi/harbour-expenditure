@@ -162,6 +162,59 @@ function deleteProject(project_id_timestamp) {
     return res;
 }
 
+function getProjectMetadata(ident) {
+    var res = DB.readQuery(
+        'SELECT * FROM projects_table WHERE project_id_timestamp = ? LIMIT 1;',
+        [String(ident)])
+
+    if (res.rows.length > 0) {
+        return {
+            ident: res.rows.item(0).project_id_timestamp,
+            name: res.rows.item(0).project_name,
+            members: res.rows.item(0).project_members.split(' ||| '),
+            lastPayer: res.rows.item(0).project_recent_payer_boolarray,
+            lastBeneficiaries: res.rows.item(0).project_recent_beneficiaries_boolarray.split(' ||| '),
+            baseCurrency: res.rows.item(0).project_base_currency,
+        }
+    }
+
+    return null
+}
+
+function getProjectEntries(ident) {
+    var order = Number(DB.getSetting("sortOrderExpensesIndex", 0)) == Number(0) ?
+                'DESC' : 'ASC'
+
+    var res = DB.readQuery('SELECT * FROM table_%1 \
+        ORDER BY date_time %2;'.arg(String(ident)).arg(order))
+    var entries = []
+
+    var allMembers = DB.readQuery('SELECT project_members FROM \
+        projects_table WHERE project_id_timestamp = ? LIMIT 1;',
+        [String(ident)])
+    allMembers = allMembers.rows.item(0).project_members
+
+    if (res.rows.length === 0) return []
+
+    for (var i = 0; i < res.rows.length; i++) {
+        entries.push({
+            ident: res.rows.item(i).id_unixtime_created,
+            date_time: res.rows.item(i).date_time,
+            section_string: new Date(Number(res.rows.item(i).date_time)).toLocaleString(Qt.locale(), 'yyyy-MM-dd'),
+            name: res.rows.item(i).expense_name,
+            sum: res.rows.item(i).expense_sum,
+            currency: res.rows.item(i).expense_currency,
+            info: res.rows.item(i).expense_info,
+            payer: res.rows.item(i).expense_payer,
+            beneficiaries: res.rows.item(i).expense_members.split(' ||| '),
+            beneficiaries_string: res.rows.item(i).expense_members === allMembers ?
+                qsTr("everyone") : res.rows.item(i).expense_members.split(' ||| ').join(', '),
+        })
+    }
+
+    return entries
+}
+
 function getAllProjects( default_value ) {
     var db = DB.getDatabase();
     var res=[];

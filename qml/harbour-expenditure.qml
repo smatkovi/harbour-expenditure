@@ -7,11 +7,13 @@
 
 import QtQuick 2.6
 import Sailfish.Silica 1.0
+import "js/storage.js" as Storage
 
 import Opal.About 1.0 as A
 import Opal.SupportMe 1.0 as M
 
 import "pages"
+import "components"
 
 ApplicationWindow {
     id: appWindow
@@ -20,6 +22,8 @@ ApplicationWindow {
 
     property bool loading: true  // only true during startup
     readonly property string appName: "Expenditure"
+
+    readonly property ProjectData activeProject: ProjectData {}
 
     // We have to explicitly set the \c _defaultPageOrientations property
     // to \c Orientation.All so the page stack's default placeholder page
@@ -39,5 +43,9 @@ ApplicationWindow {
         contents: Component {
             MySupportDialog {}
         }
+    }
+
+    Component.onCompleted: {
+        activeProject.ident = Number(Storage.getSettings("activeProjectID_unixtime", 0))
     }
 }
