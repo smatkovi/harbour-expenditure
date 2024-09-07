@@ -32,6 +32,7 @@ var dbMigrations = [
 //
 // Functions:
 // - simpleQuery(query, values): for most queries.
+// - readQuery(query, values): for read-only queries.
 // - getDatabase(): to get full access to the database.
 //
 // - defaultFor(arg, val): to use a fallback value 'val' if 'arg' is nullish.
@@ -80,7 +81,11 @@ function getDatabase() {
     return __db;
 }
 
-function simpleQuery(query, values) {
+function readQuery(query, values) {
+    return simpleQuery(query, values, true)
+}
+
+function simpleQuery(query, values, readOnly) {
     var db = getDatabase();
     var res = {
         ok: false,
@@ -96,7 +101,7 @@ function simpleQuery(query, values) {
     }
 
     try {
-        db.transaction(function(tx) {
+        var callback = function(tx) {
             var rs = tx.executeSql(query, values);
 
             if (rs.rowsAffected > 0) {
@@ -106,7 +111,13 @@ function simpleQuery(query, values) {
             }
 
             res.rows = rs.rows;
-        });
+        };
+
+        if (readOnly === true) {
+            db.readTransaction(callback)
+        } else {
+            db.transaction(callback)
+        }
 
         res.ok = true;
     } catch(e) {
