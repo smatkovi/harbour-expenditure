@@ -283,8 +283,8 @@ Page {
                 title: expense_payer
                 text: Number(expense_sum).toLocaleString(Qt.locale("de_CH")) // XXX translate
                 description: expense_currency.toString()
-                minWidth: 1.2 * Theme.itemSizeMedium
                 textLabel.font.pixelSize: Theme.fontSizeMedium
+                alignment: Qt.AlignRight
             }
 
             onClicked: openMenu()
