@@ -138,53 +138,54 @@ function getSetting(key, fallback) {
 
 function __doInit(db) {
     var latestVersion = dbMigrations[dbMigrations.length-1][0]
+
     var initialVersion = db.version
+    var previousVersion = Number(initialVersion)
+    var nextVersion = null
 
-    if (db.version !== String(latestVersion)) {
+    if (initialVersion !== String(latestVersion)) {
         for (var i in dbMigrations) {
-            var oldVersion = db.version
-            var newVersion = dbMigrations[i][0]
+            nextVersion = dbMigrations[i][0]
 
-            if (oldVersion < newVersion) {
+            if (previousVersion < nextVersion) {
                 var migrationType = typeof dbMigrations[i][1]
 
                 try {
-                    console.log("migrating database to version", newVersion)
+                    console.log("migrating database to version", nextVersion)
 
                     if (migrationType === "string") {
-                        db.changeVersion(oldVersion, newVersion, function(tx) {
+                        db.changeVersion(db.version, nextVersion, function(tx) {
                             tx.executeSql(dbMigrations[i][1])
                         })
                     } else if (migrationType === "function") {
-                        db.changeVersion(oldVersion, newVersion, dbMigrations[i][1])
+                        db.changeVersion(db.version, nextVersion, dbMigrations[i][1])
                     } else {
                         throw "expected migration as string or function, got " +
                                 migrationType + " instead"
                     }
                 } catch (e) {
                     console.error("fatal: failed to upgrade database version from",
-                                  oldVersion, "to", newVersion)
+                                  previousVersion, "to", nextVersion)
                     console.error("exception:\n", e)
-                    db.changeVersion(db.version, oldVersion, function(tx){})
+                    db.changeVersion(db.version, previousVersion, function(tx){})
                     break
                 }
+
+                previousVersion = nextVersion
             }
         }
     }
 
-    if (db.version !== String(latestVersion)) {
+    if (previousVersion !== latestVersion) {
         console.error("fatal: expected database version",
                       String(latestVersion),
-                      "but loaded database has version", db.version)
+                      "but loaded database has version", previousVersion)
         return false
     }
 
     console.log("loaded database version", db.version)
 
-    db.transaction(function(tx) {
-        tx.executeSql('CREATE TABLE IF NOT EXISTS %1 \
-            (key TEXT UNIQUE, value TEXT);'.arg(_keyValueSettingsTable));
-    });
+    db.transaction(_createSettingsTable);
 
     return true
 }
