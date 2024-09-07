@@ -41,8 +41,4 @@ ApplicationWindow {
             MySupportDialog {}
         }
     }
-
-    Item {
-        id: storageItem
-    }
 }
