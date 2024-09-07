@@ -9,7 +9,12 @@ width:Math.max(column.width,minWidth)
 height:Math.max(parent.height,column.height)
 property int minWidth:Theme.itemSizeMedium
 property int fixedWidth:0
-property string title
+property int alignment:Qt.AlignHCenter
+property int __textAlignment:{if(alignment==Qt.AlignHCenter)Text.AlignHCenter
+else if(alignment==Qt.AlignLeft)Text.AlignLeft
+else if(alignment==Qt.AlignRight)Text.AlignRight
+else Text.AlignHCenter
+}property string title
 property string text
 property string description
 readonly property alias titleLabel:_line0
@@ -38,7 +43,55 @@ font.pixelSize:Theme.fontSizeExtraSmall
 text:root.description
 palette{primaryColor:Theme.secondaryColor
 highlightColor:Theme.secondaryHighlightColor
-}}}states:[State{name:"fixedWidth"
+}}states:[State{name:"alignLeft"
+when:alignment==Qt.AlignLeft
+AnchorChanges{target:column
+anchors.horizontalCenter:undefined
+anchors.left:parent.left
+anchors.right:undefined
+}PropertyChanges{target:_line0
+horizontalAlignment:Text.AlignLeft
+}AnchorChanges{target:_line0
+anchors.horizontalCenter:undefined
+anchors.left:parent.left
+anchors.right:undefined
+}PropertyChanges{target:_line1
+horizontalAlignment:Text.AlignLeft
+}AnchorChanges{target:_line1
+anchors.horizontalCenter:undefined
+anchors.left:parent.left
+anchors.right:undefined
+}PropertyChanges{target:_line2
+horizontalAlignment:Text.AlignLeft
+}AnchorChanges{target:_line2
+anchors.horizontalCenter:undefined
+anchors.left:parent.left
+anchors.right:undefined
+}},State{name:"alignRight"
+when:alignment==Qt.AlignRight
+AnchorChanges{target:column
+anchors.horizontalCenter:undefined
+anchors.left:undefined
+anchors.right:parent.right
+}PropertyChanges{target:_line0
+horizontalAlignment:Text.AlignRight
+}AnchorChanges{target:_line0
+anchors.horizontalCenter:undefined
+anchors.left:undefined
+anchors.right:parent.right
+}PropertyChanges{target:_line1
+horizontalAlignment:Text.AlignRight
+}AnchorChanges{target:_line1
+anchors.horizontalCenter:undefined
+anchors.left:undefined
+anchors.right:parent.right
+}PropertyChanges{target:_line2
+horizontalAlignment:Text.AlignRight
+}AnchorChanges{target:_line2
+anchors.horizontalCenter:undefined
+anchors.left:undefined
+anchors.right:parent.right
+}}]}states:[State{name:"fixedWidth"
 when:fixedWidth>0
 PropertyChanges{target:root
 width:fixedWidth
@@ -47,21 +100,21 @@ width:fixedWidth
 }PropertyChanges{target:_line0
 width:fixedWidth
 wrapped:false
-horizontalAlignment:_line0.metrics.width>fixedWidth?Text.AlignLeft:Text.AlignHCenter
+horizontalAlignment:_line0.metrics.width>fixedWidth?Text.AlignLeft:__textAlignment
 }AnchorChanges{target:_line0
 anchors.horizontalCenter:undefined
 anchors.left:parent.left
 }PropertyChanges{target:_line1
 width:fixedWidth
 wrapped:false
-horizontalAlignment:_line1.metrics.width>fixedWidth?Text.AlignLeft:Text.AlignHCenter
+horizontalAlignment:_line1.metrics.width>fixedWidth?Text.AlignLeft:__textAlignment
 }AnchorChanges{target:_line1
 anchors.horizontalCenter:undefined
 anchors.left:parent.left
 }PropertyChanges{target:_line2
 width:fixedWidth
 wrapped:false
-horizontalAlignment:_line2.metrics.width>fixedWidth?Text.AlignLeft:Text.AlignHCenter
+horizontalAlignment:_line2.metrics.width>fixedWidth?Text.AlignLeft:__textAlignment
 }AnchorChanges{target:_line2
 anchors.horizontalCenter:undefined
 anchors.left:parent.left
