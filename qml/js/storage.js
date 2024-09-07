@@ -64,11 +64,11 @@ function removeFullTable(tableName) {
 //
 
 function setSettings(setting, value) {
-    DB.setSetting(setting, value)
+    return DB.setSetting(setting, value)
 }
 
 function getSettings(setting, defaultValue) {
-    DB.getSetting(setting, defaultValue)
+    return DB.getSetting(setting, defaultValue)
 }
 
 
