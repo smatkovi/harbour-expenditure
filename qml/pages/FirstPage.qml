@@ -2,11 +2,13 @@
  * This file is part of harbour-expenditure.
  * SPDX-License-Identifier: GPL-3.0-or-later
  * SPDX-FileCopyrightText: 2022 Tobias Planitzer
+ * SPDX-FileCopyrightText: 2023-2024 Mirian Margiani
  */
 
 import QtQuick 2.6
 import Sailfish.Silica 1.0
 import "../js/dates.js" as Dates
+import "../js/storage.js" as Storage
 
 import "../modules/Opal/Delegates" as D
 
@@ -15,16 +17,16 @@ Page {
     allowedOrientations: Orientation.All
 
     // project specific global variables, loaded when activating a new project
-    property double activeProjectID_unixtime : Number(storageItem.getSettings("activeProjectID_unixtime", 0))
+    property double activeProjectID_unixtime : Number(Storage.getSettings("activeProjectID_unixtime", 0))
     property int activeProjectID_listIndex
     property string activeProjectName
     property string activeProjectCurrency : "EUR"
     property string activeProjectAllMembers: ""
 
     // program specific global variables
-    property int sortOrderExpenses : Number(storageItem.getSettings("sortOrderExpensesIndex", 0)) // 0=descending, 1=ascending
-    property int exchangeRateMode : Number(storageItem.getSettings("exchangeRateModeIndex", 0)) // 0=collective, 1=individual
-    property string recentlyUsedCurrency : storageItem.getSettings("recentlyUsedCurrency", activeProjectCurrency)
+    property int sortOrderExpenses : Number(Storage.getSettings("sortOrderExpensesIndex", 0)) // 0=descending, 1=ascending
+    property int exchangeRateMode : Number(Storage.getSettings("exchangeRateModeIndex", 0)) // 0=collective, 1=individual
+    property string recentlyUsedCurrency : Storage.getSettings("recentlyUsedCurrency", activeProjectCurrency)
 
     // navigation specific blocking
     property bool updateEvenWhenCanceled : false
@@ -302,7 +304,7 @@ Page {
                         var ident = id_unixtime_created
                         var idx = index
                         idListItem.remorseDelete(function() {
-                            storageItem.deleteExpense(activeProjectID_unixtime, ident)
+                            Storage.deleteExpense(activeProjectID_unixtime, ident)
                             listModel_activeProjectExpenses.remove(idx)
                         })
                     }
@@ -322,7 +324,7 @@ Page {
 
     function generateAllProjectsList_FromDB() {
         listModel_allProjects.clear()
-        var allProjectsOverview = storageItem.getAllProjects("none")
+        var allProjectsOverview = Storage.getAllProjects("none")
         //console.log(allProjectsOverview)
         if (allProjectsOverview !== "none") {
             for (var i = 0; i < allProjectsOverview.length ; i++) {
@@ -365,7 +367,7 @@ Page {
                 }
 
                 // generate active project expenses list
-                var currentProjectEntries = storageItem.getAllExpenses( activeProjectID_unixtime, "none")
+                var currentProjectEntries = Storage.getAllExpenses( activeProjectID_unixtime, "none")
                 if (currentProjectEntries !== "none") {
                     for (i = 0; i < currentProjectEntries.length ; i++) {
                         listModel_activeProjectExpenses.append({

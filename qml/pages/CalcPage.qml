@@ -2,11 +2,15 @@
  * This file is part of harbour-expenditure.
  * SPDX-License-Identifier: GPL-3.0-or-later
  * SPDX-FileCopyrightText: 2022 Tobias Planitzer
+ * SPDX-FileCopyrightText: 2024 Mirian Margiani
  */
 
 import QtQuick 2.6
 import Sailfish.Silica 1.0
 import Sailfish.Share 1.0
+
+import "../js/storage.js" as Storage
+
 
 Page {
     id: pageResults
@@ -322,7 +326,7 @@ Page {
                 }
                 // if it has not been set yet, add to exchange rate list
                 if (currencyAlreadySet === false) {
-                    var tempStoredExchangeRateDB = Number(storageItem.getExchangeRate(listModel_activeProjectExpenses.get(i).expense_currency, 1))
+                    var tempStoredExchangeRateDB = Number(Storage.getExchangeRate(listModel_activeProjectExpenses.get(i).expense_currency, 1))
                     listModel_exchangeRates.append({ expense_currency : listModel_activeProjectExpenses.get(i).expense_currency,
                                                     base_currency : activeProjectCurrency,
                                                     exchange_rate : tempStoredExchangeRateDB,
@@ -332,7 +336,7 @@ Page {
             } else { // exchangeRateMode === 1 ... individual transactions
                 var tempExpenseCurrency = listModel_activeProjectExpenses.get(i).expense_currency
                 if (tempExpenseCurrency !== activeProjectCurrency) {
-                    tempStoredExchangeRateDB = Number(storageItem.getExchangeRate(listModel_activeProjectExpenses.get(i).expense_currency, 1))
+                    tempStoredExchangeRateDB = Number(Storage.getExchangeRate(listModel_activeProjectExpenses.get(i).expense_currency, 1))
                     listModel_exchangeRates.append({ expense_currency : listModel_activeProjectExpenses.get(i).expense_currency,
                                                     base_currency : activeProjectCurrency,
                                                     exchange_rate : tempStoredExchangeRateDB,
@@ -344,11 +348,11 @@ Page {
     }
 
     function storeExchangeRate_DB (exchange_rate_currency, exchange_rate_value) {
-        var tempOccurences = Number(storageItem.countExchangeRateOccurances(exchange_rate_currency, 0))
+        var tempOccurences = Number(Storage.countExchangeRateOccurances(exchange_rate_currency, 0))
         if (tempOccurences === 0) { // add new entry
-            storageItem.setExchangeRate(exchange_rate_currency, exchange_rate_value)
+            Storage.setExchangeRate(exchange_rate_currency, exchange_rate_value)
         } else { // update existing entry
-            storageItem.updateExchangeRate(exchange_rate_currency, exchange_rate_value)
+            Storage.updateExchangeRate(exchange_rate_currency, exchange_rate_value)
         }
     }
 

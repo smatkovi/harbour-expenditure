@@ -2,11 +2,12 @@
  * This file is part of harbour-expenditure.
  * SPDX-License-Identifier: GPL-3.0-or-later
  * SPDX-FileCopyrightText: 2022 Tobias Planitzer
+ * SPDX-FileCopyrightText: 2024 Mirian Margiani
  */
 
 import QtQuick 2.6
 import Sailfish.Silica 1.0
-
+import "../js/storage.js" as Storage
 
 MouseArea {
     id: popup
@@ -447,7 +448,7 @@ MouseArea {
 
         if (modeEdit === "new") {
             // store in DB and list for new project
-            storageItem.setProject( project_id_timestamp, project_name, project_members, project_recent_payer_boolarray, project_recent_beneficiaries_boolarray, project_base_currency )
+            Storage.setProject( project_id_timestamp, project_name, project_members, project_recent_payer_boolarray, project_recent_beneficiaries_boolarray, project_base_currency )
             listModel_allProjects.append({ project_id_timestamp : Number(project_id_timestamp),
                                          project_name : project_name,
                                          project_members : project_members,
@@ -458,7 +459,7 @@ MouseArea {
 
             // if this is the first project, auto set it as active project
             if (listModel_allProjects.count === 1) { // auto-sets as currently active project, if this project is very first one
-                storageItem.setSettings("activeProjectID_unixtime", Number(project_id_timestamp) )
+                Storage.setSettings("activeProjectID_unixtime", Number(project_id_timestamp) )
                 activeProjectID_unixtime = Number(project_id_timestamp)
                 loadActiveProjectInfos_FromDB( Number(project_id_timestamp) )
                 //console.log("auto set as active project ID = " + activeProjectID_unixtime)
@@ -466,7 +467,7 @@ MouseArea {
 
         } else { // modeEdit === "edit
             // update DB and list for existing project
-            storageItem.updateProject( project_id_timestamp, project_name, project_members, project_recent_payer_boolarray, project_recent_beneficiaries_boolarray, project_base_currency )
+            Storage.updateProject( project_id_timestamp, project_name, project_members, project_recent_payer_boolarray, project_recent_beneficiaries_boolarray, project_base_currency )
             for (var j = 0; j < listModel_allProjects.count ; j++) {
                 if (listModel_allProjects.get(j).project_id_timestamp === Number(project_id_timestamp)) {
                     //console.log("updated entry at: id_" +  project_id_timestamp)
@@ -485,7 +486,7 @@ MouseArea {
 
     function deleteProject() {
         updateEvenWhenCanceled = true
-        storageItem.deleteProject(timeStamp)
+        Storage.deleteProject(timeStamp)
         listModel_allProjects.remove(tempProjectListIndex)
         // set active project to reasonable one
         if (idComboboxProject.currentIndex != 0) {
@@ -499,7 +500,7 @@ MouseArea {
     function clearProject() {
         updateEvenWhenCanceled = true
         listModel_activeProjectExpenses.clear()
-        storageItem.removeFullTable( "table_" + activeProjectID_unixtime.toString() )
+        Storage.removeFullTable( "table_" + activeProjectID_unixtime.toString() )
         loadActiveProjectInfos_FromDB(Number(listModel_allProjects.get(idComboboxProject.currentIndex).project_id_timestamp)) // needed to make sure there is no expense or member list still active
         hide()
     }

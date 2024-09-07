@@ -2,6 +2,7 @@
  * This file is part of harbour-expenditure.
  * SPDX-License-Identifier: GPL-3.0-or-later
  * SPDX-FileCopyrightText: 2022 Tobias Planitzer
+ * SPDX-FileCopyrightText: 2023-2024 Mirian Margiani
  */
 
 import QtQuick 2.6
@@ -10,6 +11,7 @@ import Sailfish.Pickers 1.0
 import FileIO 1.0
 import Nemo.Notifications 1.0
 
+import "../js/storage.js" as Storage
 
 
 Dialog {
@@ -28,12 +30,12 @@ Dialog {
         updateEvenWhenCanceled = false
         idComboboxProject.currentIndex = 0
         for (var j = 0; j < listModel_allProjects.count ; j++) {
-            if (Number(listModel_allProjects.get(j).project_id_timestamp) === Number(storageItem.getSettings("activeProjectID_unixtime", 0))) {
+            if (Number(listModel_allProjects.get(j).project_id_timestamp) === Number(Storage.getSettings("activeProjectID_unixtime", 0))) {
                 idComboboxProject.currentIndex = j
             }
         }
-        idComboboxSortingExpenses.currentIndex = Number(storageItem.getSettings("sortOrderExpensesIndex", 0)) // 0=descending, 1=ascending
-        idComboboxExchangeRateMode.currentIndex = Number(storageItem.getSettings("exchangeRateModeIndex", 0)) // 0=collective, 1=individual
+        idComboboxSortingExpenses.currentIndex = Number(Storage.getSettings("sortOrderExpensesIndex", 0)) // 0=descending, 1=ascending
+        idComboboxExchangeRateMode.currentIndex = Number(Storage.getSettings("exchangeRateModeIndex", 0)) // 0=collective, 1=individual
         notificationString = ""
     }
     onDone: {
@@ -256,7 +258,7 @@ Dialog {
                     anchors.horizontalCenter: parent.horizontalCenter
                     onClicked: {
                         remorse_clearExchangeRatesDB.execute(qsTr("Delete stored settings?"), function() {
-                            storageItem.removeFullTable( "settings_table" )
+                            Storage.removeFullTable( "settings_table" )
                         })
                     }
                 }
@@ -265,7 +267,7 @@ Dialog {
                     anchors.horizontalCenter: parent.horizontalCenter
                     onClicked: {
                         remorse_clearExchangeRatesDB.execute(qsTr("Delete stored exchange rates?"), function() {
-                            storageItem.removeFullTable( "exchange_rates_table" )
+                            Storage.removeFullTable( "exchange_rates_table" )
                         })
                     }
                 }
@@ -277,13 +279,13 @@ Dialog {
                             // remove all individual project expense tables
                             for (var j = 0; j < listModel_allProjects.count ; j++) {
                                var tempTablename = "table_" + listModel_allProjects.get(j).project_id_timestamp
-                               storageItem.removeFullTable(tempTablename)
+                               Storage.removeFullTable(tempTablename)
                             }
                             // remove all projects overview table
-                            storageItem.removeFullTable( "projects_table" )
+                            Storage.removeFullTable( "projects_table" )
                             // set latest setting_id to zero
                             activeProjectID_unixtime = 0
-                            storageItem.setSettings("activeProjectID_unixtime", activeProjectID_unixtime)
+                            Storage.setSettings("activeProjectID_unixtime", activeProjectID_unixtime)
                             // update front page
                             updateEvenWhenCanceled = true
                         })
@@ -302,15 +304,15 @@ Dialog {
     // ******************************************** important functions ******************************************** //
 
     function writeDB_Settings() {
-        storageItem.setSettings("sortOrderExpensesIndex", idComboboxSortingExpenses.currentIndex)
+        Storage.setSettings("sortOrderExpensesIndex", idComboboxSortingExpenses.currentIndex)
         sortOrderExpenses = idComboboxSortingExpenses.currentIndex
         listModel_activeProjectExpenses.quick_sort()
 
-        storageItem.setSettings("exchangeRateModeIndex", idComboboxExchangeRateMode.currentIndex)
+        Storage.setSettings("exchangeRateModeIndex", idComboboxExchangeRateMode.currentIndex)
         exchangeRateMode = idComboboxExchangeRateMode.currentIndex
 
         if (listModel_allProjects.count > 0) { // only works if a project is actually created and loaded, otherwise this gets triggered directly in BannerAddProject.qml
-            storageItem.setSettings("activeProjectID_unixtime", Number(listModel_allProjects.get(idComboboxProject.currentIndex).project_id_timestamp))
+            Storage.setSettings("activeProjectID_unixtime", Number(listModel_allProjects.get(idComboboxProject.currentIndex).project_id_timestamp))
             activeProjectID_unixtime = Number(listModel_allProjects.get(idComboboxProject.currentIndex).project_id_timestamp)
             loadActiveProjectInfos_FromDB(Number(listModel_allProjects.get(idComboboxProject.currentIndex).project_id_timestamp))
         }
@@ -325,7 +327,7 @@ Dialog {
         var backupFilePath = selectedPath + "/" + backupFileName //StandardPaths.documents
 
         // check if project exists
-        var currentProjectEntries = storageItem.getAllExpenses(listModel_allProjects.get(idComboboxProject.currentIndex).project_id_timestamp, "none")
+        var currentProjectEntries = Storage.getAllExpenses(listModel_allProjects.get(idComboboxProject.currentIndex).project_id_timestamp, "none")
         if (currentProjectEntries !== "none") {
             // generate temp project expenses list from chosen list
             for (var i = 0; i < currentProjectEntries.length ; i++) {
@@ -384,10 +386,10 @@ Dialog {
 
             // if REPLACE: delete old entries in project-specific expense table in database, otherwise just MERGE
             if (selectedAction === "replace") {
-                storageItem.deleteAllExpenses(tempProjectIndex)
+                Storage.deleteAllExpenses(tempProjectIndex)
             } else { //"merge"
                 // generate expenses list for this project
-                var currentProjectEntries = storageItem.getAllExpenses( activeProjectID_unixtime, "none")
+                var currentProjectEntries = Storage.getAllExpenses( activeProjectID_unixtime, "none")
                 if (currentProjectEntries !== "none") {
                     for (var i = 0; i < currentProjectEntries.length ; i++) {
                         tempStringExistingId_unixtime += (currentProjectEntries[i][0]).toString() + ";"
@@ -410,12 +412,12 @@ Dialog {
                 var expense_info = tempExpenseLineArray[7]
 
                 if (selectedAction === "replace") {
-                    storageItem.setExpense(project_name_table, id_unixtime_created.toString(), date_time.toString(), expense_name, expense_sum, expense_currency, expense_info, expense_payer, expense_members)
+                    Storage.setExpense(project_name_table, id_unixtime_created.toString(), date_time.toString(), expense_name, expense_sum, expense_currency, expense_info, expense_payer, expense_members)
                     //console.log("entering DB -> " + tempExpenseLineArray)
                 } else {
                     // check for double entries, only add if not existent
                     if (tempStringExistingId_unixtime.indexOf(id_unixtime_created.toString()) === -1) {
-                        storageItem.setExpense(project_name_table, id_unixtime_created.toString(), date_time.toString(), expense_name, expense_sum, expense_currency, expense_info, expense_payer, expense_members)
+                        Storage.setExpense(project_name_table, id_unixtime_created.toString(), date_time.toString(), expense_name, expense_sum, expense_currency, expense_info, expense_payer, expense_members)
                         //console.log("entering DB -> " + tempExpenseLineArray)
                     }
                 }

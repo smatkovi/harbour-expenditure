@@ -2,11 +2,12 @@
  * This file is part of harbour-expenditure.
  * SPDX-License-Identifier: GPL-3.0-or-later
  * SPDX-FileCopyrightText: 2022 Tobias Planitzer
+ * SPDX-FileCopyrightText: 2024 Mirian Margiani
  */
 
 import QtQuick 2.6
 import Sailfish.Silica 1.0
-
+import "../js/storage.js" as Storage
 
 MouseArea {
     id: popup
@@ -560,7 +561,7 @@ MouseArea {
                 expense_payer : expense_payer,
                 expense_members : expense_members,
             })
-            storageItem.setExpense(project_name_table, id_unixtime_created.toString(), date_time.toString(), expense_name, expense_sum, expense_currency, expense_info, expense_payer, expense_members)
+            Storage.setExpense(project_name_table, id_unixtime_created.toString(), date_time.toString(), expense_name, expense_sum, expense_currency, expense_info, expense_payer, expense_members)
         } else { //modeEdit === "edit"
            for (var j = 0; j < listModel_activeProjectExpenses.count ; j++) {
                 if (id_unixtime_created === Number(listModel_activeProjectExpenses.get(j).id_unixtime_created)) {
@@ -576,7 +577,7 @@ MouseArea {
                     })
                 }
             }
-            storageItem.updateExpense(project_name_table, id_unixtime_created.toString(), date_time.toString(), expense_name, expense_sum, expense_currency, expense_info, expense_payer, expense_members)
+            Storage.updateExpense(project_name_table, id_unixtime_created.toString(), date_time.toString(), expense_name, expense_sum, expense_currency, expense_info, expense_payer, expense_members)
             // if dates got changed: also sort expenses list
             if (dateTimeManuallyChanged) {
                 listModel_activeProjectExpenses.quick_sort()
@@ -586,7 +587,7 @@ MouseArea {
 
         //remember recently used currency
         recentlyUsedCurrency = expense_currency
-        storageItem.setSettings("recentlyUsedCurrency", recentlyUsedCurrency)
+        Storage.setSettings("recentlyUsedCurrency", recentlyUsedCurrency)
 
         // update allProject_Listmodel and DB for recent_beneficiaries and recent_payer in case of "new" entry
         if (modeEdit === "new") {
@@ -598,8 +599,8 @@ MouseArea {
                       })
                 }
             }
-            storageItem.updateField_Project(activeProjectID_unixtime, "project_recent_payer_boolarray", project_recent_payer_boolarray)
-            storageItem.updateField_Project(activeProjectID_unixtime, "project_recent_beneficiaries_boolarray", project_recent_beneficiaries_boolarray)
+            Storage.updateField_Project(activeProjectID_unixtime, "project_recent_payer_boolarray", project_recent_payer_boolarray)
+            Storage.updateField_Project(activeProjectID_unixtime, "project_recent_beneficiaries_boolarray", project_recent_beneficiaries_boolarray)
         }
 
         // finally hide popup banner
