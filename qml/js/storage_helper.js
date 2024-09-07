@@ -136,6 +136,11 @@ function getSetting(key, fallback) {
     return res;
 }
 
+function _createSettingsTable(tx) {
+    tx.executeSql('CREATE TABLE IF NOT EXISTS %1 (key TEXT UNIQUE, value TEXT);'.
+                  arg(_keyValueSettingsTable));
+}
+
 function __doInit(db) {
     var latestVersion = dbMigrations[dbMigrations.length-1][0]
 
