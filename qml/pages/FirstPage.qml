@@ -7,9 +7,9 @@
 
 import QtQuick 2.6
 import Sailfish.Silica 1.0
+import "../components"
 import "../js/dates.js" as Dates
 import "../js/storage.js" as Storage
-
 import "../modules/Opal/Delegates" as D
 
 Page {
@@ -198,32 +198,10 @@ Page {
                             ""
         }
 
-        // XXX this is the new scrollbar
-        property Item _scrollbar: null
-
-        VerticalScrollDecorator {
-            flickable: idSilicaListView //root
-            visible: !idSilicaListView._scrollbar
-        }
-
-        Component.onCompleted: {
-            try {
-                _scrollbar = Qt.createQmlObject("
-                    import QtQuick 2.0
-                    import %1 1.0 as Private
-                    import '../js/dates.js' as Dates
-                    Private.Scrollbar {
-                        text: idSilicaListView.currentSectionDate.toLocaleString(Qt.locale(), Dates.dateNoYearFormat)
-                        description: idSilicaListView.currentSectionDate.toLocaleString(Qt.locale(), 'yyyy')
-                        headerHeight: idSilicaListView.headerItem ? idSilicaListView.headerItem.height : 0
-                    }".arg("Sailfish.Silica.private"), idSilicaListView, 'Scrollbar')
-            } catch (e) {
-                if (!_scrollbar) {
-                    console.warn(e)
-                    console.warn('[BUG] failed to load customized scrollbar')
-                    console.warn('[BUG] this probably means the private API has changed')
-                }
-            }
+        SmartScrollbar {
+            flickable: idSilicaListView
+            text: idSilicaListView.currentSectionDate.toLocaleString(Qt.locale(), Dates.dateNoYearFormat)
+            description: idSilicaListView.currentSectionDate.toLocaleString(Qt.locale(), 'yyyy')
         }
 
         PullDownMenu {
