@@ -36,6 +36,14 @@ DB.dbMigrations = [
             exchange_rate_value TEXT
         );
     '],
+    [0.2, function(tx){
+        var table = DB.defaultFor(DB._keyValueSettingsTable, "__local_settings")
+        tx.executeSql('DROP TABLE IF EXISTS %1;'.arg(table));
+        DB._createSettingsTable(tx);
+        tx.executeSql('INSERT INTO %1(key, value) \
+            SELECT setting, value FROM settings_table;'.arg(table))
+        tx.executeSql('DROP TABLE settings_table;');
+    }],
 
     // add new versions here...
     //
@@ -56,21 +64,11 @@ function removeFullTable(tableName) {
 //
 
 function setSettings(setting, value) {
-    DB.simpleQuery('INSERT OR REPLACE INTO settings_table VALUES (?, ?);',
-                   [setting, value]);
+    DB.setSetting(setting, value)
 }
 
 function getSettings(setting, defaultValue) {
-    var res = DB.simpleQuery('SELECT value FROM settings_table WHERE setting=? LIMIT 1;',
-                             [setting]);
-
-    if (res.rows.length > 0) {
-        res = res.rows.item(0).value;
-    } else {
-        res = defaultValue;
-    }
-
-    return res;
+    DB.getSetting(setting, defaultValue)
 }
 
 
