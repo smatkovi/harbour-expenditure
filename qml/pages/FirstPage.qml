@@ -15,6 +15,16 @@ import "../modules/Opal/Delegates" as D
 Page {
     id: root
     allowedOrientations: Orientation.All
+    forwardNavigation: true
+
+    onStatusChanged: {
+        if (status == PageStatus.Active) {
+            pageStack.pushAttached(Qt.resolvedUrl("ExpenseDialog.qml"), {
+                'acceptDestination': root,
+                'acceptDestinationAction': PageStackAction.Pop
+            })
+        }
+    }
 
     SilicaListView {
         id: listView
