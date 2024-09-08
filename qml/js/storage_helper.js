@@ -199,7 +199,7 @@ function __doInit(db) {
         return false
     }
 
-    console.log("loaded database version", db.version)
+    console.log("loaded database version", previousVersion)
 
     db.transaction(_createSettingsTable);
 
