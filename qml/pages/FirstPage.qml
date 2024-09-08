@@ -72,7 +72,7 @@ Page {
             id: item
             minContentHeight: Theme.itemSizeExtraLarge
 
-            title: new Date(Number(date_time)).toLocaleString(Qt.locale(), Dates.timeFormat)
+            title: Dates.formatDate(local_time, Dates.timeFormat, local_tz)
             text: name
             description: {
                 // FIXME linebreak causes binding loop on "height"
@@ -102,7 +102,7 @@ Page {
                 }
                 MenuItem {
                     text: qsTr("Remove")
-                    onClicked: activeProject.removeEntry(item, ident, index)
+                    onClicked: activeProject.removeEntry(item, rowid, index)
                 }
             }
         }

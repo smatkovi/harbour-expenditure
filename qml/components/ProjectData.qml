@@ -24,9 +24,9 @@ QtObject {
 
     readonly property ListModel expenses: ListModel {}
 
-    function removeEntry(item, ident, index) {
+    function removeEntry(item, rowid, index) {
         item.remorseDelete(function() {
-            Storage.deleteExpense(root.ident, ident)
+            Storage.deleteExpense(root.ident, rowid)
             root.expenses.remove(index)
         })
     }
