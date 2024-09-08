@@ -32,9 +32,14 @@ Page {
 
         header: PageHeader {
             title: qsTr("Expenses")
+
+            // the description must never be empty because the
+            // header height is not properly recalculated if the
+            // description is added later
             description: activeProject.active ?
-                            "%1 [%2]".arg(activeProject.name)
-                                     .arg(activeProject.baseCurrency) : ""
+                             "%1 [%2]".arg(activeProject.name)
+                                      .arg(activeProject.baseCurrency) :
+                             " "
         }
 
         SmartScrollbar {
