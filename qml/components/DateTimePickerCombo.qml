@@ -15,6 +15,8 @@ ValueButton {
     property string date
     property string timeZone
 
+    property date maximumDate: new Date()
+
     value: Dates.formatDate(date, Dates.fullDateTimeFormat, timeZone, qsTr("never"))
 
     onClicked: {
@@ -23,8 +25,8 @@ ValueButton {
 
         var datePicker = pageStack.push(Qt.resolvedUrl("LimitedDatePickerDialog.qml"), {
             date: dateParsed,
-            maximumDate: dateParsed,
-            acceptDestination: "Sailfish.Silica.TimePickerDialog",
+            maximumDate: maximumDate,
+            acceptDestination: Qt.resolvedUrl("LimitedTimePickerDialog.qml"),
             acceptDestinationAction: PageStackAction.Replace,
             acceptDestinationProperties: {
                 hour: dateParsed.getHours(),
@@ -35,7 +37,14 @@ ValueButton {
         datePicker.accepted.connect(function() {
             var timePicker = datePicker.acceptDestinationInstance
             newDate = Qt.formatDate(datePicker.date, 'yyyy-MM-dd')
-            console.log("picked date:", newDate)
+
+            if (newDate == Qt.formatDate(dateParsed, 'yyyy-MM-dd')) {
+                timePicker.maximumHour = maximumDate.getHours()
+                timePicker.maximumMinute = maximumDate.getMinutes()
+            } else {
+                timePicker.maximumHour = 24
+                timePicker.maximumMinute = 60
+            }
 
             timePicker.accepted.connect(function() {
                 newDate += ' ' + Qt.formatTime(timePicker.time, 'hh:mm:ss')

@@ -14,9 +14,11 @@ DatePickerDialog {
         selectedDate : new Date(Qt.formatDate(selectedDate, 'yyyy-MM-dd'))
 
     canAccept: !isNaN(selectedDate.getTime()) && _selectedDateClean <= _maximumDateClean
-    onSelectedDateChanged: {
+    on_SelectedDateCleanChanged: {
         if (_selectedDateClean > _maximumDateClean) {
-            appWindow.showMessage(qsTr("It is not possible to add entries for the future."))
+            Notices.show(qsTr("The date cannot be in the future."), 2500, Notice.Bottom)
+        } else {
+            Notices._dismissCurrent()
         }
     }
 }
