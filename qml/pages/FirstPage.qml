@@ -39,9 +39,9 @@ Page {
             // the description must never be empty because the
             // header height is not properly recalculated if the
             // description is added later
-            description: activeProject.active ?
-                             "%1 [%2]".arg(activeProject.name)
-                                      .arg(activeProject.baseCurrency) :
+            description: appWindow.activeProject.active ?
+                             "%1 [%2]".arg(appWindow.activeProject.name)
+                                      .arg(appWindow.activeProject.baseCurrency) :
                              " "
         }
 
@@ -63,7 +63,7 @@ Page {
             }
             MenuItem {
                 text: qsTr("Calculate")
-                enabled: activeProject.active
+                enabled: appWindow.activeProject.active
                 onClicked: pageStack.animatorPush(Qt.resolvedUrl("CalcPage.qml"))
             }
         }
@@ -83,7 +83,7 @@ Page {
         ViewPlaceholder {
             id: emptyPlaceholder
             enabled: !appWindow.loading &&
-                     activeProject.active &&
+                     appWindow.activeProject.active &&
                      listView.count == 0
             text: qsTr("No entries yet")
             hintText: qsTr("Swipe to the left to add entries")
@@ -91,13 +91,13 @@ Page {
 
         ViewPlaceholder {
             enabled: !appWindow.loading &&
-                     !activeProject.active
+                     !appWindow.activeProject.active
             text: qsTr("Add a project")
             hintText: qsTr("Pull down to open the settings page.")
         }
 
 
-        model: activeProject.expenses
+        model: appWindow.activeProject.expenses
 
         delegate: D.ThreeLineDelegate {
             id: item
@@ -140,7 +140,7 @@ Page {
                 }
                 MenuItem {
                     text: qsTr("Remove")
-                    onClicked: activeProject.removeEntry(item, rowid, index)
+                    onClicked: appWindow.activeProject.removeEntry(item, rowid, index)
                 }
             }
         }
