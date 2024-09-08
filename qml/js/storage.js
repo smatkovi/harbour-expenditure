@@ -168,6 +168,11 @@ function getSettings(setting, defaultValue) {
     return DB.getSetting(setting, defaultValue)
 }
 
+function getSortOrder() {
+    return Number(DB.getSetting("sortOrderExpensesIndex", 0)) == Number(0) ?
+                'DESC' : 'ASC'
+}
+
 
 //
 // BEGIN Projects
@@ -281,8 +286,7 @@ function getProjectMetadata(ident) {
 }
 
 function getProjectEntries(ident) {
-    var order = Number(DB.getSetting("sortOrderExpensesIndex", 0)) == Number(0) ?
-                'DESC' : 'ASC'
+    var order = getSortOrder()
 
     var res = DB.simpleQuery('\
         SELECT rowid, * FROM expenses \
