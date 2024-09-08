@@ -7,35 +7,58 @@
 
 import QtQuick 2.6
 import Sailfish.Silica 1.0
+import Opal.Delegates 1.0 as D
 
+import "../components"
 import "../js/storage.js" as Storage
+import "../js/dates.js" as Dates
 
 Dialog {
-    id: popup
+    id: root
     allowedOrientations: Orientation.All
 
     onStatusChanged: {
         // make sure the date is always correct, even if the page has been
         // on the stack for a long time
         if (status !== PageStatus.Activating) return;
-        ///// currentDate = new Date().toLocaleString(Qt.locale(), fullDateTimeFormat);
-        ///// dbCurrentDate = new Date().toLocaleString(Qt.locale(), dbDateFormat);
+        _now = new Date()
+        currentDate = _now.toLocaleString(Qt.locale(), Dates.fullDateTimeFormat)
+        dbCurrentDate = _now.toLocaleString(Qt.locale(), Dates.dbDateFormat)
+        nameField.forceActiveFocus()
     }
 
-    // property string currentDate: new Date().toLocaleString(Qt.locale(), fullDateTimeFormat);
-    // property string dbCurrentDate: Qt.formatDateTime(new Date(), dbDateFormat)
-    property bool editing: false
+    property date _now: new Date()
+    property string currentDate: _now.toLocaleString(Qt.locale(), Dates.fullDateTimeFormat);
+    property string dbCurrentDate: Qt.formatDateTime(_now, Dates.dbDateFormat)
+    property bool editing: rowid > -1
 
-    // UI variables
-    property var activeProjectID
-    property var hideBackColor : Theme.rgba(Theme.overlayBackgroundColor, 0.9)
-    property int amountBeneficiaries : 0
-    property string modeEdit : "new"
-    property date currentDate
-    property date currentTime
-    property double editedTimeStamp // unixtime, can be edited, is NOT entry creation timestamp
-    property double createdTimeStamp
-    property bool dateTimeManuallyChanged : false
+    property int rowid: -1
+    property int index: -1
+    property var model: null
+
+    property string utc_time: _now.toISOString()
+    property string local_time: dbCurrentDate
+    property string local_tz: Dates.getTimezone()
+    property alias name: nameField.text
+    property alias info: infoField.text
+    property alias sum: sumField.value
+    property alias currency: currencyField.text
+
+    property string payer
+    property var beneficiaries: ({})
+
+    onAccepted: {
+        if (editing) {
+            appWindow.activeProject.updateEntry(
+                index, rowid,
+                utc_time, local_time, local_tz,
+                name, info, sum, currency)
+        } else {
+            appWindow.activeProject.addEntry(
+                utc_time, local_time, local_tz,
+                name, info, sum, currency)
+        }
+    }
 
     SilicaFlickable {
         id: flick
@@ -48,561 +71,222 @@ Dialog {
             id: content
             width: parent.width
             height: childrenRect.height
-            spacing: Theme.paddingMedium
 
             DialogHeader {
-                title: editing ? qsTr("Edit Entry") : qsTr("New Entry")
+                title: editing ? qsTr("Edit expense") : qsTr("New expense")
                 acceptText: qsTr("Save")
                 cancelText: qsTr("Discard")
             }
 
-
-            // XXX edit date and time
-            ValueButton {
+            DateTimePickerCombo {
                 label: qsTr("Date")
-                vaulue: currentDate.toLocaleDateString(Qt.locale(), "dd. MMMM yyyy") // XXX translate
+                date: local_time
+                timeZone: local_tz
+                onDateChanged: {
+                    local_time = date
+                    utc_time = Dates.parseDate(date).toISOString()
+                }
+            }
+
+            Item { width: parent.width; height: Theme.paddingMedium }
+
+            TextField {
+                id: nameField
+                width: parent.width
+                acceptableInput: text.length < 300
+                label: qsTr("Expense")
+                EnterKey.onClicked: sumField.forceActiveFocus()
+            }
+
+            Row {
+                width: parent.width
+                spacing: Theme.paddingMedium
+
+                TextField {
+                    id: sumField
+                    property double value: 0.00
+
+                    width: parent.width / 5 * 3 - parent.spacing
+                    inputMethodHints: Qt.ImhFormattedNumbersOnly
+                    label: qsTr("Price")
+                    textRightMargin: 0
+                    EnterKey.onClicked: focus = false
+                    onFocusChanged: {
+                        if (focus) {
+                            if (value == 0.00) {
+                                text = value.toFixed(2)
+                            } else {
+                                text = String(value)
+                            }
+
+                            selectAll()
+                        } else {
+                            if (!!text) {
+                                value = Number(text.replace(',', '.'))
+                            } else {
+                                value = 0.00
+                            }
+
+                            text = value.toLocaleCurrencyString(Qt.locale('de-CH'), ' ').trim()
+                        }
+                    }
+                }
+
+                TextField {
+                    id: currencyField
+                    text: appWindow.activeProject.lastCurrency
+                    width: parent.width / 5 * 2
+                    acceptableInput: text.length < 100
+                    label: qsTr("Currency")
+                    EnterKey.onClicked: focus = false
+                }
+            }
+
+            TextField {
+                id: infoField
+                width: parent.width
+                acceptableInput: text.length < 1000
+                label: qsTr("Additional notes")
+                EnterKey.onClicked: focus = false
+            }
+
+            Row {
+                width: parent.width - 2*Theme.horizontalPageMargin
+                anchors.horizontalCenter: parent.horizontalCenter
+                spacing: Theme.paddingSmall
+
+                Label {
+                    width: parent.width / 2 - parent.spacing / 2
+                    font.pixelSize: Theme.fontSizeSmall
+                    color: Theme.highlightColor
+                    text: qsTr("Payer")
+                    horizontalAlignment: Text.AlignLeft
+                }
+
+                Label {
+                    width: parent.width / 2 - parent.spacing / 2
+                    font.pixelSize: Theme.fontSizeSmall
+                    color: Theme.highlightColor
+                    text: qsTr("Beneficiaries")
+                    horizontalAlignment: Text.AlignRight
+                }
+            }
+
+            D.OneLineDelegate {
+                id: allItem
+
+                property bool allSelected: {
+                    for (var i in appWindow.activeProject.members) {
+                        var member = appWindow.activeProject.members[i]
+
+                        if (!(!!root.beneficiaries[member])) {
+                            return false
+                        }
+                    }
+
+                    return true
+                }
+
+                text: qsTr("everyone")
+                padding.topBottom: 0
+
+                leftItem: TextSwitch {
+                    opacity: 0
+                    enabled: false
+                    leftMargin: 0
+                    rightMargin: 0
+                    width: Theme.itemSizeExtraSmall - Theme.paddingMedium
+                }
+                rightItem: TextSwitch {
+                    highlighted: down
+                    checked: allItem.allSelected
+                    automaticCheck: false
+                    LayoutMirroring.enabled: true
+                    LayoutMirroring.childrenInherit: true
+                    leftMargin: 0
+                    rightMargin: 0
+                    width: Theme.itemSizeExtraSmall - Theme.paddingMedium
+                }
+
                 onClicked: {
-                    var dialog = pageStack.push(datePickerComponent, {
-                        date: currentDate // preset picker to todays date
-                    })
-                    dialog.accepted.connect(function (){
-                        currentDate = (dialog.date)
-                        editedTimeStamp = Number((combineDateAndTime(currentDate, currentTime)).getTime())
-                        dateTimeManuallyChanged = true
-                    })
-                }
-            }
-        }
-    }
-
-            SilicaFlickable {
-                anchors.fill: parent
-                contentHeight: addExpenseColumn.height
-                clip: true
-
-                Column {
-                    id: addExpenseColumn
-                    width: parent.width
-
-                    Row {
-                        x: Theme.paddingLarge
-                        width: parent.width - 2*x
-                        topPadding: Theme.paddingLarge
-                        bottomPadding: Theme.paddingLarge * 2
-
-                        Column {
-                            id: idColumnAddDate
-                            width: parent.width /3*2 - Theme.paddingLarge /2
-
-                            Label {
-                                width: parent.width
-                                text: currentDate.toLocaleDateString(Qt.locale(), "dd. MMMM yyyy")
-                                color: Theme.highlightColor
-
-                                MouseArea {
-                                    anchors.fill: parent
-                                    onClicked: {
-                                        unFocusTextFields()
-                                        var dialog = pageStack.push(datePickerComponent, {
-                                            date: currentDate // preset picker to todays date
-                                        } )
-                                        dialog.accepted.connect( function () {
-                                            currentDate = (dialog.date)
-                                            editedTimeStamp = Number((combineDateAndTime(currentDate, currentTime)).getTime())
-                                            dateTimeManuallyChanged = true
-                                        } )
-                                    }
-                                }
-                            }
-                            Label {
-                                width: parent.width
-                                text: currentTime.toLocaleTimeString(Qt.locale(), Locale.ShortFormat)
-                                color: Theme.highlightColor
-
-                                MouseArea {
-                                    anchors.fill: parent
-                                    onClicked: {
-                                        unFocusTextFields()
-                                        var dialog = pageStack.push(timePickerComponent, {
-                                            hour: currentTime.getHours(), // preset picker to current time
-                                            minute: currentTime.getMinutes(),
-                                            hourMode: 1
-                                        } )
-                                        dialog.accepted.connect( function () {
-                                            currentTime = new Date ( dialog.time)
-                                            editedTimeStamp = Number((combineDateAndTime(currentDate, currentTime)).getTime())
-                                            dateTimeManuallyChanged = true
-                                        } )
-                                    }
-                                }
-                            }
-                            /*
-                            Label {
-                                width: parent.width
-                                font.pixelSize: Theme.fontSizeTiny
-                                text: "create_" + createdTimeStamp
-                            }
-                            Label {
-                                width: parent.width
-                                font.pixelSize: Theme.fontSizeTiny
-                                text: "edit_" + editedTimeStamp
-                            }
-                            */
+                    if (allSelected) {
+                        root.beneficiaries = {}
+                    } else {
+                        for (var i in appWindow.activeProject.members) {
+                            var member = appWindow.activeProject.members[i]
+                            root.beneficiaries[member] = true
                         }
-                        Item {
-                            width: Theme.paddingLarge
-                            height: 1
-                        }
-                        Button {
-                            id: idLabelHeaderAdd2
-                            enabled: (idTextfieldItem.length > 0)  && (amountBeneficiaries > 0)
-                            width: parent.width /3 - Theme.paddingLarge /2
-                            height: idColumnAddDate.height
-                            text: (modeEdit === "new") ? qsTr("Add") : qsTr("Save")
-                            onClicked: {
-                                addEditExpense()
-                            }
-                        }
-                    }
-                    TextField {
-                        id: idTextfieldItem
-                        width: page.width
-                        acceptableInput: text.length < 255
-                        font.pixelSize: Theme.fontSizeMedium
-                        EnterKey.onClicked: {
-                            focus = false
-                        }
-                        Label {
-                            anchors.top: parent.bottom
-                            anchors.topMargin: Theme.paddingSmall
-                            font.pixelSize: Theme.fontSizeExtraSmall
-                            color: Theme.secondaryColor
-                            text: qsTr("expense")
-                        }
-                    }
-                    Row {
-                        width: parent.width
 
-                        TextField {
-                            id: idTextfieldPrice
-                            width: parent.width /3 + parent.width /6
-                            textRightMargin: 0
-                            inputMethodHints: Qt.ImhFormattedNumbersOnly //use "Qt.ImhDigitsOnly" for INT
-                            text: Number("0").toFixed(2)
-                            EnterKey.onClicked: {
-                                focus = false
-                            }
-                            onFocusChanged: {
-                                text = text.replace(",", ".")
-                                text = Number(text).toFixed(2)
-                                if (focus) {
-                                    selectAll()
-                                }
-                            }
-
-                            Label {
-                                anchors.top: parent.bottom
-                                anchors.topMargin: Theme.paddingSmall
-                                font.pixelSize: Theme.fontSizeExtraSmall
-                                color: Theme.secondaryColor
-                                text: qsTr("price")
-                            }
-                        }
-                        Item {
-                            width: parent.width / 6
-                            height: 1
-                        }
-                        TextField {
-                            id: idTextfieldCurrency
-                            width: parent.width /3
-                            textLeftMargin: 0
-                            horizontalAlignment: TextInput.AlignRight
-                            acceptableInput: text.length > 0
-                            EnterKey.enabled: text.length >= 0
-                            EnterKey.onClicked: {
-                                focus = false
-                            }
-                            onFocusChanged: {
-                                if (text.length === 0) {
-                                    text = recentlyUsedCurrency
-                                }
-                                if (focus) {
-                                    selectAll()
-                                }
-                            }
-
-                            Label {
-                                anchors.right: parent.right
-                                anchors.top: parent.bottom
-                                anchors.topMargin: Theme.paddingSmall
-                                font.pixelSize: Theme.fontSizeExtraSmall
-                                color: Theme.secondaryColor
-                                text: qsTr("currency")
-                            }
-                        }
-                    }
-                    TextField {
-                        id: idTextfieldInfo
-                        width: page.width
-                        //acceptableInput: text.length < 255
-                        font.pixelSize: Theme.fontSizeMedium
-                        EnterKey.onClicked: {
-                            focus = false
-                        }
-                        Label {
-                            anchors.top: parent.bottom
-                            anchors.topMargin: Theme.paddingSmall
-                            font.pixelSize: Theme.fontSizeExtraSmall
-                            color: Theme.secondaryColor
-                            text: qsTr("info")
-                        }
-                    }
-                    Row {
-                        x: Theme.paddingLarge
-                        width: parent.width - 2*x
-                        topPadding: Theme.paddingLarge * 2
-                        bottomPadding: Theme.paddingMedium
-
-                        Label {
-                            width: parent.width / 2 - Theme.paddingLarge/2
-                            verticalAlignment: Text.AlignVCenter
-                            font.pixelSize: Theme.fontSizeExtraSmall
-                            color: Theme.secondaryColor
-                            text: qsTr("payment by")
-                        }
-                        Item {
-                            width: Theme.paddingLarge
-                            height: 1
-                        }
-                        Label {
-                            width: parent.width / 2 - Theme.paddingLarge/2
-                            verticalAlignment: Text.AlignVCenter
-                            horizontalAlignment: Text.AlignRight
-                            font.pixelSize: Theme.fontSizeExtraSmall
-                            color: Theme.secondaryColor
-                            text: qsTr("beneficiary")
-                        }
-                    }
-                    Column {
-                        x: Theme.paddingLarge
-                        width: parent.width - 2*x
-
-                        Repeater {
-                            model: listModel_activeProjectMembers
-                            delegate: Row {
-                                id: idtestcolumn
-                                width: parent.width
-
-                                Label {
-                                    id: idLabelPayerName
-                                    width: parent.width / 3*2 - Theme.paddingLarge/2
-                                    height: Theme.iconSizeSmallPlus
-                                    verticalAlignment: Text.AlignVCenter
-                                    wrapMode: Text.WordWrap
-                                    font.pixelSize: Theme.fontSizeSmall
-                                    font.bold: member_isPayer === "true"
-                                    color: (member_isPayer === "true") ? Theme.primaryColor : Theme.highlightColor
-                                    text: member_name
-
-                                    MouseArea {
-                                        anchors.fill: parent
-                                        onClicked: {
-                                            for (var i = 0; i < listModel_activeProjectMembers.count ; i++) {
-                                                listModel_activeProjectMembers.setProperty(i, "member_isPayer", "false")
-                                            }
-                                            member_isPayer="true"
-                                        }
-                                    }
-                                }
-                                Item {
-                                    width: Theme.paddingLarge
-                                    height: 1
-                                }
-                                Item {
-                                    width: parent.width / 3 - Theme.paddingLarge/2
-                                    height: parent.height
-
-                                    Icon {
-                                        anchors.right: parent.right
-                                        height: parent.height
-                                        width: height
-                                        color: (member_isPayer==="true") ? Theme.primaryColor : Theme.highlightColor
-                                        source: (member_isBeneficiary==="true") ? "image://theme/icon-m-accept?" : ""
-
-                                        Rectangle {
-                                            z: -1
-                                            anchors.centerIn: parent
-                                            width: parent.width - Theme.paddingSmall
-                                            height: width
-                                            color: "transparent"
-                                            border.width: (member_isPayer==="true") ? 2 : 1
-                                            border.color: Theme.secondaryColor
-                                            radius: width/4
-                                        }
-
-                                        MouseArea {
-                                            anchors.fill: parent
-                                            anchors.leftMargin: -Theme.paddingLarge
-                                            anchors.rightMargin: -Theme.paddingLarge
-                                            onClicked: {
-                                                (member_isBeneficiary==="true") ? (member_isBeneficiary="false") : (member_isBeneficiary="true")
-                                                amountBeneficiaries = 0
-                                                for (var i = 0; i < listModel_activeProjectMembers.count ; i++) {
-                                                    if (listModel_activeProjectMembers.get(i).member_isBeneficiary === "true") {
-                                                        amountBeneficiaries += 1
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    Item {
-                        width: parent.width
-                        height: Theme.itemSizeSmall / 2
-                    }
-                }
-    }
-
-    function notify( color, upperMargin, modeEditNew, activeProjectID_unixtime, expense_ID_created ) {
-        // color settings
-        if (color && (typeof(color) != "undefined")) {
-            idBackgroundRectExpenses.color = color
-        }
-        else {
-            idBackgroundRectExpenses.color = Theme.rgba(Theme.highlightBackgroundColor, 0.9)
-        }
-
-        // position settings
-        if (upperMargin && (typeof(upperMargin) != "undefined")) {
-            idBackgroundRectExpenses.anchors.topMargin = upperMargin
-        }
-        else {
-            idBackgroundRectExpenses.anchors.topMargin = 0
-        }
-
-        // project settings
-        activeProjectID = activeProjectID_unixtime
-        modeEdit = modeEditNew
-
-        // reset time and date to current time and date
-        if (modeEditNew === "new") {
-            idTextfieldItem.text = ""
-            idTextfieldPrice.text = "0"
-            idTextfieldCurrency.text = recentlyUsedCurrency
-            idTextfieldInfo.text = ""
-            currentDate = new Date()
-            currentTime = new Date()
-            createdTimeStamp = Number(new Date().getTime())
-            editedTimeStamp = Number(new Date().getTime())
-        } else { // modeEditNew === "edit"
-            //console.log("editing " + expense_ID_created)
-            for (var i = 0; i < listModel_activeProjectExpenses.count ; i++) {
-                if (Number(expense_ID_created) === Number(listModel_activeProjectExpenses.get(i).id_unixtime_created)) {
-                    idTextfieldItem.text = listModel_activeProjectExpenses.get(i).expense_name
-                    idTextfieldPrice.text = listModel_activeProjectExpenses.get(i).expense_sum
-                    idTextfieldCurrency.text = listModel_activeProjectExpenses.get(i).expense_currency
-                    idTextfieldInfo.text = listModel_activeProjectExpenses.get(i).expense_info
-                    var olderDateTime = Number(listModel_activeProjectExpenses.get(i).date_time)
-                    currentDate = new Date(olderDateTime)
-                    currentTime = new Date (olderDateTime)
-                    createdTimeStamp = Number(listModel_activeProjectExpenses.get(i).id_unixtime_created)
-                    editedTimeStamp = Number(listModel_activeProjectExpenses.get(i).date_time)
-                }
-            }
-        }
-
-        // remember last beneficiaries and payer in "new" mode, load expense beneficiaries and payer in "edit" mode
-        amountBeneficiaries = 0
-        if (modeEditNew === "new") {
-
-            // count beneficiaries
-            for (i = 0; i < listModel_activeProjectMembers.count ; i++) {
-                if (listModel_activeProjectMembers.get(i).member_isBeneficiary === "true") {
-                    amountBeneficiaries += 1
-                }
-            }
-
-            // use last used project specific beneficiaries and payers settings
-            for (var j = 0; j < listModel_allProjects.count ; j++) {
-                if ( Number(listModel_allProjects.get(j).project_id_timestamp) === Number(activeProjectID_unixtime) ) {
-                    var activeProjectMembersArray = (listModel_allProjects.get(j).project_members).split(" ||| ")
-                    var activeProjectRecentPayerArray = (listModel_allProjects.get(j).project_recent_payer_boolarray).split(" ||| ")
-                    var activeProjectRecentBeneficiariesArray = (listModel_allProjects.get(j).project_recent_beneficiaries_boolarray).split(" ||| ")
-                    for (var s = 0; s < activeProjectMembersArray.length ; s++) {
-                        listModel_activeProjectMembers.set( s, {
-                            "member_isBeneficiary" : activeProjectRecentBeneficiariesArray[s],
-                            "member_isPayer" : activeProjectRecentPayerArray[s],
-                        })
+                        root.beneficiaries = root.beneficiaries
                     }
                 }
             }
-        } else { // "edit" mode
 
-            // find item in expenses list for editing
-            for (var k = 0; k < listModel_activeProjectExpenses.count ; k++) {
-                if (Number(expense_ID_created) === Number(listModel_activeProjectExpenses.get(k).id_unixtime_created)) {
-                    var editedBeneficiariesList = (listModel_activeProjectExpenses.get(k).expense_members).split(" ||| ")
-                    var editPayersList =(listModel_activeProjectExpenses.get(k).expense_payer).split(" ||| ")
+            D.DelegateColumn {
+                model: appWindow.activeProject.members
 
-                    for (var l = 0; l < listModel_activeProjectMembers.count; l++) {
-                        listModel_activeProjectMembers.setProperty(l, "member_isBeneficiary", "false")
-                        listModel_activeProjectMembers.setProperty(l, "member_isPayer", "false")
+                delegate: D.OneLineDelegate {
+                    id: item
+                    text: modelData
+                    textLabel.wrapped: true
 
-                        // mark beneficiaries and get amount
-                        for (var m = 0; m < editedBeneficiariesList.length; m++) {
-                            if (listModel_activeProjectMembers.get(l).member_name === editedBeneficiariesList[m]) {
-                                listModel_activeProjectMembers.setProperty(l, "member_isBeneficiary", "true")
-                                amountBeneficiaries += 1
-                            }
+                    property bool isPayer: root.payer === modelData
+                    property bool isBeneficiary: !!root.beneficiaries[modelData]
+
+                    leftItem: TextSwitch {
+                        highlighted: down || (highlightItem.isHighlighted &&
+                                              highlightItem.isLeft)
+                        checked: isPayer
+                        automaticCheck: false
+                        leftMargin: 0
+                        rightMargin: 0
+                        width: Theme.itemSizeExtraSmall - Theme.paddingMedium
+                    }
+                    rightItem: TextSwitch {
+                        highlighted: down || (highlightItem.isHighlighted &&
+                                              !highlightItem.isLeft)
+                        checked: isBeneficiary
+                        automaticCheck: false
+                        LayoutMirroring.enabled: true
+                        LayoutMirroring.childrenInherit: true
+                        leftMargin: 0
+                        rightMargin: 0
+                        width: Theme.itemSizeExtraSmall - Theme.paddingMedium
+                    }
+
+                    padding.topBottom: 0
+                    contentItem.color: "transparent"
+
+                    Rectangle {
+                        id: highlightItem
+                        property bool isHighlighted: item._showPress
+                        property bool isLeft: x < item.width / 2
+
+                        z: -1000
+                        parent: item.contentItem
+                        height: parent.height
+                        width: parent.width / 2
+                        color: item._showPress ? item.highlightedColor : "transparent"
+                    }
+
+                    onPressed: {
+                        if (mouse.x < item.width / 2) {
+                            highlightItem.x = 0
+                        } else {
+                            highlightItem.x = item.width / 2
                         }
-                        // mark payer
-                        for (m = 0; m < editPayersList.length; m++) {
-                            if (listModel_activeProjectMembers.get(l).member_name === editPayersList[m]) {
-                                listModel_activeProjectMembers.setProperty(l, "member_isPayer", "true")
-                            }
+                    }
+
+                    onClicked: {
+                        if (mouse.x < item.width / 2) {
+                            root.payer = modelData
+                        } else {
+                            root.beneficiaries[modelData] = !(!!root.beneficiaries[modelData])
+                            root.beneficiaries = root.beneficiaries
                         }
                     }
                 }
             }
         }
-        //console.log(amountBeneficiaries)
-
-        // show banner overlay
-        popup.opacity = 1.0
-
-        // focus on expense text searchField
-        if (modeEditNew === "new") {
-            idTextfieldItem.forceActiveFocus()
-        }
-    }
-
-    function hide() {
-        unFocusTextFields()
-        popup.opacity = 0.0 // make invisible
-
-        // clear all fields
-        idTextfieldItem.text = ""
-        idTextfieldPrice.text = "0"
-        idTextfieldCurrency.text = recentlyUsedCurrency
-        idTextfieldInfo.text = ""
-        //idButtonAddExpense.visible = true
-    }
-
-    function unFocusTextFields() {
-        idTextfieldItem.focus = false
-        idTextfieldPrice.focus = false
-        idTextfieldCurrency.focus = false
-        idTextfieldInfo.focus = false
-    }
-
-    function combineDateAndTime(date, time) {
-        // warning: slice necessary to avoid singele digit outputs which can not be used in combined call
-        var year = date.getFullYear();
-        var month = ('0' + (date.getMonth() + 1)).slice(-2); // Jan is 0, dec is 11
-        var day = ('0' + date.getDate()).slice(-2)
-        //var month = date.getMonth() // only give one digit outputs <10, which causes errors later
-        //var day = date.getDate(); // only gives one digit outputs <10, which causes errors later
-        var dateString = year + '-' + month + '-' + day;
-        var hours = ('0' + time.getHours()).slice(-2)
-        var minutes = ('0' + time.getMinutes()).slice(-2)
-        var timeString = hours + ':' + minutes + ':00';
-        //var timeString = time.getHours() + ':' + time.getMinutes() + ':00';
-        //console.log(dateString)
-        //console.log(timeString)
-        var combined = Date.fromLocaleString(Qt.locale(), dateString + ' ' + timeString, "yyyy-MM-dd hh:mm:ss")
-        //console.log(combined)
-        return combined;
-    }
-
-    function addEditExpense() {
-        var project_name_table = activeProjectID.toString()
-        var id_unixtime_created = createdTimeStamp // time of entry creation, does not change, serves as unique expense_ID
-        var date_time = editedTimeStamp // new or edited time of expense
-        var expense_name = idTextfieldItem.text
-        var expense_sum = idTextfieldPrice.text
-        expense_sum = expense_sum.replace(",", ".")
-        expense_sum = Number(expense_sum).toFixed(2)
-        var expense_currency = idTextfieldCurrency.text
-        var expense_info = idTextfieldInfo.text
-        var expense_members = ""
-        var project_recent_payer_boolarray = ""
-        var project_recent_beneficiaries_boolarray = ""
-        for (var i = 0; i < listModel_activeProjectMembers.count ; i++) {
-            project_recent_payer_boolarray +=  " ||| " + listModel_activeProjectMembers.get(i).member_isPayer
-            project_recent_beneficiaries_boolarray +=  " ||| " + listModel_activeProjectMembers.get(i).member_isBeneficiary
-            if (listModel_activeProjectMembers.get(i).member_isPayer === "true") {
-                var expense_payer = listModel_activeProjectMembers.get(i).member_name
-
-            }
-            if (listModel_activeProjectMembers.get(i).member_isBeneficiary === "true") {
-                expense_members += " ||| " + listModel_activeProjectMembers.get(i).member_name
-            }
-        }
-        project_recent_payer_boolarray = project_recent_payer_boolarray.replace(" ||| ", "")
-        project_recent_beneficiaries_boolarray = project_recent_beneficiaries_boolarray.replace(" ||| ", "")
-        expense_members = expense_members.replace(" ||| ", "")
-        //console.log("table_name= " + project_name_table)
-        //console.log(id_unixtime_created + ", " + date_time + ", " + expense_name + ", " + expense_sum + ", " + expense_currency + ", " + expense_info + ", " + expense_payer + ", " + expense_members)
-
-        // update listmodel expenses and store in DB
-        if (modeEdit === "new") {
-            listModel_activeProjectExpenses.append({
-                id_unixtime_created : Number(id_unixtime_created).toFixed(0),
-                date_time : Number(date_time).toFixed(0),
-                expense_name : expense_name,
-                expense_sum : Number(expense_sum).toFixed(2),
-                expense_currency : expense_currency,
-                expense_info : expense_info,
-                expense_payer : expense_payer,
-                expense_members : expense_members,
-            })
-            Storage.setExpense(project_name_table, id_unixtime_created.toString(), date_time.toString(), expense_name, expense_sum, expense_currency, expense_info, expense_payer, expense_members)
-        } else { //modeEdit === "edit"
-           for (var j = 0; j < listModel_activeProjectExpenses.count ; j++) {
-                if (id_unixtime_created === Number(listModel_activeProjectExpenses.get(j).id_unixtime_created)) {
-                    listModel_activeProjectExpenses.set(j, {
-                        id_unixtime_created : Number(id_unixtime_created).toFixed(0),
-                        date_time : Number(date_time).toFixed(0),
-                        expense_name : expense_name,
-                        expense_sum : Number(expense_sum).toFixed(2),
-                        expense_currency : expense_currency,
-                        expense_info : expense_info,
-                        expense_payer : expense_payer,
-                        expense_members : expense_members,
-                    })
-                }
-            }
-            Storage.updateExpense(project_name_table, id_unixtime_created.toString(), date_time.toString(), expense_name, expense_sum, expense_currency, expense_info, expense_payer, expense_members)
-            // if dates got changed: also sort expenses list
-            if (dateTimeManuallyChanged) {
-                listModel_activeProjectExpenses.quick_sort()
-                dateTimeManuallyChanged = false
-            }
-        }
-
-        //remember recently used currency
-        recentlyUsedCurrency = expense_currency
-        Storage.setSettings("recentlyUsedCurrency", recentlyUsedCurrency)
-
-        // update allProject_Listmodel and DB for recent_beneficiaries and recent_payer in case of "new" entry
-        if (modeEdit === "new") {
-            for (var k = 0; k < listModel_allProjects.count ; k++) {
-                if ( Number(listModel_allProjects.get(k).project_id_timestamp) === Number(activeProjectID_unixtime) ) {
-                    listModel_allProjects.set(k, {
-                          "project_recent_payer_boolarray" : project_recent_payer_boolarray ,
-                          "project_recent_beneficiaries_boolarray" : project_recent_beneficiaries_boolarray,
-                      })
-                }
-            }
-            Storage.updateField_Project(activeProjectID_unixtime, "project_recent_payer_boolarray", project_recent_payer_boolarray)
-            Storage.updateField_Project(activeProjectID_unixtime, "project_recent_beneficiaries_boolarray", project_recent_beneficiaries_boolarray)
-        }
-
-        // finally hide popup banner
-        hide()
     }
 }
-

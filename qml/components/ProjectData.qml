@@ -31,6 +31,18 @@ QtObject {
         })
     }
 
+    function addEntry(utc_time, local_time, local_tz,
+                      name, info, sum, currency) {
+        reloadContents()
+//    property string section_string: Dates.formatDate(local_time, 'yyyy-MM-dd')
+    }
+
+    function updateEntry(index, rowid,
+                         utc_time, local_time, local_tz,
+                         name, info, sum, currency) {
+        reloadContents()
+    }
+
     function reloadMetadata() {
         var metadata = Storage.getProjectMetadata(ident)
         if (metadata === null) return
