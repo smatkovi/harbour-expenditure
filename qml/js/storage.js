@@ -303,6 +303,46 @@ function getProjectMetadata(ident) {
     return null
 }
 
+function _setLastPeople(project, payer, beneficiaries) {
+    // TODO this requires a refactored projects table!
+    DB.simpleQuery('\
+        UPDATE projects_table
+        SET last_payer = ?, last_beneficiaries = ?
+        WHERE rowid = ?',
+        [payer, beneficiaries.join(' ||| '), project])
+}
+
+function _getProjectMembers(ident) {
+    var res = DB.simpleQuery('\
+        SELECT project_members
+        FROM projects_table
+        WHERE project_id_timestamp = ?
+        LIMIT 1;',
+        [String(ident)])
+
+    return res.rows.item(0).project_members
+}
+
+function _makeProjectEntry(entryRow, projectMembers) {
+    var item = entryRow
+
+    return {
+        rowid: item.rowid,
+        utc_time: item.utc_time,
+        local_time: item.local_time,
+        local_tz: item.local_tz,
+        section_string: Dates.formatDate(item.local_time, 'yyyy-MM-dd'),
+        name: item.name,
+        info: item.info,
+        sum: item.sum,
+        currency: item.currency,
+        payer: item.payer,
+        beneficiaries: item.beneficiaries,
+        beneficiaries_string: item.beneficiaries === projectMembers ?
+            qsTr("everyone") : item.beneficiaries.split(' ||| ').join(', '),
+    }
+}
+
 function getProjectEntries(ident) {
     var order = getSortOrder()
 
@@ -312,34 +352,12 @@ function getProjectEntries(ident) {
         ORDER BY utc_time %2;'.arg(order), [ident])
     var entries = []
 
-    var allMembers = DB.simpleQuery('\
-        SELECT project_members
-        FROM projects_table
-        WHERE project_id_timestamp = ?
-        LIMIT 1;',
-        [String(ident)])
-    allMembers = allMembers.rows.item(0).project_members
+    var allMembers = _getProjectMembers(ident)
 
     if (res.rows.length === 0) return []
 
     for (var i = 0; i < res.rows.length; i++) {
-        var item = res.rows.item(i)
-
-        entries.push({
-            rowid: item.rowid,
-            utc_time: item.utc_time,
-            local_time: item.local_time,
-            local_tz: item.local_tz,
-            section_string: Dates.formatDate(item.local_time, 'yyyy-MM-dd'),
-            name: item.name,
-            info: item.info,
-            sum: item.sum,
-            currency: item.currency,
-            payer: item.payer,
-            beneficiaries: item.beneficiaries.split(' ||| '),
-            beneficiaries_string: item.beneficiaries === allMembers ?
-                qsTr("everyone") : item.beneficiaries.split(' ||| ').join(', '),
-        })
+        entries.push(_makeProjectEntry(res.rows.item(i), allMembers))
     }
 
     return entries
@@ -445,6 +463,66 @@ function getExchangeRate(exchange_rate_currency, default_value) {
 
 
 // all expenes in current project
+
+//
+// BEGIN Expenses
+//
+
+function addExpense(projectIdent,
+                    utc_time, local_time, local_tz,
+                    name, info, sum, currency, payer, beneficiaries) {
+    var res = DB.simpleQuery('\
+        INSERT INTO expenses(
+            project,
+            utc_time, local_time, local_tz,
+            name, info, sum, currency, payer, beneficiaries
+        ) VALUES (
+            ?,
+            ?, ?, ?,
+            ?, ?, ?, ?, ?, ?
+        );
+    ', [projectIdent,
+        utc_time, local_time, local_tz,
+        name, info, sum, currency, payer, beneficiaries.join(' ||| ')])
+
+    var newEntry = DB.simpleQuery('\
+        SELECT rowid, * FROM expenses \
+        WHERE rowid = ?
+        LIMIT 1;', [res.insertId])
+
+    var allMembers = _getProjectMembers(projectIdent)
+
+    _setLastPeople(projectIdent, payer, beneficiaries)
+
+    return _makeProjectEntry(newEntry.rows.item(0), allMembers)
+}
+
+function updateExpense(projectIdent, rowid,
+                       utc_time, local_time, local_tz,
+                       name, info, sum, currency, payer, beneficiaries) {
+    var res = DB.simpleQuery('\
+        UPDATE expenses SET
+            project = ?,
+            utc_time = ?, local_time = ?, local_tz = ?,
+            name = ?, info = ?, sum = ?, currency = ?, payer = ?, beneficiaries = ?
+        WHERE project = ? AND rowid = ?;
+    ', [projectIdent,
+        utc_time, local_time, local_tz,
+        name, info, sum, currency, payer, beneficiaries.join(' ||| '),
+        projectIdent, rowid])
+
+    var changedEntry = DB.simpleQuery('\
+        SELECT rowid, * FROM expenses \
+        WHERE rowid = ?
+        LIMIT 1;', [rowid])
+
+    var allMembers = _getProjectMembers(projectIdent)
+
+    _setLastPeople(projectIdent, payer, beneficiaries)
+
+    return _makeProjectEntry(changedEntry.rows.item(0), allMembers)
+}
+
 function setExpense( project_name_table, id_unixtime_created, date_time, expense_name, expense_sum, expense_currency, expense_info, expense_payer, expense_members ) {
     var db = DB.getDatabase();
     var res = "";
@@ -476,36 +554,36 @@ function setExpense( project_name_table, id_unixtime_created, date_time, expense
     return res;
 }
 
-function updateExpense ( project_name_table, id_unixtime_created, date_time, expense_name, expense_sum, expense_currency, expense_info, expense_payer, expense_members ) {
-    var db = DB.getDatabase();
-    var res = "";
-    db.transaction(function(tx) {
-        tx.executeSql('CREATE TABLE IF NOT EXISTS table_' + project_name_table + ' (id_unixtime_created TEXT, \
-                                                                            date_time TEXT, \
-                                                                            expense_name TEXT, \
-                                                                            expense_sum TEXT, \
-                                                                            expense_currency TEXT, \
-                                                                            expense_info TEXT, \
-                                                                            expense_payer TEXT, \
-                                                                            expense_members TEXT)' );
-        var rs = tx.executeSql('UPDATE table_' + project_name_table
-                               + ' SET date_time="' + date_time
-                               + '", expense_name="' + expense_name
-                               + '", expense_sum="' + expense_sum
-                               + '", expense_currency="' + expense_currency
-                               + '", expense_info="' + expense_info
-                               + '", expense_payer="' + expense_payer
-                               + '", expense_members="' + expense_members
-                               + '" WHERE id_unixtime_created=' + id_unixtime_created + ';');
-        if (rs.rowsAffected > 0) {
-            res = "OK";
-        } else {
-            res = "Error";
-        }
-    }
-    );
-    return res;
-}
+//function updateExpense ( project_name_table, id_unixtime_created, date_time, expense_name, expense_sum, expense_currency, expense_info, expense_payer, expense_members ) {
+//    var db = DB.getDatabase();
+//    var res = "";
+//    db.transaction(function(tx) {
+//        tx.executeSql('CREATE TABLE IF NOT EXISTS table_' + project_name_table + ' (id_unixtime_created TEXT, \
+//                                                                            date_time TEXT, \
+//                                                                            expense_name TEXT, \
+//                                                                            expense_sum TEXT, \
+//                                                                            expense_currency TEXT, \
+//                                                                            expense_info TEXT, \
+//                                                                            expense_payer TEXT, \
+//                                                                            expense_members TEXT)' );
+//        var rs = tx.executeSql('UPDATE table_' + project_name_table
+//                               + ' SET date_time="' + date_time
+//                               + '", expense_name="' + expense_name
+//                               + '", expense_sum="' + expense_sum
+//                               + '", expense_currency="' + expense_currency
+//                               + '", expense_info="' + expense_info
+//                               + '", expense_payer="' + expense_payer
+//                               + '", expense_members="' + expense_members
+//                               + '" WHERE id_unixtime_created=' + id_unixtime_created + ';');
+//        if (rs.rowsAffected > 0) {
+//            res = "OK";
+//        } else {
+//            res = "Error";
+//        }
+//    }
+//    );
+//    return res;
+//}
 
 function deleteExpense(projectId, entryId) {
     DB.simpleQuery('DELETE FROM expenses WHERE project = ? AND rowid = ?;',

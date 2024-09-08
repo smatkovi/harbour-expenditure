@@ -129,7 +129,14 @@ Page {
             menu: ContextMenu {
                 MenuItem {
                     text: qsTr("Edit")
-                    onClicked: {} // TODO
+                    onClicked: {
+                        pageStack.push(Qt.resolvedUrl("ExpenseDialog.qml"), {
+                            index: index, rowid: rowid,
+                            utc_time: utc_time, local_time: local_time, local_tz: local_tz,
+                            name: name, info: info, sum: sum, currency: currency, payer: payer,
+                            initialBeneficiaries: beneficiaries
+                        })
+                    }
                 }
                 MenuItem {
                     text: qsTr("Remove")

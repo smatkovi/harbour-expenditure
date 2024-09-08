@@ -34,15 +34,36 @@ QtObject {
     }
 
     function addEntry(utc_time, local_time, local_tz,
-                      name, info, sum, currency) {
-        reloadContents()
-//    property string section_string: Dates.formatDate(local_time, 'yyyy-MM-dd')
+                      name, info, sum, currency, payer, beneficiaries,
+                      reload) {
+        var newEntry = Storage.addExpense(
+            ident,
+            utc_time, local_time, local_tz,
+            name, info, sum, currency, payer, beneficiaries)
+
+        if (reload) {
+            reloadContents()
+        } else if (Storage.getSortOrder() === 'DESC') {
+            expenses.insert(0, newEntry)
+        } else {
+            expenses.append(newEntry)
+        }
     }
 
     function updateEntry(index, rowid,
                          utc_time, local_time, local_tz,
-                         name, info, sum, currency) {
-        reloadContents()
+                         name, info, sum, currency, payer, beneficiaries,
+                         reload) {
+        var changedEntry = Storage.updateExpense(
+            ident, rowid,
+            utc_time, local_time, local_tz,
+            name, info, sum, currency, payer, beneficiaries)
+
+        if (reload) {
+            reloadContents()
+        } else {
+            expenses.set(index, changedEntry)
+        }
     }
 
     function reloadMetadata() {
