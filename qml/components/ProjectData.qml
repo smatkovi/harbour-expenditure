@@ -10,9 +10,9 @@ import "../js/storage.js" as Storage
 
 QtObject {
     id: root
-    readonly property bool active: ident !== 0
+    readonly property bool active: project_id_timestamp !== 0
 
-    property double ident
+    property double project_id_timestamp
     property string name
     property string baseCurrency
     property var members: ([])
@@ -24,11 +24,11 @@ QtObject {
 
     readonly property ListModel expenses: ListModel {}
 
-    signal loaded(var ident)
+    signal loaded(var project_id_timestamp)
 
     function removeEntry(item, rowid, index) {
         item.remorseDelete(function() {
-            Storage.deleteExpense(root.ident, rowid)
+            Storage.deleteExpense(root.project_id_timestamp, rowid)
             root.expenses.remove(index)
         })
     }
@@ -37,7 +37,7 @@ QtObject {
                       name, info, sum, currency, payer, beneficiaries,
                       reload) {
         var newEntry = Storage.addExpense(
-            ident,
+            project_id_timestamp,
             utc_time, local_time, local_tz,
             name, info, sum, currency, payer, beneficiaries)
 
@@ -55,7 +55,7 @@ QtObject {
                          name, info, sum, currency, payer, beneficiaries,
                          reload) {
         var changedEntry = Storage.updateExpense(
-            ident, rowid,
+            project_id_timestamp, rowid,
             utc_time, local_time, local_tz,
             name, info, sum, currency, payer, beneficiaries)
 
@@ -67,7 +67,7 @@ QtObject {
     }
 
     function reloadMetadata() {
-        var metadata = Storage.getProjectMetadata(ident)
+        var metadata = Storage.getProjectMetadata(project_id_timestamp)
         if (metadata === null) return
 
         name = metadata.name
@@ -87,11 +87,11 @@ QtObject {
 
     function reloadContents() {
         expenses.clear()
-        expenses.append(Storage.getProjectEntries(ident))
+        expenses.append(Storage.getProjectEntries(project_id_timestamp))
     }
 
-    onIdentChanged: {
-        if (ident === 0) {
+    onProject_id_timestampChanged: {
+        if (project_id_timestamp === 0) {
             name = ''
             currency = ''
             members = []
@@ -102,7 +102,7 @@ QtObject {
         reloadMetadata()
         reloadContents()
 
-        console.log("loaded project data:", ident, name, members)
-        loaded(ident)
+        console.log("loaded project data:", project_id_timestamp, name, members)
+        loaded(project_id_timestamp)
     }
 }
