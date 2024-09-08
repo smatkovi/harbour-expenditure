@@ -111,6 +111,7 @@ Dialog {
                     label: qsTr("Price")
                     textRightMargin: 0
                     EnterKey.onClicked: focus = false
+
                     onFocusChanged: {
                         if (focus) {
                             if (value == 0.00) {
@@ -201,6 +202,7 @@ Dialog {
                     width: Theme.itemSizeExtraSmall - Theme.paddingMedium
                 }
                 rightItem: TextSwitch {
+                    onClicked: allItem.toggle()
                     highlighted: down
                     checked: allItem.allSelected
                     automaticCheck: false
@@ -211,7 +213,7 @@ Dialog {
                     width: Theme.itemSizeExtraSmall - Theme.paddingMedium
                 }
 
-                onClicked: {
+                function toggle() {
                     if (allSelected) {
                         root.beneficiaries = {}
                     } else {
@@ -237,6 +239,7 @@ Dialog {
                     property bool isBeneficiary: !!root.beneficiaries[modelData]
 
                     leftItem: TextSwitch {
+                        onClicked: root.payer = modelData
                         highlighted: down || (highlightItem.isHighlighted &&
                                               highlightItem.isLeft)
                         checked: isPayer
@@ -246,6 +249,10 @@ Dialog {
                         width: Theme.itemSizeExtraSmall - Theme.paddingMedium
                     }
                     rightItem: TextSwitch {
+                        onClicked: {
+                            root.beneficiaries[modelData] = !(!!root.beneficiaries[modelData])
+                            root.beneficiaries = root.beneficiaries
+                        }
                         highlighted: down || (highlightItem.isHighlighted &&
                                               !highlightItem.isLeft)
                         checked: isBeneficiary
@@ -289,6 +296,8 @@ Dialog {
                         }
                     }
                 }
+
+                onClicked: toggle()
             }
         }
     }
