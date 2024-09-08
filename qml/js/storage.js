@@ -486,7 +486,7 @@ function updateExpense ( project_name_table, id_unixtime_created, date_time, exp
 }
 
 function deleteExpense(projectId, entryId) {
-    DB.simpleQuery('DELETE FROM expenses WHERE project = ?, rowid = ?;',
+    DB.simpleQuery('DELETE FROM expenses WHERE project = ? AND rowid = ?;',
                    [projectId, entryId])
 }
 
