@@ -44,20 +44,92 @@ Dialog {
     property alias info: infoField.text
     property alias sum: sumField.value
     property alias currency: currencyField.text
+    property string payer: appWindow.activeProject.lastPayer
 
-    property string payer
-    property var beneficiaries: ({})
+    property string initialBeneficiaries: appWindow.activeProject.lastBeneficiaries.join(' ||| ')
+    property var beneficiaries: {
+        var list = initialBeneficiaries.split(' ||| ')
+        var map = {}
+
+        for (var i in list) {
+            map[list[i]] = true
+        }
+
+        return map
+    }
+
+    function _getBeneficiariesArray() {
+        var array = []
+
+        for (var i in appWindow.activeProject.members) {
+            var member = appWindow.activeProject.members[i]
+
+            if (!!root.beneficiaries[member]) {
+                array.push(member)
+            }
+        }
+
+        return array
+    }
+
+    canAccept: {
+        !!name.trim() && !!currency.trim()
+        && !!payer.trim() && _getBeneficiariesArray().length > 0
+    }
 
     onAccepted: {
-        if (editing) {
+        var beneficiaries = _getBeneficiariesArray()
+        var name = root.name.trim()
+        var info = root.info.trim()
+        var currency = root.currency.trim()
+
+        if (_editing) {
             appWindow.activeProject.updateEntry(
                 index, rowid,
                 utc_time, local_time, local_tz,
-                name, info, sum, currency)
+                name, info, sum, currency, payer, beneficiaries,
+                _usingCustomTime)
         } else {
             appWindow.activeProject.addEntry(
                 utc_time, local_time, local_tz,
-                name, info, sum, currency)
+                name, info, sum, currency, payer, beneficiaries,
+                _usingCustomTime)
+        }
+    }
+
+    onDone: {
+        if (result != DialogResult.Rejected && result != DialogResult.None) {
+            return
+        }
+
+        if (name == "" && info == "" && sum === 0.00
+            && (currency == "" ||
+                currency == appWindow.activeProject.lastCurrency)) {
+            return
+        }
+
+        appWindow._currentlyEditedEntry.index         = index
+        appWindow._currentlyEditedEntry.rowid         = rowid
+        appWindow._currentlyEditedEntry.utc_time      = utc_time
+        appWindow._currentlyEditedEntry.local_time    = local_time
+        appWindow._currentlyEditedEntry.local_tz      = local_tz
+        appWindow._currentlyEditedEntry.name          = name
+        appWindow._currentlyEditedEntry.info          = info
+        appWindow._currentlyEditedEntry.sum           = sum
+        appWindow._currentlyEditedEntry.currency      = currency
+        appWindow._currentlyEditedEntry.payer         = payer
+        appWindow._currentlyEditedEntry.beneficiaries = beneficiaries
+
+        try {
+            var page = pageStack.previousPage(page)
+        } catch(error) {
+            page = appWindow
+        }
+
+        if (_editing) {
+            remorseCancelWriting(page || appWindow, qsTr("Discarded all changes"))
+        } else {
+            remorseCancelWriting(page || appWindow, qsTr("Discarded the entry"))
         }
     }
 
@@ -74,7 +146,7 @@ Dialog {
             height: childrenRect.height
 
             DialogHeader {
-                title: editing ? qsTr("Edit expense") : qsTr("New expense")
+                title: _editing ? qsTr("Edit expense") : qsTr("New expense")
                 acceptText: qsTr("Save")
                 cancelText: qsTr("Discard")
             }
@@ -84,6 +156,11 @@ Dialog {
                 date: local_time
                 timeZone: local_tz
                 onDateChanged: {
+                    if (date == local_time) {
+                        return
+                    }
+
+                    _usingCustomTime = true
                     local_time = date
                     utc_time = Dates.parseDate(date).toISOString()
                 }
@@ -226,6 +303,8 @@ Dialog {
                         root.beneficiaries = root.beneficiaries
                     }
                 }
+
+                onClicked: toggle()
             }
 
             D.DelegateColumn {
@@ -297,8 +376,6 @@ Dialog {
                         }
                     }
                 }
-
-                onClicked: toggle()
             }
         }
     }

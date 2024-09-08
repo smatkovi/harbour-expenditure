@@ -24,6 +24,27 @@ ApplicationWindow {
     readonly property string appName: "Expenditure"
 
     readonly property ProjectData activeProject: ProjectData {}
+    readonly property var _currentlyEditedEntry: ({})
+
+    function _reopenEditDialog() {
+        pageStack.push(Qt.resolvedUrl("pages/ExpenseDialog.qml"), _currentlyEditedEntry)
+    }
+
+    function remorseCancelWriting(parentPage, cancelMessage) {
+        // This function requires valid data in _currentlyEditedEntry.
+        // Populate the cache object before calling this function.
+
+        var remorse = Remorse.popupAction(
+                    parentPage, cancelMessage,
+                    function(){}, 5000)
+
+        var callback = function () {
+            remorse.canceled.disconnect(callback)
+            _reopenEditDialog()
+        }
+
+        remorse.canceled.connect(callback)
+    }
 
     // We have to explicitly set the \c _defaultPageOrientations property
     // to \c Orientation.All so the page stack's default placeholder page
