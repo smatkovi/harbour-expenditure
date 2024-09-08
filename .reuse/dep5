@@ -27,9 +27,9 @@ Comment: This file is generated from [this file's name].yaml and shares copyrigh
 Files: icons/* qml/images/* dist/harbour-*.png
 Copyright: Tobias Planitzer
 License: CC-BY-SA-4.0
-Comment: These files are generated from the sources at icon-src/*.
+Comment: These files are generated from the sources at icons-src/*.
 
-Files: icon-src/*
+Files: icons-src/*
 Copyright: Tobias Planitzer
 License: CC-BY-SA-4.0
 Comment: These files contain proper Dublin Core licensing metadata.
@@ -58,3 +58,7 @@ Files: dist/ambience.jpg
 Copyright: Daniel Diemer
 License: LicenseRef-Unsplash
 Comment: https://unsplash.com/de/fotos/7zRTDfnRcrg
+
+Files: _service
+Copyright: yajo10
+License: GPL-3.0-or-later
