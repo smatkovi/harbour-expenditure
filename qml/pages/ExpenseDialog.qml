@@ -114,21 +114,24 @@ Dialog {
                     onFocusChanged: {
                         if (focus) {
                             if (value == 0.00) {
-                                text = value.toFixed(2)
+                                text = '  %1  '.arg(value.toFixed(2))
                             } else {
-                                text = String(value)
+                                text = '  %1  '.arg(String(value))
                             }
 
                             selectAll()
                         } else {
                             if (!!text) {
-                                value = Number(text.replace(',', '.'))
+                                value = Number(text.trim().replace(',', '.'))
+                                text = value.toLocaleCurrencyString(Qt.locale('de-CH'), ' ').trim()
                             } else {
                                 value = 0.00
                             }
-
-                            text = value.toLocaleCurrencyString(Qt.locale('de-CH'), ' ').trim()
                         }
+                    }
+
+                    onValueChanged: {
+                        text = value.toLocaleCurrencyString(Qt.locale('de-CH'), ' ').trim()
                     }
                 }
 
