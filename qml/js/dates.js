@@ -60,7 +60,7 @@ function formatDate(dbDateString, format, zone, alternativeIfEmpty) {
 
     var date = parseDate(dbDateString).toLocaleString(Qt.locale(), format)
 
-    if (zone !== undefined && zone !== "" && zone !== timezone) {
+    if (zone !== undefined && zone !== "" && zone !== getTimezone()) {
         return qsTr("%1 (%2)", "1: date, 2: time zone info").arg(date).arg(zone)
     }
 
