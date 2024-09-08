@@ -271,13 +271,31 @@ function getProjectMetadata(ident) {
 
     if (res.rows.length > 0) {
         var item = res.rows.item(0)
+
+        var members = item.project_members.split(' ||| ')
+        var lastPayer = ''
+        var lastBeneficiaries = []
+
+        var payersBool = item.project_recent_payer_boolarray.split(' ||| ')
+        var beneBool = item.project_recent_beneficiaries_boolarray.split(' ||| ')
+
+        for (var i in members) {
+            if (payersBool[i] == 'true') {
+                lastPayer = members[i]
+            }
+
+            if (beneBool[i] == 'true') {
+                lastBeneficiaries.push(members[i])
+            }
+        }
+
         return {
             ident: item.project_id_timestamp,
             name: item.project_name,
             members: item.project_members.split(' ||| '),
             lastCurrency: DB.getSetting("recentlyUsedCurrency", item.project_base_currency),
-            lastPayer: item.project_recent_payer_boolarray,
-            lastBeneficiaries: item.project_recent_beneficiaries_boolarray.split(' ||| '),
+            lastPayer: lastPayer,
+            lastBeneficiaries: lastBeneficiaries,
             baseCurrency: item.project_base_currency,
         }
     }
