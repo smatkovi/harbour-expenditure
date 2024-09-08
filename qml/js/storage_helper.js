@@ -90,6 +90,7 @@ function simpleQuery(query, values, readOnly) {
     var res = {
         ok: false,
         rowsAffected: 0,
+        insertId: undefined,
         rows: []
     };
 
@@ -110,6 +111,7 @@ function simpleQuery(query, values, readOnly) {
                 res.rowsAffected = 0;
             }
 
+            res.insertId = rs.insertId;
             res.rows = rs.rows;
         };
 
