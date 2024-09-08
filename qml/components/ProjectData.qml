@@ -17,6 +17,7 @@ QtObject {
     property string baseCurrency
     property var members: ([])
 
+    property string lastCurrency
     property string lastPayer
     property var lastBeneficiaries: ([])
     property var lastBeneficiariesMap: ({})
@@ -37,6 +38,7 @@ QtObject {
         name = metadata.name
         baseCurrency = metadata.baseCurrency
         members = metadata.members
+        lastCurrency = metadata.lastCurrency
         lastPayer = metadata.lastPayer
         lastBeneficiaries = metadata.lastBeneficiaries
 

@@ -168,13 +168,15 @@ function getProjectMetadata(ident) {
         [String(ident)])
 
     if (res.rows.length > 0) {
+        var item = res.rows.item(0)
         return {
-            ident: res.rows.item(0).project_id_timestamp,
-            name: res.rows.item(0).project_name,
-            members: res.rows.item(0).project_members.split(' ||| '),
-            lastPayer: res.rows.item(0).project_recent_payer_boolarray,
-            lastBeneficiaries: res.rows.item(0).project_recent_beneficiaries_boolarray.split(' ||| '),
-            baseCurrency: res.rows.item(0).project_base_currency,
+            ident: item.project_id_timestamp,
+            name: item.project_name,
+            members: item.project_members.split(' ||| '),
+            lastCurrency: DB.getSetting("recentlyUsedCurrency", item.project_base_currency),
+            lastPayer: item.project_recent_payer_boolarray,
+            lastBeneficiaries: item.project_recent_beneficiaries_boolarray.split(' ||| '),
+            baseCurrency: item.project_base_currency,
         }
     }
 
