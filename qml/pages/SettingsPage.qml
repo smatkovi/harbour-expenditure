@@ -18,10 +18,7 @@ Dialog {
     allowedOrientations: Orientation.All
 
     property string notificationString : ""
-    //property int oldProjectIndex
 
-    backNavigation: (bannerAddProject.opacity < 1) // && (updateEvenWhenCanceled === false)
-    forwardNavigation: (bannerAddProject.opacity < 1)
     onOpened: {
         //console.log("old project index = " + activeProjectID_unixtime)
         updateEvenWhenCanceled = false
@@ -35,11 +32,13 @@ Dialog {
         idComboboxExchangeRateMode.currentIndex = Number(Storage.getSettings("exchangeRateModeIndex", 0)) // 0=collective, 1=individual
         notificationString = ""
     }
+
     onDone: {
         if (result == DialogResult.Accepted) {
             writeDB_Settings()
         }
     }
+
     onRejected: {
         // in certain cases reload list even on cancel: if project was cleared, delted or created
         // then use previous activeProjectID_unixtime instead of the new one from dropdown menu
@@ -74,17 +73,7 @@ Dialog {
             publish()
         }
     }
-    RemorsePopup {
-        z: 10
-        id: remorse_clearExchangeRatesDB
-    }
-    RemorsePopup {
-        z: 10
-        id: remorse_restoreBackupFile
-    }
-    ListModel {
-        id: listModel_tempProjectExpenses
-    }
+
     Component {
         id: idFolderPickerPage
 
@@ -120,11 +109,10 @@ Dialog {
            }
        }
     }
+
     TextFileIO {
         id: idTextFileBackup
     }
-
-
 
     SilicaFlickable{
         anchors.fill: parent
@@ -135,31 +123,9 @@ Dialog {
             width: root.width
 
             DialogHeader {
-                //title: qsTr("Settings")
+                title: qsTr("Settings")
             }
-            Row {
-                width: parent.width
-                bottomPadding: Theme.paddingLarge
 
-                Label {
-                    id: idLabelSettingsHeader
-                    width: parent.width / 6 * 5
-                    leftPadding: Theme.paddingLarge
-                    font.pixelSize: Theme.fontSizeExtraLarge
-                    color: Theme.highlightColor
-                    text: qsTr("Settings")
-                }
-                IconButton {
-                    width: parent.width / 6
-                    anchors.verticalCenter: idLabelSettingsHeader.verticalCenter
-                    icon.color: Theme.highlightColor
-                    icon.scale: 1.1
-                    icon.source: "image://theme/icon-m-about?"
-                    onClicked: {
-                        pageStack.animatorPush(Qt.resolvedUrl("AboutPage.qml"), {})
-                    }
-                }
-            }
             Row {
                 width: parent.width
 
