@@ -7,6 +7,7 @@
 
 .pragma library
 .import "storage_helper.js" as DB
+.import "dates.js" as Dates
 
 //
 // BEGIN Database configuration
@@ -43,6 +44,102 @@ DB.dbMigrations = [
         tx.executeSql('INSERT INTO %1(key, value) \
             SELECT setting, value FROM settings_table;'.arg(table))
         tx.executeSql('DROP TABLE settings_table;');
+    }],
+    [0.3, function(tx){
+        tx.executeSql('\
+            CREATE TABLE IF NOT EXISTS expenses(
+                project INTEGER NOT NULL,
+                utc_time TEXT NOT NULL,
+                local_time TEXT NOT NULL,
+                local_tz TEXT NOT NULL,
+                name TEXT DEFAULT "",
+                info TEXT DEFAULT "",
+                sum REAL,
+                currency TEXT NOT NULL,
+                payer TEXT NOT NULL,
+                beneficiaries TEXT NOT NULL
+            );
+        ')
+
+        // TODO:
+        // Recreate this table in a future migration with
+        // foreign key once the projects table is finalized.
+        //
+        //  FOREIGN KEY (project)
+        //  REFERENCES projects_table (project_id_timestamp)
+        //    ON UPDATE CASCADE
+        //    ON DELETE CASCADE
+
+        var projects = tx.executeSql('SELECT rowid, project_id_timestamp FROM projects_table;')
+        var timezone = Dates.getTimezone()
+
+        console.log("> rewriting", projects.rows.length, "projects...")
+
+        for (var i = 0; i < projects.rows.length; i++) {
+            var projectId = projects.rows.item(i).project_id_timestamp
+            var projectRowId = projects.rows.item(i).rowid
+
+            // old expenses schema
+            tx.executeSql('\
+                CREATE TABLE IF NOT EXISTS table_%1 (
+                    id_unixtime_created TEXT,
+                    date_time TEXT,
+                    expense_name TEXT,
+                    expense_sum TEXT,
+                    expense_currency TEXT,
+                    expense_info TEXT,
+                    expense_payer TEXT,
+                    expense_members TEXT
+                );
+            '.arg(projectId));
+
+            // new expenses schema
+            tx.executeSql('\
+                INSERT INTO expenses(
+                    project,
+                    utc_time,
+                    local_time,
+                    local_tz,
+                    name,
+                    info,
+                    sum,
+                    currency,
+                    payer,
+                    beneficiaries)
+                SELECT
+                    "project",
+                    date_time,
+                    date_time,
+                    "",
+                    expense_name,
+                    expense_info,
+                    expense_sum,
+                    expense_currency,
+                    expense_payer,
+                    expense_members
+                FROM table_%2;
+            '.arg(projectId))
+
+            tx.executeSql('DROP TABLE table_%1;'.arg(projectId))
+            tx.executeSql('UPDATE expenses SET project = ?, local_tz = ? WHERE project = ?;',
+                          [projectId, timezone, "project"])
+        }
+
+        var dates = tx.executeSql('SELECT DISTINCT utc_time FROM expenses;')
+
+        console.log("> rewriting", dates.rows.length, "dates...")
+
+        for (var k = 0; k < dates.rows.length; ++k) {
+            var oldTime = dates.rows.item(k).utc_time
+            var date = new Date(Number(oldTime))
+            var utc = date.toISOString()
+            var local = date.toLocaleString(Qt.locale(), Dates.dbDateFormat)
+            console.log(oldTime, "->", utc, "UTC /", local, timezone, "LOCAL")
+
+            tx.executeSql('UPDATE expenses SET \
+                utc_time = ?, local_time = ? WHERE utc_time = ?;',
+                [utc, local, oldTime])
+        }
     }],
 
     // add new versions here...
@@ -187,30 +284,39 @@ function getProjectEntries(ident) {
     var order = Number(DB.getSetting("sortOrderExpensesIndex", 0)) == Number(0) ?
                 'DESC' : 'ASC'
 
-    var res = DB.readQuery('SELECT * FROM table_%1 \
-        ORDER BY date_time %2;'.arg(String(ident)).arg(order))
+    var res = DB.simpleQuery('\
+        SELECT rowid, * FROM expenses \
+        WHERE project = ?
+        ORDER BY utc_time %2;'.arg(order), [ident])
     var entries = []
 
-    var allMembers = DB.readQuery('SELECT project_members FROM \
-        projects_table WHERE project_id_timestamp = ? LIMIT 1;',
+    var allMembers = DB.simpleQuery('\
+        SELECT project_members
+        FROM projects_table
+        WHERE project_id_timestamp = ?
+        LIMIT 1;',
         [String(ident)])
     allMembers = allMembers.rows.item(0).project_members
 
     if (res.rows.length === 0) return []
 
     for (var i = 0; i < res.rows.length; i++) {
+        var item = res.rows.item(i)
+
         entries.push({
-            ident: res.rows.item(i).id_unixtime_created,
-            date_time: res.rows.item(i).date_time,
-            section_string: new Date(Number(res.rows.item(i).date_time)).toLocaleString(Qt.locale(), 'yyyy-MM-dd'),
-            name: res.rows.item(i).expense_name,
-            sum: res.rows.item(i).expense_sum,
-            currency: res.rows.item(i).expense_currency,
-            info: res.rows.item(i).expense_info,
-            payer: res.rows.item(i).expense_payer,
-            beneficiaries: res.rows.item(i).expense_members.split(' ||| '),
-            beneficiaries_string: res.rows.item(i).expense_members === allMembers ?
-                qsTr("everyone") : res.rows.item(i).expense_members.split(' ||| ').join(', '),
+            rowid: item.rowid,
+            utc_time: item.utc_time,
+            local_time: item.local_time,
+            local_tz: item.local_tz,
+            section_string: Dates.formatDate(item.local_time, 'yyyy-MM-dd'),
+            name: item.name,
+            info: item.info,
+            sum: item.sum,
+            currency: item.currency,
+            payer: item.payer,
+            beneficiaries: item.beneficiaries.split(' ||| '),
+            beneficiaries_string: item.beneficiaries === allMembers ?
+                qsTr("everyone") : item.beneficiaries.split(' ||| ').join(', '),
         })
     }
 
@@ -379,28 +485,9 @@ function updateExpense ( project_name_table, id_unixtime_created, date_time, exp
     return res;
 }
 
-function deleteExpense (project_id_timestamp, id_unixtime_created) {
-    var db = DB.getDatabase();
-    var res = "";
-    db.transaction(function(tx) {
-        tx.executeSql('CREATE TABLE IF NOT EXISTS table_' + project_id_timestamp + ' (id_unixtime_created TEXT, \
-                                                                            date_time TEXT, \
-                                                                            expense_name TEXT, \
-                                                                            expense_sum TEXT, \
-                                                                            expense_currency TEXT, \
-                                                                            expense_info TEXT, \
-                                                                            expense_payer TEXT, \
-                                                                            expense_members TEXT)' );
-        //var rs = tx.executeSql('DELETE FROM table_' + project_id_timestamp + ';');
-        var rs = tx.executeSql('DELETE FROM table_' + project_id_timestamp + ' WHERE id_unixtime_created=' + id_unixtime_created + ';');
-        if (rs.rowsAffected > 0) {
-            res = "OK";
-        } else {
-            res = "Error";
-        }
-    }
-    );
-    return res;
+function deleteExpense(projectId, entryId) {
+    DB.simpleQuery('DELETE FROM expenses WHERE project = ?, rowid = ?;',
+                   [projectId, entryId])
 }
 
 function deleteAllExpenses (project_id_timestamp) {
