@@ -14,12 +14,12 @@ import Nemo.Notifications 1.0
 import "../js/storage.js" as Storage
 
 Dialog {
-    id: pageSettings
+    id: root
+    allowedOrientations: Orientation.All
 
     property string notificationString : ""
     //property int oldProjectIndex
 
-    allowedOrientations: Orientation.Portrait
     backNavigation: (bannerAddProject.opacity < 1) // && (updateEvenWhenCanceled === false)
     forwardNavigation: (bannerAddProject.opacity < 1)
     onOpened: {
@@ -132,7 +132,7 @@ Dialog {
 
         Column {
             id: column
-            width: pageSettings.width
+            width: root.width
 
             DialogHeader {
                 //title: qsTr("Settings")
