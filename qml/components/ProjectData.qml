@@ -24,6 +24,8 @@ QtObject {
 
     readonly property ListModel expenses: ListModel {}
 
+    signal loaded(var ident)
+
     function removeEntry(item, rowid, index) {
         item.remorseDelete(function() {
             Storage.deleteExpense(root.ident, rowid)
@@ -80,5 +82,6 @@ QtObject {
         reloadContents()
 
         console.log("loaded project data:", ident, name, members)
+        loaded(ident)
     }
 }

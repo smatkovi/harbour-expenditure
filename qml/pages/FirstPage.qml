@@ -29,6 +29,9 @@ Page {
     SilicaListView {
         id: listView
         anchors.fill: parent
+        opacity: busyPlaceholder.enabled ? 0.5 : 1.0
+
+        Behavior on opacity { FadeAnimator {} }
 
         header: PageHeader {
             title: qsTr("Expenses")
@@ -66,10 +69,33 @@ Page {
         }
 
         ViewPlaceholder {
-            enabled: !activeProject.active
+            id: busyPlaceholder
+            enabled: appWindow.loading
+            verticalOffset: -listView.originY - height
+
+            BusyIndicator {
+                anchors.centerIn: parent
+                running: parent.enabled
+                size: BusyIndicatorSize.Large
+            }
+        }
+
+        ViewPlaceholder {
+            id: emptyPlaceholder
+            enabled: !appWindow.loading &&
+                     activeProject.active &&
+                     listView.count == 0
+            text: qsTr("No entries yet")
+            hintText: qsTr("Swipe to the left to add entries")
+        }
+
+        ViewPlaceholder {
+            enabled: !appWindow.loading &&
+                     !activeProject.active
             text: qsTr("Add a project")
             hintText: qsTr("Pull down to open the settings page.")
         }
+
 
         model: activeProject.expenses
 

@@ -46,6 +46,7 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
+        activeProject.loaded.connect(function(){ appWindow.loading = false; })
         activeProject.ident = Number(Storage.getSettings("activeProjectID_unixtime", 0))
     }
 }
