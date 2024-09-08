@@ -22,22 +22,23 @@ Dialog {
         // on the stack for a long time
         if (status !== PageStatus.Activating) return;
         _now = new Date()
-        currentDate = _now.toLocaleString(Qt.locale(), Dates.fullDateTimeFormat)
-        dbCurrentDate = _now.toLocaleString(Qt.locale(), Dates.dbDateFormat)
+        _nowLocalTime = _now.toLocaleString(Qt.locale(), Dates.dbDateFormat)
+        _nowUtc = _now.toISOString()
         nameField.forceActiveFocus()
     }
 
     property date _now: new Date()
-    property string currentDate: _now.toLocaleString(Qt.locale(), Dates.fullDateTimeFormat);
-    property string dbCurrentDate: Qt.formatDateTime(_now, Dates.dbDateFormat)
-    property bool editing: rowid > -1
+    property string _nowLocalTime: Qt.formatDateTime(_now, Dates.dbDateFormat)
+    property string _nowUtc: _now.toISOString()
+
+    property bool _editing: rowid > -1
+    property bool _usingCustomTime: false
 
     property int rowid: -1
     property int index: -1
-    property var model: null
 
-    property string utc_time: _now.toISOString()
-    property string local_time: dbCurrentDate
+    property string utc_time: _nowUtc
+    property string local_time: _nowLocalTime
     property string local_tz: Dates.getTimezone()
     property alias name: nameField.text
     property alias info: infoField.text
