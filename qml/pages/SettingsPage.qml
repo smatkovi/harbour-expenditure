@@ -13,11 +13,9 @@ import Nemo.Notifications 1.0
 
 import "../js/storage.js" as Storage
 
-
 Dialog {
     id: pageSettings
 
-    property int showMaintenanceButtonsCounter : 0
     property string notificationString : ""
     //property int oldProjectIndex
 
@@ -26,7 +24,6 @@ Dialog {
     forwardNavigation: (bannerAddProject.opacity < 1)
     onOpened: {
         //console.log("old project index = " + activeProjectID_unixtime)
-        showMaintenanceButtonsCounter = 0
         updateEvenWhenCanceled = false
         idComboboxProject.currentIndex = 0
         for (var j = 0; j < listModel_allProjects.count ; j++) {
@@ -151,11 +148,6 @@ Dialog {
                     font.pixelSize: Theme.fontSizeExtraLarge
                     color: Theme.highlightColor
                     text: qsTr("Settings")
-
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: showMaintenanceButtonsCounter = showMaintenanceButtonsCounter + 1
-                    }
                 }
                 IconButton {
                     width: parent.width / 6
@@ -238,60 +230,6 @@ Dialog {
                 }
             }
 
-            Column {
-                visible: showMaintenanceButtonsCounter > 9
-                width: parent.width
-                topPadding: Theme.paddingLarge * 3
-                spacing: Theme.paddingLarge
-
-                Label {
-                    width: parent.width
-                    wrapMode: Text.WordWrap
-                    horizontalAlignment: Text.AlignHCenter
-                    color: Theme.errorColor
-                    text: qsTr("Database cleanup - requires restart:")
-                    leftPadding: Theme.paddingLarge + Theme.paddingSmall
-                    rightPadding: leftPadding
-                }
-                Button {
-                    text: qsTr("settings")
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    onClicked: {
-                        remorse_clearExchangeRatesDB.execute(qsTr("Delete stored settings?"), function() {
-                            Storage.removeFullTable( "settings_table" )
-                        })
-                    }
-                }
-                Button {
-                    text: qsTr("exchange rates")
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    onClicked: {
-                        remorse_clearExchangeRatesDB.execute(qsTr("Delete stored exchange rates?"), function() {
-                            Storage.removeFullTable( "exchange_rates_table" )
-                        })
-                    }
-                }
-                Button {
-                    text: qsTr("projects")
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    onClicked: {
-                        remorse_clearExchangeRatesDB.execute(qsTr("Delete stored projects?"), function() {
-                            // remove all individual project expense tables
-                            for (var j = 0; j < listModel_allProjects.count ; j++) {
-                               var tempTablename = "table_" + listModel_allProjects.get(j).project_id_timestamp
-                               Storage.removeFullTable(tempTablename)
-                            }
-                            // remove all projects overview table
-                            Storage.removeFullTable( "projects_table" )
-                            // set latest setting_id to zero
-                            activeProjectID_unixtime = 0
-                            Storage.setSettings("activeProjectID_unixtime", activeProjectID_unixtime)
-                            // update front page
-                            updateEvenWhenCanceled = true
-                        })
-                    }
-                }
-            }
             Item {
                 width: parent.width
                 height: Theme.paddingLarge

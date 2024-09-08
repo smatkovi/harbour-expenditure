@@ -69,13 +69,6 @@ A.AboutPageBase {
         OpalLinkHandlerAttribution {}
     ]
 
-    extraSections: [
-        A.InfoSection {
-            title: qsTr("Troubleshooting")
-            smallPrint: qsTr("In case of any database error tap 10x on the word 'Settings' for cleanup options.")
-        }
-    ]
-
     contributionSections: [
         A.ContributionSection {
             title: qsTr("Development")
