@@ -153,6 +153,21 @@ function _createSettingsTable(tx) {
 }
 
 function __doInit(db) {
+    // Due to https://bugreports.qt.io/browse/QTBUG-71838 which was fixed only
+    // in Qt 5.13, it's not possible the get the actually current version number
+    // from the database object after a migration. The db.version field always
+    // stays at the initial version. Instead of reopening the database and
+    // replacing the db object, we track the current version manually when
+    // applying migrations (previousVersion).
+    //
+    // However, db.changeVersion(from, to) expects the same version as stored in
+    // the database object as "from" parameter. This means that calls to
+    // changeVersion must use db.version as the first argument and not the correct
+    // version number. When a migration fails, it is important to roll back to
+    // the version the database is actually on, i.e. the manually tracked version.
+    // That means a last call to changeVersion(db.version, previousVersion) is
+    // necessary.
+
     var latestVersion = dbMigrations[dbMigrations.length-1][0]
 
     var initialVersion = db.version
