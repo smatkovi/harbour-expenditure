@@ -30,19 +30,31 @@ Dialog {
         ProjectData { loadExpenses: false }
     }
 
-    Component.onCompleted: {
-        if (allProjects.length === 0) {
-            // if there are no projects, immediately set up a new one
-            projectCombo.currentIndex = -1
-            projectCombo.currentIndex = 0
-        }
-    }
-
     function deleteCurrentProject() {
         if (projectCombo.currentIndex >= 0 &&
                 projectCombo.currentIndex < allProjects.length) {
             allProjects.splice(projectCombo.currentIndex, 1)
             allProjects = allProjects
+            projectCombo.currentIndex = -1
+            projectCombo.currentIndex = 0
+        }
+    }
+
+    function exportCurrentProject() {
+        Notices.show('Not implemented yet')
+    }
+
+    function importCurrentProject() {
+        Notices.show('Not implemented yet')
+    }
+
+    onAccepted: {
+        Notices.show('Not implemented yet')
+    }
+
+    Component.onCompleted: {
+        if (allProjects.length === 0) {
+            // if there are no projects, immediately set up a new one
             projectCombo.currentIndex = -1
             projectCombo.currentIndex = 0
         }
@@ -76,8 +88,6 @@ Dialog {
 
                     onCurrentIndexChanged: {
                         if (currentIndex < 0) return
-
-                        console.log("IDX changed", currentIndex)
 
                         if (currentIndex >= allProjects.length) {
                             var newProjectData = {
@@ -301,15 +311,11 @@ Dialog {
             ButtonLayout {
                 Button {
                     text: qsTr("Import")
-                    onClicked: {
-                        Notices.show('Not implemented yet')
-                    }
+                    onClicked: importCurrentProject()
                 }
                 Button {
                     text: qsTr("Export")
-                    onClicked: {
-                        Notices.show('Not implemented yet')
-                    }
+                    onClicked: exportCurrentProject()
                 }
             }
 
