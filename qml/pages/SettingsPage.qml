@@ -292,8 +292,9 @@ Dialog {
                         icon.source: "image://theme/icon-splus-remove"
                         onClicked: {
                             var item = modelData
+                            var project = selectedProject
                             delegate.remorseDelete(function(){
-                                selectedProject.removeMember(item)
+                                project.removeMember(item)
                             })
                         }
                     }
