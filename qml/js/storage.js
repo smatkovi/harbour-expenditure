@@ -464,15 +464,26 @@ function getProjectMetadata(ident) {
     return null
 }
 
-function _setLastPeople(project, payer, beneficiaries) {
+function _setLastInfo(project, currency, payer, beneficiaries) {
+    // Only store names of active project members. When editing
+    // old entries, it's possible that there are still names of
+    // since deleted members. To avoid keeping these names floating
+    // around, they have to be filtered out here.
+    var members = splitMembersList(_getProjectMembers(project))
+    beneficiaries = beneficiaries.filter(
+        function(e){ return members.indexOf(e) >= 0 })
+
     DB.simpleQuery('\
         UPDATE projects
-        SET last_payer = ?, last_beneficiaries = ?
+        SET last_currency = ?, last_payer = ?, last_beneficiaries = ?
         WHERE rowid = ?',
-        [payer, joinMembersList(beneficiaries), project])
+        [currency, payer, joinMembersList(beneficiaries),
+         project])
 }
 
 function _getProjectMembers(ident) {
+    // This return a formatted string, not an array!
+
     var res = DB.simpleQuery('\
         SELECT members FROM projects WHERE rowid = ? LIMIT 1;
     ', [ident])
@@ -494,7 +505,14 @@ function _makeProjectEntry(entryRow, projectMembers) {
         sum: item.sum,
         currency: item.currency,
         payer: item.payer,
+
+        // Beneficiaries are not split into an array because
+        // that would be converted into a ListModel in QML,
+        // which is impractical to work with in this case.
         beneficiaries: item.beneficiaries,
+
+        // The screen presentation string is created here
+        // to avoid having to recalculate it when bindings are evaluated.
         beneficiaries_string: item.beneficiaries === projectMembers ?
             qsTr("everyone") : splitMembersList(item.beneficiaries).join(', '),
     }
@@ -649,7 +667,7 @@ function addExpense(projectIdent,
 
     var allMembers = _getProjectMembers(projectIdent)
 
-    _setLastPeople(projectIdent, payer, beneficiaries)
+    _setLastInfo(projectIdent, currency, payer, beneficiaries)
 
     return _makeProjectEntry(newEntry.rows.item(0), allMembers)
 }
@@ -675,7 +693,7 @@ function updateExpense(projectIdent, rowid,
 
     var allMembers = _getProjectMembers(projectIdent)
 
-    _setLastPeople(projectIdent, payer, beneficiaries)
+    _setLastInfo(projectIdent, currency, payer, beneficiaries)
 
     return _makeProjectEntry(changedEntry.rows.item(0), allMembers)
 }
