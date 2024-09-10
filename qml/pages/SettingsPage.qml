@@ -15,18 +15,25 @@ import Opal.ComboData 1.0
 import Opal.InfoCombo 1.0
 import Opal.Delegates 1.0 as D
 
+import "../components"
 import "../js/storage.js" as Storage
 
 Dialog {
     id: root
     allowedOrientations: Orientation.All
 
-    property var allProjects: Storage.getProjects()
+    property var allProjects: Storage.getProjects(projectDataComponent, root)
+    property ProjectData selectedProject: ProjectData { project_id_timestamp: -1000 }
+
+    Component {
+        id: projectDataComponent
+        ProjectData { loadExpenses: false }
+    }
 
     SilicaFlickable {
         id: flick
         anchors.fill: parent
-        contentHeight: content.height + addMemberItem.height
+        contentHeight: content.height + Theme.paddingLarge
 
         VerticalScrollDecorator { flickable: flick }
 
@@ -39,29 +46,88 @@ Dialog {
                 title: qsTr("Settings")
             }
 
+            SectionHeader {
+                text: qsTr("General settings")
+            }
+
+            ComboBox {
+                // TODO
+                width: parent.width
+                label: qsTr("Sorting")
+
+                menu: ContextMenu {
+                    MenuItem {
+                        text: qsTr("descending")
+                    }
+                    MenuItem {
+                        text: qsTr("ascending")
+                    }
+                }
+            }
+
+            ComboBox {
+                // TODO configure exchange rate preference per project
+                width: parent.width
+                label: qsTr("Exchange rate")
+
+                menu: ContextMenu {
+                    MenuItem {
+                        text: qsTr("per currency (constant)")
+                    }
+                    MenuItem {
+                        text: qsTr("per transaction (dates)")
+                    }
+                }
+            }
+
+            SectionHeader {
+                text: qsTr("Current project")
+            }
+
             ComboBox {
                 id: projectCombo
                 label: qsTr("Project")
                 rightMargin: Theme.horizontalPageMargin + Theme.iconSizeMedium
+                currentIndex: -1
 
-                property ComboData cdata
-                ComboData { dataRole: "value" }
+                onCurrentIndexChanged: {
+                    if (currentIndex < 0) return
 
-                onValueChanged: {
-                    appWindow.activeProject.project_id_timestamp = cdata.currentData
+                    if (currentIndex >= allProjects.length) {
+                        var newProjectData = {
+                            project_id_timestamp: -1,
+                            name: qsTr("New project"),
+                            baseCurrency: Qt.locale().currencySymbol(Locale.CurrencyIsoCode)
+                        }
+
+                        allProjects.push(projectDataComponent.createObject(root, newProjectData))
+                    }
+
+                    selectedProject = allProjects[currentIndex]
+
+                    if (!!newProjectData) {
+                        allProjects = allProjects
+                    }
                 }
 
                 menu: ContextMenu {
                     Repeater {
-                        model: allProjects
+                        model: allProjects.concat([{project_id_timestamp: -1000}])
 
                         MenuItem {
-                            property string value: modelData.project_id_timestamp
-                            text: "%1 [%2]".arg(modelData.name).arg(modelData.base_currency)
+                            property double value: modelData.project_id_timestamp
+                            text: value == -1000 ?
+                                      qsTr("New project ...") :
+                                      "%1 [%2]".arg(modelData.name).arg(modelData.baseCurrency)
 
                             Component.onCompleted: {
-                                if (value == appWindow.activeProject.project_id_timestamp) {
-                                    projectCombo.cdata.reset(value)
+                                var check = selectedProject.project_id_timestamp
+                                if (check < -1) {
+                                    check = appWindow.activeProject.project_id_timestamp
+                                }
+
+                                if (value == check) {
+                                    projectCombo.currentIndex = index
                                 }
                             }
                         }
@@ -84,29 +150,38 @@ Dialog {
                 }
             }
 
-            SectionHeader {
-                text: qsTr("Current project")
-            }
-
             Row {
                 width: parent.width
                 spacing: Theme.paddingMedium
 
                 TextField {
                     id: nameField
-                    text: appWindow.activeProject.name
+                    text: selectedProject.name
                     width: parent.width / 5 * 3 - parent.spacing
                     label: qsTr("Name")
                     textRightMargin: 0
+                    acceptableInput: !!text
                     EnterKey.onClicked: focus = false
+                    onTextChanged: {
+                        if (text) {
+                            selectedProject.name = text
+                        }
+                    }
                 }
 
                 TextField {
                     id: currencyField
-                    text: appWindow.activeProject.baseCurrency
+                    text: selectedProject.baseCurrency
                     width: parent.width / 5 * 2
-                    acceptableInput: text.length < 100
+                    acceptableInput: !!text && text.length < 100
                     label: qsTr("Currency")
+                    onFocusChanged: if (focus) selectAll()
+                    EnterKey.onClicked: focus = false
+                    onTextChanged: {
+                        if (text) {
+                            selectedProject.baseCurrency = text
+                        }
+                    }
                 }
             }
 
@@ -122,28 +197,17 @@ Dialog {
                 bottomPadding: Theme.paddingMedium
             }
 
-            ComboBox {
-                // TODO
-                width: parent.width
-                label: qsTr("Exchange rate")
-
-                menu: ContextMenu {
-                    MenuItem {
-                        text: qsTr("per currency (constant)")
-                    }
-                    MenuItem {
-                        text: qsTr("per transaction (dates)")
-                    }
-                }
-            }
-
             SectionHeader {
                 text: qsTr("Project members")
             }
 
             D.DelegateColumn {
-                model: appWindow.activeProject.members
+                id: membersList
+                model: selectedProject.members
+                width: parent.width
+
                 delegate: D.PaddedDelegate {
+                    id: delegate
                     minContentHeight:Theme.itemSizeSmall
                     centeredContainer: contentContainer
                     interactive: false
@@ -156,10 +220,16 @@ Dialog {
                         TextField {
                             width: parent.width
                             acceptableInput: !!text
-                            text: modelData
+                            text: selectedProject.renamedMembers[modelData] || modelData
                             textMargin: 0
                             textTopPadding: 0
                             labelVisible: false
+
+                            onTextChanged: {
+                                if (text) {
+                                    selectedProject.renameMember(modelData, text)
+                                }
+                            }
                         }
                     }
 
@@ -167,7 +237,8 @@ Dialog {
                         width: Theme.iconSizeSmallPlus
                         icon.source: "image://theme/icon-splus-remove"
                         onClicked: {
-                            Notices.show('Not implemented yet')
+                            // delegate.animateRemoval()
+                            selectedProject.removeMember(modelData)
                         }
                     }
                 }
@@ -183,11 +254,10 @@ Dialog {
 
                 function apply() {
                     if (!!newMemberField.text) {
-                        appWindow.activeProject.members.push(newMemberField.text)
-                        appWindow.activeProject.members = appWindow.activeProject.members
-                        newMemberField.text = ''
-                        newMemberField.focus = true
+                        selectedProject.addMember(newMemberField.text)
                         flick.scrollToBottom()
+                        newMemberField.text = ''
+                        newMemberField.forceActiveFocus()
                     }
                 }
 
@@ -202,10 +272,16 @@ Dialog {
                         textTopPadding: 0
                         labelVisible: false
                         EnterKey.onClicked: addMemberItem.apply()
+                        onFocusChanged: {
+                            if (!focus && !!text) {
+                                addMemberItem.apply()
+                            }
+                        }
                     }
                 }
 
                 rightItem: IconButton {
+                    enabled: !!newMemberField.text
                     width: Theme.iconSizeSmallPlus
                     icon.source: "image://theme/icon-splus-add"
                     onClicked: addMemberItem.apply()
@@ -243,25 +319,6 @@ Dialog {
                 font.pixelSize: Theme.fontSizeExtraSmall
                 topPadding: Theme.paddingLarge
                 bottomPadding: Theme.paddingMedium
-            }
-
-            SectionHeader {
-                text: qsTr("General settings")
-            }
-
-            ComboBox {
-                // TODO
-                width: parent.width
-                label: qsTr("Sorting")
-
-                menu: ContextMenu {
-                    MenuItem {
-                        text: qsTr("descending")
-                    }
-                    MenuItem {
-                        text: qsTr("ascending")
-                    }
-                }
             }
         }
     }

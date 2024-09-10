@@ -264,18 +264,14 @@ function deleteProject(project_id_timestamp) {
     return res;
 }
 
-function getProjects() {
-    var res = DB.readQuery('SELECT rowid, * FROM projects_table;')
+function getProjects(projectDataComponent, parent) {
+    var res = DB.readQuery('SELECT project_id_timestamp FROM projects_table;')
     var projects = []
 
     for (var i = 0; i < res.rows.length; ++i) {
         var item = res.rows.item(i)
-        projects.push({
-            project_id_timestamp: item.project_id_timestamp,
-            rowid: item.rowid,
-            name: item.project_name,
-            base_currency: item.project_base_currency,
-        })
+        projects.push(projectDataComponent.createObject(
+            parent, {project_id_timestamp: item.project_id_timestamp}))
     }
 
     return projects

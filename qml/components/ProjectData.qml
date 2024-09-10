@@ -10,21 +10,30 @@ import "../js/storage.js" as Storage
 
 QtObject {
     id: root
-    readonly property bool active: project_id_timestamp !== 0
 
+    // STATE
+    readonly property bool active: project_id_timestamp >= 0
+    signal loaded(var project_id_timestamp)
+
+    // CONFIGURATION
+    property bool loadExpenses: true
+    property var removedMembers: ([])
+    property var addedMembers: ([])
+    property var renamedMembers: ({})
+
+    // PROJECT METADATA AND DATA
+    // ident -1 is reserved for unsaved new projects
+    //     < -1 clears all loaded data
     property double project_id_timestamp
     property string name
     property string baseCurrency
     property var members: ([])
-
     property string lastCurrency
     property string lastPayer
     property var lastBeneficiaries: ([])
-
     readonly property ListModel expenses: ListModel {}
 
-    signal loaded(var project_id_timestamp)
-
+    // IMMEDIATELY APPLIED FUNCTIONS
     function removeEntry(item, rowid, index) {
         item.remorseDelete(function() {
             Storage.deleteExpense(root.project_id_timestamp, rowid)
@@ -82,19 +91,39 @@ QtObject {
         expenses.append(Storage.getProjectEntries(project_id_timestamp))
     }
 
+    // FUNCTIONS APPLIED ONCE saveMetadata() IS CALLED
+    function removeMember(name) {
+        removedMembers.push(name)
+        members = members.filter(function(item) {
+            return item !== name
+        })
+    }
+
+    function addMember(name) {
+        addedMembers.push(name)
+        members = members.concat([name])
+    }
+
+    function renameMember(name, newName) {
+        // note: the members array is not updated in this case
+        // to avoid a binding loop when editing members
+        renamedMembers[name] = newName
+    }
+
     onProject_id_timestampChanged: {
-        if (project_id_timestamp === 0) {
+        if (project_id_timestamp == -1) {
+            return
+        } else if (project_id_timestamp < -1) {
             name = ''
             currency = ''
             members = []
             expenses.clear()
-            return
+        } else {
+            reloadMetadata()
+            reloadContents()
+
+            console.log("loaded project data:", project_id_timestamp, name, members)
+            loaded(project_id_timestamp)
         }
-
-        reloadMetadata()
-        reloadContents()
-
-        console.log("loaded project data:", project_id_timestamp, name, members)
-        loaded(project_id_timestamp)
     }
 }
