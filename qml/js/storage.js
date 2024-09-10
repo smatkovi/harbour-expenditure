@@ -416,13 +416,13 @@ function getSortOrder() {
 //}
 
 function getProjects(projectDataComponent, parent) {
-    var res = DB.readQuery('SELECT project_id_timestamp FROM projects_table;')
+    var res = DB.readQuery('SELECT rowid FROM projects;')
     var projects = []
 
     for (var i = 0; i < res.rows.length; ++i) {
         var item = res.rows.item(i)
         projects.push(projectDataComponent.createObject(
-            parent, {project_id_timestamp: item.project_id_timestamp}))
+            parent, {rowid: item.rowid}))
     }
 
     return projects
@@ -430,37 +430,20 @@ function getProjects(projectDataComponent, parent) {
 
 function getProjectMetadata(ident) {
     var res = DB.readQuery(
-        'SELECT * FROM projects_table WHERE project_id_timestamp = ? LIMIT 1;',
+        'SELECT * FROM projects WHERE rowid = ? LIMIT 1;',
         [String(ident)])
 
     if (res.rows.length > 0) {
         var item = res.rows.item(0)
-
-        var members = item.project_members.split(' ||| ')
-        var lastPayer = ''
-        var lastBeneficiaries = []
-
-        var payersBool = item.project_recent_payer_boolarray.split(' ||| ')
-        var beneBool = item.project_recent_beneficiaries_boolarray.split(' ||| ')
-
-        for (var i in members) {
-            if (payersBool[i] == 'true') {
-                lastPayer = members[i]
-            }
-
-            if (beneBool[i] == 'true') {
-                lastBeneficiaries.push(members[i])
-            }
-        }
-
         return {
-            ident: item.project_id_timestamp,
-            name: item.project_name,
-            members: item.project_members.split(' ||| '),
-            lastCurrency: DB.getSetting("recentlyUsedCurrency", item.project_base_currency),
-            lastPayer: lastPayer,
-            lastBeneficiaries: lastBeneficiaries,
-            baseCurrency: item.project_base_currency,
+            ident: item.rowid,
+            name: item.name,
+            baseCurrency: item.base_currency,
+            members: _splitMembersList(item.members),
+            lastCurrency: item.last_currency,
+            lastPayer: item.last_payer,
+            lastBeneficiaries: item.last_Beneficiaries,
+            ratesMode: item.rates_mode,
         }
     }
 
@@ -468,23 +451,19 @@ function getProjectMetadata(ident) {
 }
 
 function _setLastPeople(project, payer, beneficiaries) {
-    // TODO this requires a refactored projects table!
     DB.simpleQuery('\
-        UPDATE projects_table
+        UPDATE projects
         SET last_payer = ?, last_beneficiaries = ?
         WHERE rowid = ?',
-        [payer, beneficiaries.join(' ||| '), project])
+        [payer, _joinMembersList(beneficiaries), project])
 }
 
 function _getProjectMembers(ident) {
     var res = DB.simpleQuery('\
-        SELECT project_members
-        FROM projects_table
-        WHERE project_id_timestamp = ?
-        LIMIT 1;',
-        [String(ident)])
+        SELECT members FROM projects WHERE rowid = ? LIMIT 1;
+    ', [String(ident)])
 
-    return res.rows.item(0).project_members
+    return res.rows.item(0).members
 }
 
 function _makeProjectEntry(entryRow, projectMembers) {
