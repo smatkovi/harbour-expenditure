@@ -17,8 +17,6 @@ QtObject {
 
     // CONFIGURATION
     property bool loadExpenses: true
-    property var removedMembers: ([])
-    property var addedMembers: ([])
     property var renamedMembers: ({})
 
     // PROJECT METADATA AND DATA
@@ -102,16 +100,18 @@ QtObject {
         expenses.append(Storage.getProjectEntries(rowid))
     }
 
-    // FUNCTIONS APPLIED ONCE saveMetadata() IS CALLED
+    // FUNCTIONS APPLIED ONCE Storage.saveProjects() IS CALLED
     function removeMember(name) {
-        removedMembers.push(name)
         members = members.filter(function(item) {
             return item !== name
         })
+
+        if (renamedMembers.hasOwnProperty(name)) {
+            delete renamedMembers[name]
+        }
     }
 
     function addMember(name) {
-        addedMembers.push(name)
         members = members.concat([name])
     }
 

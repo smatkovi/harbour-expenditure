@@ -496,16 +496,45 @@ function _saveNewProject(projectData) {
     return res.insertId
 }
 
-function _updateProject(projectData) {
-    var oldMembers = _getProjectMembers(projectData.rowid)
-    var newMembers = joinMembersList(projectData.members)
+function _renameProjectMember(project, oldName, newName) {
+    DB.simpleQuery('\
+        UPDATE expenses
+        SET beneficiaries = REPLACE(beneficiaries, " ||| " || ? || " ||| ", " ||| " || ? || " ||| ")
+        WHERE beneficiaries LIKE "% ||| " || ? || " ||| %"
+            AND project = ?
+    ;', [oldName, newName, oldName, project])
+    DB.simpleQuery('\
+        UPDATE expenses
+        SET payer = ?
+        WHERE payer = ? AND project = ?
+    ;', [newName, oldName, project])
+}
 
-    if (oldMembers !== newMembers) {
-        // TODO
-        // - add/remove members from the current list
-        // - rename members
-        console.log("TODO project members changed from", oldMembers, "to", newMembers)
+function _updateProject(projectData) {
+    var newMembers = []
+    var renamedMembers = projectData.renamedMembers
+
+    for (var i in projectData.members) {
+        var member = projectData.members[i]
+        if (!renamedMembers.hasOwnProperty(member)) {
+            renamedMembers[member] = member
+        }
     }
+
+    for (var k in projectData.renamedMembers) {
+        if (renamedMembers.hasOwnProperty(k)) {
+            newMembers.push(renamedMembers[k])
+
+            if (k !== renamedMembers[k]) {
+                _renameProjectMember(projectData.rowid, k, renamedMembers[k])
+            }
+        }
+    }
+
+    var lastBeneficiaries = projectData.lastBeneficiaries.filter(
+        function(e){ return newMembers.indexOf(e) >= 0 })
+    var lastPayer = newMembers.indexOf(projectData.lastPayer) >= 0 ?
+        projectData.lastPayer : ''
 
     DB.simpleQuery('\
         UPDATE projects SET
@@ -516,9 +545,9 @@ function _updateProject(projectData) {
             rates_mode = ?
         WHERE rowid = ?;
     ', [projectData.name, projectData.baseCurrency,
-        joinMembersList(projectData.members),
-        projectData.lastCurrency, projectData.lastPayer,
-        joinMembersList(projectData.lastBeneficiaries),
+        joinMembersList(newMembers),
+        projectData.lastCurrency, lastPayer,
+        joinMembersList(lastBeneficiaries),
         projectData.ratesMode,
         projectData.rowid])
 
