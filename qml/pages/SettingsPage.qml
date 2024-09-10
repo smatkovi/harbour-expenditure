@@ -150,16 +150,40 @@ Dialog {
             }
 
             ComboBox {
-                // TODO configure exchange rate preference per project
+                id: ratesModeCombo
                 width: parent.width
                 label: qsTr("Exchange rate")
 
+                property var indexOfData
+                property int currentData
+                ComboData { dataRole: 'value' }
+
                 menu: ContextMenu {
                     MenuItem {
+                        property int value: 0
                         text: qsTr("per currency (constant)")
                     }
                     MenuItem {
+                        property int value: 1
                         text: qsTr("per transaction (dates)")
+                    }
+                }
+
+                onCurrentDataChanged: {
+                    if (currentData != selectedProject.ratesMode) {
+                        selectedProject.ratesMode = currentData
+                    }
+                }
+
+                Component.onCompleted: {
+                    currentIndex = indexOfData(selectedProject.ratesMode)
+                }
+
+                Connections {
+                    target: root
+                    onSelectedProjectChanged: {
+                        ratesModeCombo.currentIndex = ratesModeCombo.indexOfData(
+                            selectedProject.ratesMode)
                     }
                 }
             }
