@@ -429,7 +429,116 @@ function getSortOrder() {
 //    return res;
 //}
 
+function saveProjects(projectDataArray) {
+    // This function takes an array of ProjectData objects
+    // as returned by getProjects().
+    // - All projects that are currently in the database but
+    //   that are NOT in this array will be DELETED.
+    // - All projects in the database will be updated with new
+    //   metadata from the array.
+
+    var res = DB.readQuery('SELECT rowid FROM projects;')
+    var currentProjects = []
+    var keptProjects = {}
+    var newRowids = []
+
+    for (var i = 0; i < res.rows.length; ++i) {
+        var item = res.rows.item(i)
+        keptProjects[item.rowid] = false
+        currentProjects.push(item.rowid)
+    }
+
+    for (var k in projectDataArray) {
+        var kRowid = projectDataArray[k].rowid
+
+        if (kRowid < 0) {
+            // new project
+            newRowids.push(_saveNewProject(projectDataArray[k]))
+        } else {
+            // updated project
+            keptProjects[projectDataArray[k].rowid] = true
+            newRowids.push(_updateProject(projectDataArray[k]))
+        }
+    }
+
+    var deletedProjects = currentProjects.filter(function(item){
+        return keptProjects[item] === false
+    })
+
+    for (var x in deletedProjects) {
+        _deleteProject(deletedProjects[x])
+    }
+
+    return newRowids
+}
+
+function _saveNewProject(projectData) {
+    var res = DB.simpleQuery('\
+        INSERT INTO projects(
+            rowid,
+            name, base_currency,
+            members,
+            last_currency, last_payer,
+            last_beneficiaries,
+            rates_mode
+        ) VALUES (
+            NULL,
+            ?, ?, ?,
+            ?, ?, ?,
+            ?
+        );
+    ', [projectData.name, projectData.baseCurrency,
+        joinMembersList(projectData.members),
+        projectData.lastCurrency, projectData.lastPayer,
+        joinMembersList(projectData.lastBeneficiaries),
+        projectData.ratesMode])
+
+    return res.insertId
+}
+
+function _updateProject(projectData) {
+    var oldMembers = _getProjectMembers(projectData.rowid)
+    var newMembers = joinMembersList(projectData.members)
+
+    if (oldMembers !== newMembers) {
+        // TODO
+        // - add/remove members from the current list
+        // - rename members
+        console.log("TODO project members changed from", oldMembers, "to", newMembers)
+    }
+
+    DB.simpleQuery('\
+        UPDATE projects SET
+            name = ?, base_currency = ?,
+            members = ?,
+            last_currency = ?, last_payer = ?,
+            last_beneficiaries = ?,
+            rates_mode = ?
+        WHERE rowid = ?;
+    ', [projectData.name, projectData.baseCurrency,
+        joinMembersList(projectData.members),
+        projectData.lastCurrency, projectData.lastPayer,
+        joinMembersList(projectData.lastBeneficiaries),
+        projectData.ratesMode,
+        projectData.rowid])
+
+    return projectData.rowid
+}
+
+function _deleteProject(rowid) {
+    rowid = DB.defaultFor(rowid, -1)
+
+    if (rowid < 0) return
+
+    console.log("deleting project id", rowid, "...")
+    DB.simpleQuery('DELETE FROM projects WHERE rowid = ?;', [rowid])
+}
+
 function getProjects(projectDataComponent, parent) {
+    // This function takes a ProjectData component and a
+    // parent QML object. It returns an array of ProjectData
+    // objects parented to "parent".
+
     var res = DB.readQuery('SELECT rowid FROM projects;')
     var projects = []
 

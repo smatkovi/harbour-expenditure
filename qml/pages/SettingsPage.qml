@@ -50,7 +50,8 @@ Dialog {
     }
 
     onAccepted: {
-        Notices.show('Not implemented yet')
+        var newRowids = Storage.saveProjects(allProjects)
+        appWindow.activeProject.rowid = newRowids[projectCombo.currentIndex]
     }
 
     Component.onCompleted: {
