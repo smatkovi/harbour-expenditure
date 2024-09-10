@@ -202,11 +202,11 @@ Dialog {
                 menu: ContextMenu {
                     MenuItem {
                         property int value: 0
-                        text: qsTr("per currency (constant)")
+                        text: qsTr("fixed per currency")
                     }
                     MenuItem {
                         property int value: 1
-                        text: qsTr("per transaction (dates)")
+                        text: qsTr("per transaction date")
                     }
                 }
 
@@ -409,8 +409,8 @@ Dialog {
             }
 
             Label {
-                text: qsTr("You can import and export expenses and metadata " +
-                           "of the current project to CSV.")
+                text: qsTr("You can import and export expenses of the current " +
+                           "project to CSV. Project metadata is not included.")
                 width: parent.width - 2*x
                 x: Theme.horizontalPageMargin
                 wrapMode: Text.Wrap
