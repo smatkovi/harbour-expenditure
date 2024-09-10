@@ -46,29 +46,6 @@ Dialog {
                 title: qsTr("Settings")
             }
 
-            SectionHeader {
-                text: qsTr("General settings")
-            }
-
-            ComboBox {
-                // TODO configure exchange rate preference per project
-                width: parent.width
-                label: qsTr("Exchange rate")
-
-                menu: ContextMenu {
-                    MenuItem {
-                        text: qsTr("per currency (constant)")
-                    }
-                    MenuItem {
-                        text: qsTr("per transaction (dates)")
-                    }
-                }
-            }
-
-            SectionHeader {
-                text: qsTr("Current project")
-            }
-
             ComboBox {
                 id: projectCombo
                 label: qsTr("Project")
@@ -131,6 +108,21 @@ Dialog {
                     Binding on highlighted {
                         when: projectCombo.highlighted
                         value: true
+                    }
+                }
+            }
+
+            ComboBox {
+                // TODO configure exchange rate preference per project
+                width: parent.width
+                label: qsTr("Exchange rate")
+
+                menu: ContextMenu {
+                    MenuItem {
+                        text: qsTr("per currency (constant)")
+                    }
+                    MenuItem {
+                        text: qsTr("per transaction (dates)")
                     }
                 }
             }
