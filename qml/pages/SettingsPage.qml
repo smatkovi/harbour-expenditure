@@ -51,21 +51,6 @@ Dialog {
             }
 
             ComboBox {
-                // TODO
-                width: parent.width
-                label: qsTr("Sorting")
-
-                menu: ContextMenu {
-                    MenuItem {
-                        text: qsTr("descending")
-                    }
-                    MenuItem {
-                        text: qsTr("ascending")
-                    }
-                }
-            }
-
-            ComboBox {
                 // TODO configure exchange rate preference per project
                 width: parent.width
                 label: qsTr("Exchange rate")
