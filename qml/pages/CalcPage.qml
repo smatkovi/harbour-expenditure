@@ -12,6 +12,9 @@ import Sailfish.Share 1.0
 import "../js/storage.js" as Storage
 
 
+//    property int exchangeRateMode : Number(Storage.getSetting("exchangeRateModeIndex", 0)) // 0=collective, 1=individual
+
+
 Page {
     id: pageResults
     allowedOrientations: Orientation.All

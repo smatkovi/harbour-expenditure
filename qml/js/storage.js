@@ -316,10 +316,6 @@ DB.dbMigrations = [
 // BEGIN Expenditure database functions
 //
 
-//function removeFullTable(tableName) {
-//    DB.simpleQuery('DROP TABLE IF EXISTS ?', [tableName]);
-//}
-
 var fieldSeparator = ' ||| '
 
 function splitMembersList(string) {
@@ -363,92 +359,6 @@ function getSortOrder() {
 //
 // BEGIN Projects
 //
-
-//// all projects available
-//function setProject(project_id_timestamp,
-//                    project_name,
-//                    project_members,
-//                    project_recent_payer_boolarray,
-//                    project_recent_beneficiaries_boolarray,
-//                    project_base_currency) {
-//    var res = DB.simpleQuery('INSERT OR REPLACE INTO projects_table VALUES (?,?,?,?,?,?);',
-//                             [project_id_timestamp,
-//                              project_name,
-//                              project_members,
-//                              project_recent_payer_boolarray,
-//                              project_recent_beneficiaries_boolarray,
-//                              project_base_currency
-//                             ])
-
-//    if (res.rowsAffected > 0) {
-//        return "OK"
-//    } else {
-//        return "Error"
-//    }
-//}
-
-//function updateProject(project_id_timestamp,
-//                       project_name,
-//                       project_members,
-//                       project_recent_payer_boolarray,
-//                       project_recent_beneficiaries_boolarray,
-//                       project_base_currency) {
-//    var res = DB.simpleQuery('\
-//            UPDATE projects_table SET \
-//                project_name = ?,
-//                project_members = ?,
-//                project_recent_payer_boolarray = ?,
-//                project_recent_beneficiaries_boolarray = ?,
-//                project_base_currency = ?
-//            WHERE project_id_timestamp = ?
-//        ', [
-//             project_name,
-//             project_members,
-//             project_recent_payer_boolarray,
-//             project_recent_beneficiaries_boolarray,
-//             project_base_currency,
-//             project_id_timestamp
-//        ])
-
-//    if (res.rowsAffected > 0) {
-//        return "OK"
-//    } else {
-//        return "Error"
-//    }
-//}
-
-//function updateField_Project(project_id_timestamp, field_name, new_value) {
-//    var db = DB.getDatabase();
-//    var res = "";
-//    db.transaction(function(tx) {
-//        var rs = tx.executeSql('UPDATE projects_table SET ' + field_name + '= ? WHERE project_id_timestamp = ?;',
-//                               [new_value, project_id_timestamp]);
-//        if (rs.rowsAffected > 0) {
-//            res = "OK";
-//        } else {
-//            res = "Error";
-//        }
-//    }
-//    );
-//    return res;
-//}
-
-//function deleteProject(project_id_timestamp) {
-//    var db = DB.getDatabase();
-//    var res = "";
-//    db.transaction(function(tx) {
-//        var rs = tx.executeSql('DELETE FROM projects_table WHERE project_id_timestamp= ?;',
-//                               [project_id_timestamp]);
-//        if (rs.rowsAffected > 0) {
-//            res = "OK";
-//        } else {
-//            res = "Error";
-//        }
-//    }
-//    );
-//    removeFullTable("table_" + project_id_timestamp)
-//    return res;
-//}
 
 function saveProjects(projectDataArray) {
     // This function takes an array of ProjectData objects
@@ -708,32 +618,6 @@ function getProjectEntries(ident) {
     return entries
 }
 
-//function getAllProjects( default_value ) {
-//    var db = DB.getDatabase();
-//    var res=[];
-//    try {
-//        db.transaction(function(tx) {
-//            var rs = tx.executeSql('SELECT * FROM projects_table;')
-//            if (rs.rows.length > 0) {
-//                for (var i = 0; i < rs.rows.length; i++) {
-//                    res.push([rs.rows.item(i).project_id_timestamp,
-//                              rs.rows.item(i).project_name,
-//                              rs.rows.item(i).project_members,
-//                              rs.rows.item(i).project_recent_payer_boolarray,
-//                              rs.rows.item(i).project_recent_beneficiaries_boolarray,
-//                              rs.rows.item(i).project_base_currency,
-//                             ])
-//                }
-//            } else {
-//                res = default_value;
-//            }
-//        })
-//    } catch (err) {
-//        //console.log("Database " + err);
-//        res = default_value;
-//    };
-//    return res
-//}
 
 // all exchange rates used
 function countExchangeRateOccurances (exchange_rate_currency, default_value) {
@@ -807,8 +691,6 @@ function getExchangeRate(exchange_rate_currency, default_value) {
 }
 
 
-// all expenes in current project
-
 //
 // BEGIN Expenses
 //
@@ -878,121 +760,7 @@ function updateExpense(projectIdent, rowid,
     return _makeProjectEntry(changedEntry.rows.item(0), allMembers)
 }
 
-//function setExpense( project_name_table, id_unixtime_created, date_time, expense_name, expense_sum, expense_currency, expense_info, expense_payer, expense_members ) {
-//    var db = DB.getDatabase();
-//    var res = "";
-//    db.transaction(function(tx) {
-//        tx.executeSql('CREATE TABLE IF NOT EXISTS table_' + project_name_table + ' (id_unixtime_created TEXT, \
-//                                                                                    date_time TEXT, \
-//                                                                                    expense_name TEXT, \
-//                                                                                    expense_sum TEXT, \
-//                                                                                    expense_currency TEXT, \
-//                                                                                    expense_info TEXT, \
-//                                                                                    expense_payer TEXT, \
-//                                                                                    expense_members TEXT)' );
-//        var rs = tx.executeSql('INSERT OR REPLACE INTO table_' + project_name_table + ' VALUES (?,?,?,?,?,?,?,?);', [ id_unixtime_created,
-//                                                                                                                     date_time,
-//                                                                                                                     expense_name,
-//                                                                                                                     expense_sum,
-//                                                                                                                     expense_currency,
-//                                                                                                                     expense_info,
-//                                                                                                                     expense_payer,
-//                                                                                                                     expense_members ]);
-//        if (rs.rowsAffected > 0) {
-//            res = "OK";
-//            //console.log("project info found and updated")
-//        } else {
-//            res = "Error";
-//        }
-//    }
-//    );
-//    return res;
-//}
-
-//function updateExpense ( project_name_table, id_unixtime_created, date_time, expense_name, expense_sum, expense_currency, expense_info, expense_payer, expense_members ) {
-//    var db = DB.getDatabase();
-//    var res = "";
-//    db.transaction(function(tx) {
-//        tx.executeSql('CREATE TABLE IF NOT EXISTS table_' + project_name_table + ' (id_unixtime_created TEXT, \
-//                                                                            date_time TEXT, \
-//                                                                            expense_name TEXT, \
-//                                                                            expense_sum TEXT, \
-//                                                                            expense_currency TEXT, \
-//                                                                            expense_info TEXT, \
-//                                                                            expense_payer TEXT, \
-//                                                                            expense_members TEXT)' );
-//        var rs = tx.executeSql('UPDATE table_' + project_name_table
-//                               + ' SET date_time="' + date_time
-//                               + '", expense_name="' + expense_name
-//                               + '", expense_sum="' + expense_sum
-//                               + '", expense_currency="' + expense_currency
-//                               + '", expense_info="' + expense_info
-//                               + '", expense_payer="' + expense_payer
-//                               + '", expense_members="' + expense_members
-//                               + '" WHERE id_unixtime_created=' + id_unixtime_created + ';');
-//        if (rs.rowsAffected > 0) {
-//            res = "OK";
-//        } else {
-//            res = "Error";
-//        }
-//    }
-//    );
-//    return res;
-//}
-
 function deleteExpense(projectId, entryId) {
     DB.simpleQuery('DELETE FROM expenses WHERE project = ? AND rowid = ?;',
                    [projectId, entryId])
 }
-
-//function deleteAllExpenses (project_id_timestamp) {
-//    var db = DB.getDatabase();
-//    var res = "";
-//    db.transaction(function(tx) {
-//        tx.executeSql('CREATE TABLE IF NOT EXISTS table_' + project_id_timestamp + ' (id_unixtime_created TEXT, \
-//                                                                            date_time TEXT, \
-//                                                                            expense_name TEXT, \
-//                                                                            expense_sum TEXT, \
-//                                                                            expense_currency TEXT, \
-//                                                                            expense_info TEXT, \
-//                                                                            expense_payer TEXT, \
-//                                                                            expense_members TEXT)' );
-//        var rs = tx.executeSql('DELETE FROM table_' + project_id_timestamp + ';');
-//        if (rs.rowsAffected > 0) {
-//            res = "OK";
-//        } else {
-//            res = "Error";
-//        }
-//    }
-//    );
-//    return res;
-//}
-
-//function getAllExpenses( project_name_table, default_value ) {
-//    var db = DB.getDatabase();
-//    var res=[];
-//    try {
-//        db.transaction(function(tx) {
-//            var rs = tx.executeSql('SELECT * FROM table_'+ project_name_table + ';');
-//            if (rs.rows.length > 0) {
-//                for (var i = 0; i < rs.rows.length; i++) {
-//                    res.push([rs.rows.item(i).id_unixtime_created,
-//                              rs.rows.item(i).date_time,
-//                              rs.rows.item(i).expense_name,
-//                              rs.rows.item(i).expense_sum,
-//                              rs.rows.item(i).expense_currency,
-//                              rs.rows.item(i).expense_info,
-//                              rs.rows.item(i).expense_payer,
-//                              rs.rows.item(i).expense_members,
-//                             ])
-//                }
-//            } else {
-//                res = default_value;
-//            }
-//        })
-//    } catch (err) {
-//        //console.log("Database " + err);
-//        res = default_value;
-//    };
-//    return res
-//}
