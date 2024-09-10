@@ -82,8 +82,8 @@ QtObject {
         name = metadata.name
         baseCurrency = metadata.baseCurrency
         members = metadata.members
-        lastCurrency = metadata.lastCurrency
-        lastPayer = metadata.lastPayer
+        lastCurrency = metadata.lastCurrency || metadata.baseCurrency
+        lastPayer = metadata.lastPayer || ''
         lastBeneficiaries = metadata.lastBeneficiaries
         ratesMode = metadata.ratesMode
     }
