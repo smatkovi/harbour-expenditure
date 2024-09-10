@@ -204,6 +204,7 @@ Dialog {
                     textRightMargin: 0
                     acceptableInput: !!text
                     EnterKey.onClicked: focus = false
+                    EnterKey.iconSource: "image://theme/icon-m-enter-close"
                     onFocusChanged: {
                         if (focus && text === _newProjectName) {
                             selectAll()
@@ -225,6 +226,8 @@ Dialog {
                     label: qsTr("Currency")
                     onFocusChanged: if (focus) selectAll()
                     EnterKey.onClicked: focus = false
+                    EnterKey.iconSource: "image://theme/icon-m-enter-close"
+                    inputMethodHints: Qt.ImhNoPredictiveText
                     onTextChanged: {
                         if (text) {
                             selectedProject.baseCurrency = text
@@ -272,9 +275,11 @@ Dialog {
                             textMargin: 0
                             textTopPadding: 0
                             labelVisible: false
+                            EnterKey.onClicked: focus = false
+                            EnterKey.iconSource: "image://theme/icon-m-enter-close"
 
                             onTextChanged: {
-                                if (text) {
+                                if (text.trim()) {
                                     selectedProject.renameMember(modelData, text.trim())
                                 }
                             }
@@ -300,11 +305,13 @@ Dialog {
                 centeredContainer: contentContainer2
                 interactive: false
                 padding.topBottom: 0
+
                 property int index: 0
+                property bool canApply: !!newMemberField.text.trim()
 
                 function apply() {
-                    if (!!newMemberField.text) {
-                        selectedProject.addMember(newMemberField.text)
+                    if (canApply) {
+                        selectedProject.addMember(newMemberField.text.trim())
                         flick.scrollToBottom()
                         newMemberField.text = ''
                         newMemberField.forceActiveFocus()
@@ -321,9 +328,15 @@ Dialog {
                         textMargin: 0
                         textTopPadding: 0
                         labelVisible: false
-                        EnterKey.onClicked: addMemberItem.apply()
+                        EnterKey.onClicked: {
+                            if (addMemberItem.canApply) addMemberItem.apply()
+                            else focus = false
+                        }
+                        EnterKey.iconSource: addMemberItem.canApply ?
+                            "image://theme/icon-m-add" :
+                            "image://theme/icon-m-enter-close"
                         onFocusChanged: {
-                            if (!focus && !!text) {
+                            if (!focus && addMemberItem.canApply) {
                                 addMemberItem.apply()
                             }
                         }

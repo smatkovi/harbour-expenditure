@@ -198,6 +198,7 @@ Dialog {
                 acceptableInput: text.length < 300
                 label: qsTr("Expense")
                 EnterKey.onClicked: sumField.forceActiveFocus()
+                EnterKey.iconSource: "image://theme/icon-m-enter-next"
             }
 
             Row {
@@ -213,6 +214,7 @@ Dialog {
                     label: qsTr("Price")
                     textRightMargin: 0
                     EnterKey.onClicked: focus = false
+                    EnterKey.iconSource: "image://theme/icon-m-enter-close"
 
                     onFocusChanged: {
                         if (focus) {
@@ -244,7 +246,9 @@ Dialog {
                     width: parent.width / 5 * 2
                     acceptableInput: text.length < 100
                     label: qsTr("Currency")
+                    inputMethodHints: Qt.ImhNoPredictiveText
                     EnterKey.onClicked: focus = false
+                    EnterKey.iconSource: "image://theme/icon-m-enter-close"
                     onFocusChanged: if (focus) selectAll()
                 }
             }
@@ -255,6 +259,7 @@ Dialog {
                 acceptableInput: text.length < 1000
                 label: qsTr("Additional notes")
                 EnterKey.onClicked: focus = false
+                EnterKey.iconSource: "image://theme/icon-m-enter-close"
             }
 
             Row {
