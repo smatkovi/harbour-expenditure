@@ -228,8 +228,8 @@ DB.dbMigrations = [
                 }
             }
 
-            lastBeneficiaries = _joinMembersList(lastBeneficiaries)
-            members = _joinMembersList(members)
+            lastBeneficiaries = joinMembersList(lastBeneficiaries)
+            members = joinMembersList(members)
 
             tx.executeSql('\
                 UPDATE projects SET
@@ -299,11 +299,19 @@ DB.dbMigrations = [
 //    DB.simpleQuery('DROP TABLE IF EXISTS ?', [tableName]);
 //}
 
-function _splitMembersList(string) {
+var fieldSeparator = ' ||| '
+
+function splitMembersList(string) {
+    // Important: do not use this in migrations!
+    // This function might change over time. However, migrations
+    // must explicitly state what they do.
     return string.split(' ||| ').filter(function(e){return e});
 }
 
-function _joinMembersList(array) {
+function joinMembersList(array) {
+    // Important: do not use this in migrations!
+    // This function might change over time. However, migrations
+    // must explicitly state what they do.
     return ' ||| %1 ||| '.arg(array.join(' ||| '))
 }
 
@@ -439,7 +447,7 @@ function getProjectMetadata(ident) {
             ident: item.rowid,
             name: item.name,
             baseCurrency: item.base_currency,
-            members: _splitMembersList(item.members),
+            members: splitMembersList(item.members),
             lastCurrency: item.last_currency,
             lastPayer: item.last_payer,
             lastBeneficiaries: item.last_Beneficiaries,
@@ -455,7 +463,7 @@ function _setLastPeople(project, payer, beneficiaries) {
         UPDATE projects
         SET last_payer = ?, last_beneficiaries = ?
         WHERE rowid = ?',
-        [payer, _joinMembersList(beneficiaries), project])
+        [payer, joinMembersList(beneficiaries), project])
 }
 
 function _getProjectMembers(ident) {
@@ -482,7 +490,7 @@ function _makeProjectEntry(entryRow, projectMembers) {
         payer: item.payer,
         beneficiaries: item.beneficiaries,
         beneficiaries_string: item.beneficiaries === projectMembers ?
-            qsTr("everyone") : item.beneficiaries.split(' ||| ').join(', '),
+            qsTr("everyone") : splitMembersList(item.beneficiaries).join(', '),
     }
 }
 
@@ -626,7 +634,7 @@ function addExpense(projectIdent,
         );
     ', [projectIdent,
         utc_time, local_time, local_tz,
-        name, info, sum, currency, payer, beneficiaries.join(' ||| ')])
+        name, info, sum, currency, payer, joinMembersList(beneficiaries)])
 
     var newEntry = DB.simpleQuery('\
         SELECT rowid, * FROM expenses \
@@ -651,7 +659,7 @@ function updateExpense(projectIdent, rowid,
         WHERE project = ? AND rowid = ?;
     ', [projectIdent,
         utc_time, local_time, local_tz,
-        name, info, sum, currency, payer, beneficiaries.join(' ||| '),
+        name, info, sum, currency, payer, joinMembersList(beneficiaries),
         projectIdent, rowid])
 
     var changedEntry = DB.simpleQuery('\

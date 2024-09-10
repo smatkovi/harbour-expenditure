@@ -233,7 +233,7 @@ Dialog {
 
                         TextField {
                             width: parent.width
-                            acceptableInput: !!text.trim() && text.indexOf(' ||| ') < 0
+                            acceptableInput: !!text.trim() && text.indexOf(Storage.fieldSeparator) < 0
                             text: selectedProject.renamedMembers[modelData] || modelData
                             textMargin: 0
                             textTopPadding: 0

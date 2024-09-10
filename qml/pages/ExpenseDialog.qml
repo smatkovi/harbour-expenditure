@@ -49,9 +49,9 @@ Dialog {
     property alias currency: currencyField.text
     property string payer: appWindow.activeProject.lastPayer
 
-    property string initialBeneficiaries: appWindow.activeProject.lastBeneficiaries.join(' ||| ')
+    property string initialBeneficiaries: Storage.joinMembersList(appWindow.activeProject.lastBeneficiaries)
     property var beneficiaries: {
-        var list = initialBeneficiaries.split(' ||| ')
+        var list = Storage.splitMembersList(initialBeneficiaries)
         var map = {}
 
         for (var i in list) {
