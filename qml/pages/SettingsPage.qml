@@ -52,23 +52,47 @@ Dialog {
         dialog.accepted.connect(function(){
             py.importModule('import_export', function() {
                 var entries = Storage.getProjectEntries(selectedProject.rowid)
-                py.call('import_export.export',
+                py.call('import_export.doExport',
                         [entries, dialog.selectedPath,
                         selectedProject.name, selectedProject.baseCurrency],
                 function(outputPath){
                     Notices.show(qsTr("Exported expenses to “%1”").arg(
-                        outputPath), 5000)
+                        outputPath), 5000, Notice.Center)
                 })
             })
         })
     }
 
     function importCurrentProject() {
-        Notices.show('Not implemented yet')
+        var picker = pageStack.push('Sailfish.Pickers.FilePickerPage', {
+            'title': qsTr("Import expenses", "Page title for the file import picker"),
+            'nameFilters': ['*.csv']
+        })
+        picker.selectedContentPropertiesChanged.connect(function(){
+            if (!picker.selectedContentProperties) return
+            var filePath = picker.selectedContentProperties.filePath
+
+            py.importModule('import_export', function() {
+                py.call('import_export.doImport', [filePath],
+                function(expenses){
+                    if (!!expenses) {
+                        selectedProject.importedExpenses = expenses
+                        Notices.show(qsTr("Imported %1 expenses into “%2”.").arg(
+                            expenses.length).arg(selectedProject.name),
+                            5000, Notice.Center)
+                    } else {
+                        Notices.show(qsTr("Failed to import “%1”.",
+                            "%1 is a filename").arg(filePath), Notice.Center)
+                    }
+                })
+            })
+        })
     }
 
     Python {
         id: py
+        Component.onCompleted: addImportPath(Qt.resolvedUrl('../py'))
+        onReceived: { Notices.show(data); console.log(data) }
         onError: {
             console.error("an error occurred in the Python backend, traceback:")
             console.error(traceback)
@@ -77,17 +101,11 @@ Dialog {
                                      "Please restart the app and check the logs.") +
                          "\n", 10000, Notice.Center)
         }
-        onReceived: {
-            console.log(data)
-        }
-
-        Component.onCompleted: {
-            addImportPath(Qt.resolvedUrl('../py'))
-        }
     }
 
     onAccepted: {
         var newRowids = Storage.saveProjects(allProjects)
+        Storage.setSetting('activeProjectID_unixtime', newRowids[projectCombo.currentIndex])
         appWindow.activeProject.rowid = newRowids[projectCombo.currentIndex]
         appWindow.activeProject.reloadMetadata()
         appWindow.activeProject.reloadContents() // in case members have changed
@@ -410,7 +428,9 @@ Dialog {
 
             Label {
                 text: qsTr("You can import and export expenses of the current " +
-                           "project to CSV. Project metadata is not included.")
+                           "project to CSV. Project metadata is not included.") + " " +
+                      qsTr("When importing, imported entries will be added to " +
+                           "the current project and old entries will be kept.")
                 width: parent.width - 2*x
                 x: Theme.horizontalPageMargin
                 wrapMode: Text.Wrap

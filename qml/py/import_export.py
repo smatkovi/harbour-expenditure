@@ -52,7 +52,7 @@ def move_aside(path):
             break
 
 
-def export(entries, outputFolder, name, currency):
+def doExport(entries, outputFolder, name, currency):
     outputPath = Path(outputFolder) / f'{name} [{currency}].csv'
     move_aside(outputPath)
 
@@ -65,3 +65,23 @@ def export(entries, outputFolder, name, currency):
             writer.writerow([entry[x] for x in EXPENSES_COLUMNS])
 
     return outputPath
+
+
+def doImport(inputPath):
+    if not Path(inputPath).is_file():
+        return None
+
+    with open(inputPath, newline='') as csvfile:
+        reader = csv.DictReader(csvfile)
+
+        missingFields = [x for x in EXPENSES_COLUMNS if x not in reader.fieldnames]
+
+        if missingFields:
+            pyotherside.send('Fields missing: ' + missingFields.join(', '))
+            return None
+
+        # rowid is skipped: imported entries get new IDs
+        result = [{a: x[a] for a in EXPENSES_COLUMNS if a != 'rowid'} for x in reader]
+        return result
+
+    return None

@@ -471,15 +471,26 @@ function saveProjects(projectDataArray) {
 
     for (var k in projectDataArray) {
         var kRowid = projectDataArray[k].rowid
+        var newIdent = -1
 
         if (kRowid < 0) {
             // new project
-            newRowids.push(_saveNewProject(projectDataArray[k]))
+            newIdent = _saveNewProject(projectDataArray[k])
         } else {
             // updated project
             keptProjects[projectDataArray[k].rowid] = true
-            newRowids.push(_updateProject(projectDataArray[k]))
+            newIdent = _updateProject(projectDataArray[k])
         }
+
+        for (var imported in projectDataArray[k].importedExpenses) {
+            var e = projectDataArray[k].importedExpenses[imported]
+            _addExpenseDirectly(newIdent,
+                                e.utc_time, e.local_time, e.local_tz,
+                                e.name, e.info, e.sum, e.currency,
+                                e.payer, splitMembersList(e.beneficiaries))
+        }
+
+        newRowids.push(newIdent)
     }
 
     var deletedProjects = currentProjects.filter(function(item){
@@ -641,7 +652,7 @@ function _setLastInfo(project, currency, payer, beneficiaries) {
 }
 
 function _getProjectMembers(ident) {
-    // This return a formatted string, not an array!
+    // This returns a formatted string, not an array!
 
     var res = DB.simpleQuery('\
         SELECT members FROM projects WHERE rowid = ? LIMIT 1;
@@ -802,9 +813,9 @@ function getExchangeRate(exchange_rate_currency, default_value) {
 // BEGIN Expenses
 //
 
-function addExpense(projectIdent,
-                    utc_time, local_time, local_tz,
-                    name, info, sum, currency, payer, beneficiaries) {
+function _addExpenseDirectly(projectIdent,
+                             utc_time, local_time, local_tz,
+                             name, info, sum, currency, payer, beneficiaries) {
     var res = DB.simpleQuery('\
         INSERT INTO expenses(
             project,
@@ -818,6 +829,16 @@ function addExpense(projectIdent,
     ', [projectIdent,
         utc_time, local_time, local_tz,
         name, info, sum, currency, payer, joinMembersList(beneficiaries)])
+
+    return res
+}
+
+function addExpense(projectIdent,
+                    utc_time, local_time, local_tz,
+                    name, info, sum, currency, payer, beneficiaries) {
+    var res = _addExpenseDirectly(projectIdent,
+                                  utc_time, local_time, local_tz,
+                                  name, info, sum, currency, payer, beneficiaries)
 
     var newEntry = DB.simpleQuery('\
         SELECT rowid, * FROM expenses \

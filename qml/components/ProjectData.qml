@@ -18,6 +18,7 @@ QtObject {
     // CONFIGURATION
     property bool loadExpenses: true
     property var renamedMembers: ({})
+    property var importedExpenses: ([])
 
     // PROJECT METADATA AND DATA
     // ident -1 is reserved for unsaved new projects
