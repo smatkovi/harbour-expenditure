@@ -31,6 +31,7 @@ QtObject {
     property string lastCurrency
     property string lastPayer
     property var lastBeneficiaries: ([])
+    property int ratesMode: 0
     readonly property ListModel expenses: ListModel {}
 
     // IMMEDIATELY APPLIED FUNCTIONS
@@ -84,6 +85,7 @@ QtObject {
         lastCurrency = metadata.lastCurrency
         lastPayer = metadata.lastPayer
         lastBeneficiaries = metadata.lastBeneficiaries
+        ratesMode = metadata.ratesMode
     }
 
     function reloadContents() {
