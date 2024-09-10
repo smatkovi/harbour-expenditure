@@ -189,6 +189,8 @@ Dialog {
                 }
             }
 
+            Item { width: parent.width; height: Theme.paddingLarge }
+
             Row {
                 width: parent.width
                 spacing: Theme.paddingMedium
@@ -282,8 +284,10 @@ Dialog {
                         width: Theme.iconSizeSmallPlus
                         icon.source: "image://theme/icon-splus-remove"
                         onClicked: {
-                            // delegate.animateRemoval()
-                            selectedProject.removeMember(modelData)
+                            var item = modelData
+                            delegate.remorseDelete(function(){
+                                selectedProject.removeMember(item)
+                            })
                         }
                     }
                 }
