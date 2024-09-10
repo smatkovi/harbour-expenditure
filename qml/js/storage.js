@@ -61,15 +61,6 @@ DB.dbMigrations = [
             );
         ')
 
-        // TODO:
-        // Recreate this table in a future migration with
-        // foreign key once the projects table is finalized.
-        //
-        //  FOREIGN KEY (project)
-        //  REFERENCES projects_table (project_id_timestamp)
-        //    ON UPDATE CASCADE
-        //    ON DELETE CASCADE
-
         var projects = tx.executeSql('SELECT rowid, project_id_timestamp FROM projects_table;')
         var timezone = Dates.getTimezone()
 
@@ -141,6 +132,159 @@ DB.dbMigrations = [
                 [utc, local, oldTime])
         }
     }],
+    [0.4, function(tx){
+        // The rowid column is created explicitly here because
+        // it is used as foreign key in other tables. Autoincrement
+        // is not necessary because all data referencing a project
+        // is deleted when the project is deleted.
+        //
+        // https://sqlite.org/lang_createtable.html#rowid
+        // https://sqlite.org/autoinc.html
+        tx.executeSql('\
+            CREATE TABLE IF NOT EXISTS projects(
+                rowid INTEGER PRIMARY KEY,
+                name TEXT,
+                base_currency TEXT,
+                members TEXT,
+                last_currency TEXT,
+                last_payer TEXT,
+                last_beneficiaries TEXT,
+                rates_mode INTEGER,
+                project_id_timestamp TEXT
+            );
+        ')
+        tx.executeSql('\
+            INSERT INTO projects(
+                rowid,
+                name,
+                base_currency,
+                members,
+                last_currency,
+                last_payer,
+                last_beneficiaries,
+                rates_mode,
+                project_id_timestamp
+            ) SELECT
+                NULL,
+                project_name,
+                project_base_currency,
+                project_members,
+                project_base_currency,
+                project_recent_payer_boolarray,
+                project_recent_beneficiaries_boolarray,
+                0,
+                project_id_timestamp
+            FROM projects_table;
+        ')
+        tx.executeSql('\
+            UPDATE expenses
+            SET project = (
+                SELECT projects.rowid FROM projects
+                WHERE expenses.project = projects.project_id_timestamp
+            ) WHERE EXISTS (
+                SELECT projects.rowid FROM projects
+                WHERE expenses.project = projects.project_id_timestamp
+            );
+        ')
+        tx.executeSql('\
+            UPDATE %1
+            SET value = (
+                SELECT projects.rowid FROM projects
+                WHERE %1.key = "activeProjectID_unixtime"
+                    AND %1.value = CAST(projects.project_id_timestamp as INTEGER)
+            ) WHERE %1.key = "activeProjectID_unixtime" AND EXISTS (
+                SELECT projects.rowid FROM projects
+                WHERE %1.key = "activeProjectID_unixtime"
+                    AND %1.value = CAST(projects.project_id_timestamp as INTEGER)
+            )
+        '.arg(DB._keyValueSettingsTable))
+        tx.executeSql('ALTER TABLE projects DROP COLUMN project_id_timestamp;')
+        tx.executeSql('DROP TABLE projects_table;')
+
+        var projects = tx.executeSql('\
+            SELECT rowid, members, last_payer, last_beneficiaries
+            FROM projects;').rows
+        console.log("> rewriting", projects.length, "member lists...")
+
+        // Rewrite recently used member lists in project metadata
+        // from bool-arrays to the actual member names
+        for (var i = 0; i < projects.length; ++i) {
+            var item = projects.item(i)
+            var members = item.members.split(' ||| ')
+
+            var lastPayer = ''
+            var lastBeneficiaries = []
+
+            var payersBool = item.last_payer.split(' ||| ')
+            var beneBool = item.last_beneficiaries.split(' ||| ')
+
+            for (var k in members) {
+                if (payersBool[k] == 'true') {
+                    lastPayer = members[k]
+                }
+
+                if (beneBool[k] == 'true') {
+                    lastBeneficiaries.push(members[k])
+                }
+            }
+
+            lastBeneficiaries = _joinMembersList(lastBeneficiaries)
+            members = _joinMembersList(members)
+
+            tx.executeSql('\
+                UPDATE projects SET
+                    members = ?,
+                    last_payer = ?,
+                    last_beneficiaries = ?
+                WHERE rowid = ?
+            ', [members, lastPayer, lastBeneficiaries, item.rowid])
+        }
+    }],
+    [0.5, function(tx){
+        // Rewrite member lists in expenses to the new format:
+        // required for renaming members using REPLACE LIKE
+        tx.executeSql('\
+            UPDATE expenses
+            SET beneficiaries = (" ||| " || expenses.beneficiaries || " ||| ");
+        ')
+
+        // Rewrite expenses table with foreign key constraint
+        tx.executeSql('\
+            CREATE TABLE IF NOT EXISTS expenses_temp(
+                rowid INTEGER PRIMARY KEY,
+                project INTEGER NOT NULL,
+                utc_time TEXT NOT NULL,
+                local_time TEXT NOT NULL,
+                local_tz TEXT NOT NULL,
+                name TEXT DEFAULT "",
+                info TEXT DEFAULT "",
+                sum REAL DEFAULT 0.0,
+                currency TEXT NOT NULL,
+                payer TEXT NOT NULL,
+                beneficiaries TEXT NOT NULL,
+
+                FOREIGN KEY (project)
+                REFERENCES projects (rowid)
+                    ON UPDATE CASCADE
+                    ON DELETE CASCADE
+            );
+        ')
+        tx.executeSql('\
+            INSERT INTO expenses_temp(
+                rowid,
+                project, utc_time, local_time, local_tz,
+                name, info, sum, currency,
+                payer, beneficiaries
+            ) SELECT
+                NULL,
+                project, utc_time, local_time, local_tz,
+                name, info, sum, currency,
+                payer, beneficiaries
+            FROM expenses;
+        ')
+        tx.executeSql('DROP TABLE expenses;')
+        tx.executeSql('ALTER TABLE expenses_temp RENAME TO expenses;')
+    }],
 
     // add new versions here...
     //
@@ -153,6 +297,14 @@ DB.dbMigrations = [
 
 function removeFullTable(tableName) {
     DB.simpleQuery('DROP TABLE IF EXISTS ?', [tableName]);
+}
+
+function _splitMembersList(string) {
+    return string.split(' ||| ').filter(function(e){return e});
+}
+
+function _joinMembersList(array) {
+    return ' ||| %1 ||| '.arg(array.join(' ||| '))
 }
 
 
