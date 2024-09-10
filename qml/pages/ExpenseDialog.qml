@@ -24,7 +24,10 @@ Dialog {
         _now = new Date()
         _nowLocalTime = _now.toLocaleString(Qt.locale(), Dates.dbDateFormat)
         _nowUtc = _now.toISOString()
-        nameField.forceActiveFocus()
+
+        if (!_editing) {
+            nameField.forceActiveFocus()
+        }
     }
 
     property date _now: new Date()
