@@ -52,6 +52,7 @@ Dialog {
     onAccepted: {
         var newRowids = Storage.saveProjects(allProjects)
         appWindow.activeProject.rowid = newRowids[projectCombo.currentIndex]
+        appWindow.activeProject.reloadMetadata()
     }
 
     Component.onCompleted: {
