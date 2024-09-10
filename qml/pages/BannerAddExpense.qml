@@ -587,7 +587,7 @@ MouseArea {
 
         //remember recently used currency
         recentlyUsedCurrency = expense_currency
-        Storage.setSettings("recentlyUsedCurrency", recentlyUsedCurrency)
+        Storage.setSetting("recentlyUsedCurrency", recentlyUsedCurrency)
 
         // update allProject_Listmodel and DB for recent_beneficiaries and recent_payer in case of "new" entry
         if (modeEdit === "new") {

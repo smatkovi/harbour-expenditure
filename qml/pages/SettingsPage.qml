@@ -343,12 +343,12 @@ Dialog {
 ////        updateEvenWhenCanceled = false
 ////        idComboboxProject.currentIndex = 0
 ////        for (var j = 0; j < listModel_allProjects.count ; j++) {
-////            if (Number(listModel_allProjects.get(j).project_id_timestamp) === Number(Storage.getSettings("activeProjectID_unixtime", 0))) {
+////            if (Number(listModel_allProjects.get(j).project_id_timestamp) === Number(Storage.getSetting("activeProjectID_unixtime", 0))) {
 ////                idComboboxProject.currentIndex = j
 ////            }
 ////        }
-////        idComboboxSortingExpenses.currentIndex = Number(Storage.getSettings("sortOrderExpensesIndex", 0)) // 0=descending, 1=ascending
-////        idComboboxExchangeRateMode.currentIndex = Number(Storage.getSettings("exchangeRateModeIndex", 0)) // 0=collective, 1=individual
+////        idComboboxSortingExpenses.currentIndex = Number(Storage.getSetting("sortOrderExpensesIndex", 0)) // 0=descending, 1=ascending
+////        idComboboxExchangeRateMode.currentIndex = Number(Storage.getSetting("exchangeRateModeIndex", 0)) // 0=collective, 1=individual
 ////        notificationString = ""
 //    }
 
@@ -527,15 +527,15 @@ Dialog {
 //    // ******************************************** important functions ******************************************** //
 
 //    function writeDB_Settings() {
-//        Storage.setSettings("sortOrderExpensesIndex", idComboboxSortingExpenses.currentIndex)
+//        Storage.setSetting("sortOrderExpensesIndex", idComboboxSortingExpenses.currentIndex)
 //        sortOrderExpenses = idComboboxSortingExpenses.currentIndex
 //        listModel_activeProjectExpenses.quick_sort()
 
-//        Storage.setSettings("exchangeRateModeIndex", idComboboxExchangeRateMode.currentIndex)
+//        Storage.setSetting("exchangeRateModeIndex", idComboboxExchangeRateMode.currentIndex)
 //        exchangeRateMode = idComboboxExchangeRateMode.currentIndex
 
 //        if (listModel_allProjects.count > 0) { // only works if a project is actually created and loaded, otherwise this gets triggered directly in BannerAddProject.qml
-//            Storage.setSettings("activeProjectID_unixtime", Number(listModel_allProjects.get(idComboboxProject.currentIndex).project_id_timestamp))
+//            Storage.setSetting("activeProjectID_unixtime", Number(listModel_allProjects.get(idComboboxProject.currentIndex).project_id_timestamp))
 //            activeProjectID_unixtime = Number(listModel_allProjects.get(idComboboxProject.currentIndex).project_id_timestamp)
 //            loadActiveProjectInfos_FromDB(Number(listModel_allProjects.get(idComboboxProject.currentIndex).project_id_timestamp))
 //        }

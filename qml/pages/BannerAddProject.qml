@@ -459,7 +459,7 @@ MouseArea {
 
             // if this is the first project, auto set it as active project
             if (listModel_allProjects.count === 1) { // auto-sets as currently active project, if this project is very first one
-                Storage.setSettings("activeProjectID_unixtime", Number(project_id_timestamp) )
+                Storage.setSetting("activeProjectID_unixtime", Number(project_id_timestamp) )
                 activeProjectID_unixtime = Number(project_id_timestamp)
                 loadActiveProjectInfos_FromDB( Number(project_id_timestamp) )
                 //console.log("auto set as active project ID = " + activeProjectID_unixtime)

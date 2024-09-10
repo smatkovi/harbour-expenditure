@@ -312,12 +312,12 @@ function _joinMembersList(array) {
 // BEGIN Settings
 //
 
-function setSettings(setting, value) {
-    return DB.setSetting(setting, value)
+function setSetting(key, value) {
+    return DB.setSetting(key, value)
 }
 
-function getSettings(setting, defaultValue) {
-    return DB.getSetting(setting, defaultValue)
+function getSetting(key, fallback) {
+    return DB.getSetting(key, fallback)
 }
 
 function getSortOrder() {

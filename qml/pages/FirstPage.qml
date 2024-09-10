@@ -158,15 +158,15 @@ Page {
     // ***************************************************************
 
     // project specific global variables, loaded when activating a new project
-//    property double activeProjectID_unixtime : Number(Storage.getSettings("activeProjectID_unixtime", 0))
+//    property double activeProjectID_unixtime : Number(Storage.getSetting("activeProjectID_unixtime", 0))
 //    property string activeProjectName
 //    property string activeProjectCurrency : "EUR"
 //    property string activeProjectAllMembers: ""
 
     // program specific global variables
-//    property int sortOrderExpenses : Number(Storage.getSettings("sortOrderExpensesIndex", 0)) // 0=descending, 1=ascending
-//    property int exchangeRateMode : Number(Storage.getSettings("exchangeRateModeIndex", 0)) // 0=collective, 1=individual
-//    property string recentlyUsedCurrency : Storage.getSettings("recentlyUsedCurrency", activeProjectCurrency)
+//    property int sortOrderExpenses : Number(Storage.getSetting("sortOrderExpensesIndex", 0)) // 0=descending, 1=ascending
+//    property int exchangeRateMode : Number(Storage.getSetting("exchangeRateModeIndex", 0)) // 0=collective, 1=individual
+//    property string recentlyUsedCurrency : Storage.getSetting("recentlyUsedCurrency", activeProjectCurrency)
 
     // navigation specific blocking
 //    property bool updateEvenWhenCanceled : false
