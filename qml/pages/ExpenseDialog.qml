@@ -72,7 +72,7 @@ Dialog {
         }
 
         for (var k in initial) {
-            map[_mergedMembers[k]] = true
+            map[initial[k]] = true
         }
 
         return map
