@@ -224,6 +224,7 @@ Dialog {
                     acceptableInput: text.length < 100
                     label: qsTr("Currency")
                     EnterKey.onClicked: focus = false
+                    onFocusChanged: if (focus) selectAll()
                 }
             }
 
