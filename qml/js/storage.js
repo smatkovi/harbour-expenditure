@@ -428,7 +428,7 @@ function getSortOrder() {
 //}
 
 function getProjects(projectDataComponent, parent) {
-    var res = DB.simpleQuery('SELECT rowid FROM projects;')
+    var res = DB.readQuery('SELECT rowid FROM projects;')
     var projects = []
 
     for (var i = 0; i < res.rows.length; ++i) {
@@ -441,9 +441,9 @@ function getProjects(projectDataComponent, parent) {
 }
 
 function getProjectMetadata(ident) {
-    var res = DB.simpleQuery(
+    var res = DB.readQuery(
         'SELECT * FROM projects WHERE rowid = ? LIMIT 1;',
-        [String(ident)])
+        [ident])
 
     if (res.rows.length > 0) {
         var item = res.rows.item(0)
@@ -473,7 +473,7 @@ function _setLastPeople(project, payer, beneficiaries) {
 function _getProjectMembers(ident) {
     var res = DB.simpleQuery('\
         SELECT members FROM projects WHERE rowid = ? LIMIT 1;
-    ', [String(ident)])
+    ', [ident])
 
     return res.rows.item(0).members
 }
