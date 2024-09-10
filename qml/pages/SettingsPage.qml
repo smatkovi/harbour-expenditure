@@ -233,7 +233,7 @@ Dialog {
 
                         TextField {
                             width: parent.width
-                            acceptableInput: !!text
+                            acceptableInput: !!text.trim() && text.indexOf(' ||| ') < 0
                             text: selectedProject.renamedMembers[modelData] || modelData
                             textMargin: 0
                             textTopPadding: 0
@@ -241,7 +241,7 @@ Dialog {
 
                             onTextChanged: {
                                 if (text) {
-                                    selectedProject.renameMember(modelData, text)
+                                    selectedProject.renameMember(modelData, text.trim())
                                 }
                             }
                         }
