@@ -50,12 +50,29 @@ Dialog {
     property string payer: appWindow.activeProject.lastPayer
 
     property string initialBeneficiaries: Storage.joinMembersList(appWindow.activeProject.lastBeneficiaries)
-    property var beneficiaries: {
-        var list = Storage.splitMembersList(initialBeneficiaries)
-        var map = {}
+    property var _mergedMembers: {
+        // This is an array containing all active members of the project
+        // plus possible additional members that were deleted from the
+        // project but are still stored in this expense entry.
+        // This is only relevant when editing entries after a member has
+        // been deleted from the project.
+        appWindow.activeProject.members.concat(
+            Storage.splitMembersList(initialBeneficiaries).filter(
+                function(item){
+                    return appWindow.activeProject.members.indexOf(item) < 0
+                }))
+    }
 
-        for (var i in list) {
-            map[list[i]] = true
+    property var beneficiaries: {
+        var map = {}
+        var initial = Storage.splitMembersList(initialBeneficiaries)
+
+        for (var i in _mergedMembers) {
+            map[_mergedMembers[i]] = false
+        }
+
+        for (var k in initial) {
+            map[_mergedMembers[k]] = true
         }
 
         return map
@@ -64,8 +81,8 @@ Dialog {
     function _getBeneficiariesArray() {
         var array = []
 
-        for (var i in appWindow.activeProject.members) {
-            var member = appWindow.activeProject.members[i]
+        for (var i in _mergedMembers) {
+            var member = _mergedMembers[i]
 
             if (!!root.beneficiaries[member]) {
                 array.push(member)
@@ -299,9 +316,8 @@ Dialog {
                     if (allSelected) {
                         root.beneficiaries = {}
                     } else {
-                        for (var i in appWindow.activeProject.members) {
-                            var member = appWindow.activeProject.members[i]
-                            root.beneficiaries[member] = true
+                        for (var i in _mergedMembers) {
+                            root.beneficiaries[_mergedMembers[i]] = true
                         }
 
                         root.beneficiaries = root.beneficiaries
@@ -312,7 +328,7 @@ Dialog {
             }
 
             D.DelegateColumn {
-                model: appWindow.activeProject.members
+                model: _mergedMembers
 
                 delegate: D.OneLineDelegate {
                     id: item
