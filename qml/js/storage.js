@@ -456,7 +456,7 @@ function getProjectMetadata(ident) {
             members: splitMembersList(item.members),
             lastCurrency: item.last_currency,
             lastPayer: item.last_payer,
-            lastBeneficiaries: item.last_Beneficiaries,
+            lastBeneficiaries: splitMembersList(item.last_beneficiaries),
             ratesMode: item.rates_mode,
         }
     }
