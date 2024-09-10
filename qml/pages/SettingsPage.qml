@@ -53,6 +53,7 @@ Dialog {
         var newRowids = Storage.saveProjects(allProjects)
         appWindow.activeProject.rowid = newRowids[projectCombo.currentIndex]
         appWindow.activeProject.reloadMetadata()
+        appWindow.activeProject.reloadContents() // in case members have changed
     }
 
     Component.onCompleted: {
