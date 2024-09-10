@@ -288,8 +288,8 @@ Dialog {
                 id: allItem
 
                 property bool allSelected: {
-                    for (var i in appWindow.activeProject.members) {
-                        var member = appWindow.activeProject.members[i]
+                    for (var i in _mergedMembers) {
+                        var member = _mergedMembers[i]
 
                         if (!(!!root.beneficiaries[member])) {
                             return false
