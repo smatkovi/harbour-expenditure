@@ -24,6 +24,7 @@ Dialog {
 
     property var allProjects: Storage.getProjects(projectDataComponent, root)
     property ProjectData selectedProject: ProjectData { rowid: -1000 }
+    property string _newProjectName: qsTr("New project")
 
     Component {
         id: projectDataComponent
@@ -92,7 +93,7 @@ Dialog {
                         if (currentIndex >= allProjects.length) {
                             var newProjectData = {
                                 rowid: -1,
-                                name: qsTr("New project"),
+                                name: _newProjectName,
                                 baseCurrency: Qt.locale().currencySymbol(Locale.CurrencyIsoCode)
                             }
 
@@ -200,6 +201,12 @@ Dialog {
                     textRightMargin: 0
                     acceptableInput: !!text
                     EnterKey.onClicked: focus = false
+                    onFocusChanged: {
+                        if (focus && text === _newProjectName) {
+                            selectAll()
+                        }
+                    }
+
                     onTextChanged: {
                         if (text) {
                             selectedProject.name = text
