@@ -33,6 +33,7 @@ var dbMigrations = [
 // Functions:
 // - simpleQuery(query, values): for most queries.
 // - readQuery(query, values): for read-only queries.
+// - guardedTx(tx, callback): run callback(tx) in a transaction and rollback on errors.
 // - getDatabase(): to get full access to the database.
 //
 // - defaultFor(arg, val): to use a fallback value 'val' if 'arg' is nullish.
@@ -85,7 +86,33 @@ function readQuery(query, values) {
     return simpleQuery(query, values, true)
 }
 
+function guardedTx(tx, callback) {
+    var res = null
+
+    try {
+        tx.executeSql('SAVEPOINT __guarded_tx_started__;')
+        res = callback(tx)
+        tx.executeSql('RELEASE __guarded_tx_started__;')
+    } catch (e) {
+        tx.executeSql('ROLLBACK TO __guarded_tx_started__;')
+        throw e
+    }
+
+    return res
+}
+
 function simpleQuery(query, values, readOnly) {
+    // The QtQuick.LocalStorage implementation does not perform rollbacks
+    // on failed transactions, contrary to what is stated in the documentation.
+    //
+    // You can safely use simpleQuery() which handles errors and rollbacks
+    // properly. Check the implementation and use guardedTx() in custom transactions.
+    //
+    // This is the case in Qt 5.6 (Sailfish 4.6) but the code has not changed
+    // at least until Qt 6.8. That means manual guarding is necessary: every
+    // transaction must be enclosed in a throw/catch block and perform
+    // either ROLLBACK or SAVEPOINT <name> with ROLLBACK TO <name> when needed.
+
     var db = getDatabase();
     var res = {
         ok: false,
@@ -103,7 +130,9 @@ function simpleQuery(query, values, readOnly) {
 
     try {
         var callback = function(tx) {
-            var rs = tx.executeSql(query, values);
+            var rs = guardedTx(tx, function(tx){
+                return tx.executeSql(query, values)
+            })
 
             if (rs.rowsAffected > 0) {
                 res.rowsAffected = rs.rowsAffected;
@@ -169,6 +198,10 @@ function __doInit(db) {
     // the version the database is actually on, i.e. the manually tracked version.
     // That means a last call to changeVersion(db.version, previousVersion) is
     // necessary.
+    //
+    // Furthermore, QtQuick.LocalStorage does not perform rollbacks
+    // on failed transactions, contrary to what is stated in the documentation.
+    // See the docs on simpleQuery() for details.
 
     var latestVersion = dbMigrations[dbMigrations.length-1][0]
 
@@ -181,21 +214,22 @@ function __doInit(db) {
             nextVersion = dbMigrations[i][0]
 
             if (previousVersion < nextVersion) {
-                var migrationType = typeof dbMigrations[i][1]
-
                 try {
                     console.log("migrating database to version", nextVersion)
 
-                    if (migrationType === "string") {
-                        db.changeVersion(db.version, nextVersion, function(tx) {
-                            tx.executeSql(dbMigrations[i][1])
+                    db.changeVersion(db.version, nextVersion, function(tx){
+                        guardedTx(tx, function(tx){
+                            var migrationType = typeof dbMigrations[i][1]
+                            if (migrationType === "string") {
+                                tx.executeSql(dbMigrations[i][1])
+                            } else if (migrationType === "function") {
+                                dbMigrations[i][1](tx)
+                            } else {
+                                throw "expected migration as string or function, got " +
+                                        migrationType + " instead"
+                            }
                         })
-                    } else if (migrationType === "function") {
-                        db.changeVersion(db.version, nextVersion, dbMigrations[i][1])
-                    } else {
-                        throw "expected migration as string or function, got " +
-                                migrationType + " instead"
-                    }
+                    })
                 } catch (e) {
                     console.error("fatal: failed to upgrade database version from",
                                   previousVersion, "to", nextVersion)
