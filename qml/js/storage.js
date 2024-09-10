@@ -20,23 +20,26 @@ DB.dbDescription = "BibleDatabaseComplete"
 DB.dbSize = 2000000
 
 DB.dbMigrations = [
-    [0.1, '\
-        CREATE TABLE IF NOT EXISTS settings_table(
-            setting TEXT UNIQUE, value TEXT
-        );
-        CREATE TABLE IF NOT EXISTS projects_table(
-            project_id_timestamp TEXT,
-            project_name TEXT,
-            project_members TEXT,
-            project_recent_payer_boolarray TEXT,
-            project_recent_beneficiaries_boolarray TEXT,
-            project_base_currency TEXT
-        );
-        CREATE TABLE IF NOT EXISTS exchange_rates_table(
-            exchange_rate_currency TEXT,
-            exchange_rate_value TEXT
-        );
-    '],
+    [0.1, function(tx){
+        tx.executeSql('\
+            CREATE TABLE IF NOT EXISTS settings_table(
+                setting TEXT UNIQUE, value TEXT
+            );')
+        tx.executeSql('\
+            CREATE TABLE IF NOT EXISTS projects_table(
+                project_id_timestamp TEXT,
+                project_name TEXT,
+                project_members TEXT,
+                project_recent_payer_boolarray TEXT,
+                project_recent_beneficiaries_boolarray TEXT,
+                project_base_currency TEXT
+            );')
+        tx.executeSql('\
+            CREATE TABLE IF NOT EXISTS exchange_rates_table(
+                exchange_rate_currency TEXT,
+                exchange_rate_value TEXT
+            );')
+    }],
     [0.2, function(tx){
         var table = DB.defaultFor(DB._keyValueSettingsTable, "__local_settings")
         tx.executeSql('DROP TABLE IF EXISTS %1;'.arg(table));
