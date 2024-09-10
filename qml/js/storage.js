@@ -116,12 +116,11 @@ DB.dbMigrations = [
                           [projectId, timezone, "project"])
         }
 
-        var dates = tx.executeSql('SELECT DISTINCT utc_time FROM expenses;')
+        var expenses = tx.executeSql('SELECT DISTINCT utc_time, beneficiaries FROM expenses;')
+        console.log("> rewriting", expenses.rows.length, "dates and beneficiary lists...")
 
-        console.log("> rewriting", dates.rows.length, "dates...")
-
-        for (var k = 0; k < dates.rows.length; ++k) {
-            var oldTime = dates.rows.item(k).utc_time
+        for (var k = 0; k < expenses.rows.length; ++k) {
+            var oldTime = expenses.rows.item(k).utc_time
             var date = new Date(Number(oldTime))
             var utc = date.toISOString()
             var local = date.toLocaleString(Qt.locale(), Dates.dbDateFormat)
@@ -130,6 +129,28 @@ DB.dbMigrations = [
             tx.executeSql('UPDATE expenses SET \
                 utc_time = ?, local_time = ? WHERE utc_time = ?;',
                 [utc, local, oldTime])
+        }
+
+        function formatBeneficiaries(oldString) {
+            var array = DB.defaultFor(oldString || '', '').split(' ||| ').filter(
+                        function(e){return e});
+
+            if (array.length > 0) {
+                // without outer ' ||| ' - they are added later!
+                return array.sort().join(' ||| ')
+            }
+
+            return ''
+        }
+
+        for (var x = 0; x < expenses.rows.length; ++x) {
+            var oldBenefs = expenses.rows.item(x).beneficiaries
+            var newBenefs = formatBeneficiaries(oldBenefs)
+            console.log(oldBenefs, " RAW ->", newBenefs, "CLEAN")
+
+            tx.executeSql('UPDATE expenses SET \
+                beneficiaries = ? WHERE beneficiaries = ?;',
+                [newBenefs, oldBenefs])
         }
     }],
     [0.4, function(tx){
