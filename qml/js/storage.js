@@ -305,15 +305,17 @@ function splitMembersList(string) {
     // Important: do not use this in migrations!
     // This function might change over time. However, migrations
     // must explicitly state what they do.
-    return string.split(' ||| ').filter(function(e){return e});
+    return DB.defaultFor(string || '', '').split(' ||| ').filter(function(e){return e});
 }
 
 function joinMembersList(array) {
     // Important: do not use this in migrations!
     // This function might change over time. However, migrations
     // must explicitly state what they do.
-    if (!!array) {
-        return ' ||| %1 ||| '.arg(array.join(' ||| '))
+    array = DB.defaultFor(array, [])
+
+    if (array.length > 0) {
+        return ' ||| %1 ||| '.arg(array.sort().join(' ||| '))
     }
 
     return ''
