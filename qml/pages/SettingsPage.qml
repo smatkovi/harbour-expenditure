@@ -23,7 +23,7 @@ Dialog {
     allowedOrientations: Orientation.All
 
     property var allProjects: Storage.getProjects(projectDataComponent, root)
-    property ProjectData selectedProject: ProjectData { project_id_timestamp: -1000 }
+    property ProjectData selectedProject: ProjectData { rowid: -1000 }
 
     Component {
         id: projectDataComponent
@@ -91,7 +91,7 @@ Dialog {
 
                         if (currentIndex >= allProjects.length) {
                             var newProjectData = {
-                                project_id_timestamp: -1,
+                                rowid: -1,
                                 name: qsTr("New project"),
                                 baseCurrency: Qt.locale().currencySymbol(Locale.CurrencyIsoCode)
                             }
@@ -108,18 +108,18 @@ Dialog {
 
                     menu: ContextMenu {
                         Repeater {
-                            model: allProjects.concat([{project_id_timestamp: -1000}])
+                            model: allProjects.concat([{rowid: -1000}])
 
                             MenuItem {
-                                property double value: modelData.project_id_timestamp
+                                property double value: modelData.rowid
                                 text: value == -1000 ?
                                           qsTr("New project ...") :
                                           "%1 [%2]".arg(modelData.name).arg(modelData.baseCurrency)
 
                                 Component.onCompleted: {
-                                    var check = selectedProject.project_id_timestamp
+                                    var check = selectedProject.rowid
                                     if (check < -1) {
-                                        check = appWindow.activeProject.project_id_timestamp
+                                        check = appWindow.activeProject.rowid
                                     }
 
                                     if (value == check) {

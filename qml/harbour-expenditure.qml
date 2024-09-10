@@ -68,6 +68,6 @@ ApplicationWindow {
 
     Component.onCompleted: {
         activeProject.loaded.connect(function(){ appWindow.loading = false; })
-        activeProject.project_id_timestamp = Number(Storage.getSetting("activeProjectID_unixtime", 0))
+        activeProject.rowid = Number(Storage.getSetting("activeProjectID_unixtime", 0))
     }
 }

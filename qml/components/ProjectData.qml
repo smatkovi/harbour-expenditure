@@ -12,8 +12,8 @@ QtObject {
     id: root
 
     // STATE
-    readonly property bool active: project_id_timestamp >= 0
-    signal loaded(var project_id_timestamp)
+    readonly property bool active: rowid >= 0
+    signal loaded(var rowid)
 
     // CONFIGURATION
     property bool loadExpenses: true
@@ -24,7 +24,7 @@ QtObject {
     // PROJECT METADATA AND DATA
     // ident -1 is reserved for unsaved new projects
     //     < -1 clears all loaded data
-    property double project_id_timestamp
+    property int rowid
     property string name
     property string baseCurrency
     property var members: ([])
@@ -37,7 +37,7 @@ QtObject {
     // IMMEDIATELY APPLIED FUNCTIONS
     function removeEntry(item, rowid, index) {
         item.remorseDelete(function() {
-            Storage.deleteExpense(root.project_id_timestamp, rowid)
+            Storage.deleteExpense(root.rowid, rowid)
             root.expenses.remove(index)
         })
     }
@@ -46,7 +46,7 @@ QtObject {
                       name, info, sum, currency, payer, beneficiaries,
                       reload) {
         var newEntry = Storage.addExpense(
-            project_id_timestamp,
+            root.rowid,
             utc_time, local_time, local_tz,
             name, info, sum, currency, payer, beneficiaries)
 
@@ -64,7 +64,7 @@ QtObject {
                          name, info, sum, currency, payer, beneficiaries,
                          reload) {
         var changedEntry = Storage.updateExpense(
-            project_id_timestamp, rowid,
+            root.rowid, rowid,
             utc_time, local_time, local_tz,
             name, info, sum, currency, payer, beneficiaries)
 
@@ -76,7 +76,7 @@ QtObject {
     }
 
     function reloadMetadata() {
-        var metadata = Storage.getProjectMetadata(project_id_timestamp)
+        var metadata = Storage.getProjectMetadata(rowid)
         if (metadata === null) return
 
         name = metadata.name
@@ -90,7 +90,7 @@ QtObject {
 
     function reloadContents() {
         expenses.clear()
-        expenses.append(Storage.getProjectEntries(project_id_timestamp))
+        expenses.append(Storage.getProjectEntries(rowid))
     }
 
     // FUNCTIONS APPLIED ONCE saveMetadata() IS CALLED
@@ -112,10 +112,10 @@ QtObject {
         renamedMembers[name] = newName
     }
 
-    onProject_id_timestampChanged: {
-        if (project_id_timestamp == -1) {
+    onRowidChanged: {
+        if (rowid == -1) {
             return
-        } else if (project_id_timestamp < -1) {
+        } else if (rowid < -1) {
             name = ''
             baseCurrency = ''
             members = []
@@ -124,8 +124,8 @@ QtObject {
             reloadMetadata()
             reloadContents()
 
-            console.log("loaded project data:", project_id_timestamp, name, members)
-            loaded(project_id_timestamp)
+            console.log("loaded project data:", rowid, name, members)
+            loaded(rowid)
         }
     }
 }
