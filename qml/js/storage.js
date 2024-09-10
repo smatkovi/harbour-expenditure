@@ -321,8 +321,7 @@ function getSettings(setting, defaultValue) {
 }
 
 function getSortOrder() {
-    return Number(DB.getSetting("sortOrderExpensesIndex", 0)) == Number(0) ?
-                'DESC' : 'ASC'
+    return 'DESC'
 }
 
 
