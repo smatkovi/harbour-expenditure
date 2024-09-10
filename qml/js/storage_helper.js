@@ -152,7 +152,10 @@ function simpleQuery(query, values, readOnly) {
 
         res.ok = true;
     } catch(e) {
-        console.error("database query failed:\n", e, "\nquery values:", values);
+        console.error((readOnly === true ? "read-only " : "") + "database query failed:",
+                      "\n   ERROR  >", e,
+                      "\n   QUERY  >", query,
+                      "\n   VALUES >", values);
         res.ok = false;
     }
 
