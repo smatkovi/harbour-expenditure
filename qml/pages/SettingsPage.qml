@@ -30,6 +30,14 @@ Dialog {
         ProjectData { loadExpenses: false }
     }
 
+    Component.onCompleted: {
+        if (allProjects.length === 0) {
+            // if there are no projects, immediately set up a new one
+            projectCombo.currentIndex = -1
+            projectCombo.currentIndex = 0
+        }
+    }
+
     function deleteCurrentProject() {
         if (projectCombo.currentIndex >= 0 &&
                 projectCombo.currentIndex < allProjects.length) {
