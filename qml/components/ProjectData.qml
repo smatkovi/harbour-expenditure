@@ -115,7 +115,7 @@ QtObject {
             return
         } else if (project_id_timestamp < -1) {
             name = ''
-            currency = ''
+            baseCurrency = ''
             members = []
             expenses.clear()
         } else {
