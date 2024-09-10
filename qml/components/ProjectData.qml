@@ -20,7 +20,6 @@ QtObject {
     property string lastCurrency
     property string lastPayer
     property var lastBeneficiaries: ([])
-    property var lastBeneficiariesMap: ({})
 
     readonly property ListModel expenses: ListModel {}
 
@@ -76,13 +75,6 @@ QtObject {
         lastCurrency = metadata.lastCurrency
         lastPayer = metadata.lastPayer
         lastBeneficiaries = metadata.lastBeneficiaries
-
-        var map = {}
-        for (var i in lastBeneficiaries) {
-            map[lastBeneficiaries[i]] = true
-        }
-
-        lastBeneficiariesMap = map
     }
 
     function reloadContents() {
