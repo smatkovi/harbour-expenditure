@@ -312,7 +312,11 @@ function joinMembersList(array) {
     // Important: do not use this in migrations!
     // This function might change over time. However, migrations
     // must explicitly state what they do.
-    return ' ||| %1 ||| '.arg(array.join(' ||| '))
+    if (!!array) {
+        return ' ||| %1 ||| '.arg(array.join(' ||| '))
+    }
+
+    return ''
 }
 
 
@@ -424,7 +428,7 @@ function getSortOrder() {
 //}
 
 function getProjects(projectDataComponent, parent) {
-    var res = DB.readQuery('SELECT rowid FROM projects;')
+    var res = DB.simpleQuery('SELECT rowid FROM projects;')
     var projects = []
 
     for (var i = 0; i < res.rows.length; ++i) {
@@ -437,7 +441,7 @@ function getProjects(projectDataComponent, parent) {
 }
 
 function getProjectMetadata(ident) {
-    var res = DB.readQuery(
+    var res = DB.simpleQuery(
         'SELECT * FROM projects WHERE rowid = ? LIMIT 1;',
         [String(ident)])
 
