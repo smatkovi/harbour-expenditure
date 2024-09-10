@@ -56,11 +56,15 @@ Dialog {
         // project but are still stored in this expense entry.
         // This is only relevant when editing entries after a member has
         // been deleted from the project.
-        appWindow.activeProject.members.concat(
-            Storage.splitMembersList(initialBeneficiaries).filter(
-                function(item){
-                    return appWindow.activeProject.members.indexOf(item) < 0
-                }))
+        var members = appWindow.activeProject.members
+        var extras = Storage.splitMembersList(initialBeneficiaries)
+
+        if (extras.indexOf(payer) < 0) {
+            extras.push(payer)
+        }
+
+        return members.concat(extras.filter(
+            function(item){ return !!item && members.indexOf(item) < 0 }))
     }
 
     property var beneficiaries: {
