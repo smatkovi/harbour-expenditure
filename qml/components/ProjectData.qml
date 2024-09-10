@@ -49,6 +49,7 @@ QtObject {
             root.rowid,
             utc_time, local_time, local_tz,
             name, info, sum, currency, payer, beneficiaries)
+        reloadLastInfo()
 
         if (reload) {
             reloadContents()
@@ -67,12 +68,20 @@ QtObject {
             root.rowid, rowid,
             utc_time, local_time, local_tz,
             name, info, sum, currency, payer, beneficiaries)
+        reloadLastInfo()
 
         if (reload) {
             reloadContents()
         } else {
             expenses.set(index, changedEntry)
         }
+    }
+
+    function reloadLastInfo() {
+        var metadata = Storage.getProjectMetadata(rowid)
+        lastCurrency = metadata.lastCurrency || metadata.baseCurrency
+        lastPayer = metadata.lastPayer || ''
+        lastBeneficiaries = metadata.lastBeneficiaries
     }
 
     function reloadMetadata() {
