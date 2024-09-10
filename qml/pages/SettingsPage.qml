@@ -30,6 +30,16 @@ Dialog {
         ProjectData { loadExpenses: false }
     }
 
+    function deleteCurrentProject() {
+        if (projectCombo.currentIndex >= 0 &&
+                projectCombo.currentIndex < allProjects.length) {
+            allProjects.splice(projectCombo.currentIndex, 1)
+            allProjects = allProjects
+            projectCombo.currentIndex = -1
+            projectCombo.currentIndex = 0
+        }
+    }
+
     SilicaFlickable {
         id: flick
         anchors.fill: parent
@@ -46,68 +56,77 @@ Dialog {
                 title: qsTr("Settings")
             }
 
-            ComboBox {
-                id: projectCombo
-                label: qsTr("Project")
-                rightMargin: Theme.horizontalPageMargin + Theme.iconSizeMedium
-                currentIndex: -1
+            ListItem {
+                id: projectsContainer
+                contentHeight: projectCombo.height
 
-                onCurrentIndexChanged: {
-                    if (currentIndex < 0) return
+                ComboBox {
+                    id: projectCombo
+                    label: qsTr("Project")
+                    rightMargin: Theme.horizontalPageMargin + Theme.iconSizeMedium
+                    currentIndex: -1
 
-                    if (currentIndex >= allProjects.length) {
-                        var newProjectData = {
-                            project_id_timestamp: -1,
-                            name: qsTr("New project"),
-                            baseCurrency: Qt.locale().currencySymbol(Locale.CurrencyIsoCode)
+                    onCurrentIndexChanged: {
+                        if (currentIndex < 0) return
+
+                        console.log("IDX changed", currentIndex)
+
+                        if (currentIndex >= allProjects.length) {
+                            var newProjectData = {
+                                project_id_timestamp: -1,
+                                name: qsTr("New project"),
+                                baseCurrency: Qt.locale().currencySymbol(Locale.CurrencyIsoCode)
+                            }
+
+                            allProjects.push(projectDataComponent.createObject(root, newProjectData))
                         }
 
-                        allProjects.push(projectDataComponent.createObject(root, newProjectData))
+                        selectedProject = allProjects[currentIndex]
+
+                        if (!!newProjectData) {
+                            allProjects = allProjects
+                        }
                     }
 
-                    selectedProject = allProjects[currentIndex]
+                    menu: ContextMenu {
+                        Repeater {
+                            model: allProjects.concat([{project_id_timestamp: -1000}])
 
-                    if (!!newProjectData) {
-                        allProjects = allProjects
-                    }
-                }
+                            MenuItem {
+                                property double value: modelData.project_id_timestamp
+                                text: value == -1000 ?
+                                          qsTr("New project ...") :
+                                          "%1 [%2]".arg(modelData.name).arg(modelData.baseCurrency)
 
-                menu: ContextMenu {
-                    Repeater {
-                        model: allProjects.concat([{project_id_timestamp: -1000}])
+                                Component.onCompleted: {
+                                    var check = selectedProject.project_id_timestamp
+                                    if (check < -1) {
+                                        check = appWindow.activeProject.project_id_timestamp
+                                    }
 
-                        MenuItem {
-                            property double value: modelData.project_id_timestamp
-                            text: value == -1000 ?
-                                      qsTr("New project ...") :
-                                      "%1 [%2]".arg(modelData.name).arg(modelData.baseCurrency)
-
-                            Component.onCompleted: {
-                                var check = selectedProject.project_id_timestamp
-                                if (check < -1) {
-                                    check = appWindow.activeProject.project_id_timestamp
-                                }
-
-                                if (value == check) {
-                                    projectCombo.currentIndex = index
+                                    if (value == check) {
+                                        projectCombo.currentIndex = index
+                                    }
                                 }
                             }
                         }
                     }
-                }
 
-                IconButton {
-                    enabled: projectCombo.enabled
-                    anchors.right: parent.right
-                    icon.source: "image://theme/icon-m-delete"
+                    IconButton {
+                        enabled: projectCombo.enabled && projectCombo.currentIndex >= 0
+                        anchors.right: parent.right
+                        icon.source: "image://theme/icon-m-delete"
 
-                    onClicked: {
-                        Notices.show('Not implemented yet')
-                    }
+                        onClicked: {
+                            projectsContainer.remorseDelete(function(){
+                                root.deleteCurrentProject()
+                            })
+                        }
 
-                    Binding on highlighted {
-                        when: projectCombo.highlighted
-                        value: true
+                        Binding on highlighted {
+                            when: projectCombo.highlighted
+                            value: true
+                        }
                     }
                 }
             }
