@@ -11,6 +11,7 @@ import Sailfish.Pickers 1.0
 import FileIO 1.0
 import Nemo.Notifications 1.0
 
+import io.thp.pyotherside 1.5
 import Opal.ComboData 1.0
 import Opal.InfoCombo 1.0
 import Opal.Delegates 1.0 as D
@@ -42,11 +43,47 @@ Dialog {
     }
 
     function exportCurrentProject() {
-        Notices.show('Not implemented yet')
+        if (selectedProject.rowid < 0) return
+
+        var dialog = pageStack.push('Sailfish.Pickers.FolderPickerDialog', {
+            'path': StandardPaths.documents,
+            'title': qsTr("Export to", "Page title for the backup output folder picker")
+        })
+        dialog.accepted.connect(function(){
+            py.importModule('import_export', function() {
+                var entries = Storage.getProjectEntries(selectedProject.rowid)
+                py.call('import_export.export',
+                        [entries, dialog.selectedPath,
+                        selectedProject.name, selectedProject.baseCurrency],
+                function(outputPath){
+                    Notices.show(qsTr("Exported expenses to “%1”").arg(
+                        outputPath), 5000)
+                })
+            })
+        })
     }
 
     function importCurrentProject() {
         Notices.show('Not implemented yet')
+    }
+
+    Python {
+        id: py
+        onError: {
+            console.error("an error occurred in the Python backend, traceback:")
+            console.error(traceback)
+
+            Notices.show("\n" + qsTr("An error occurred in the Python backend.\n" +
+                                     "Please restart the app and check the logs.") +
+                         "\n", 10000, Notice.Center)
+        }
+        onReceived: {
+            console.log(data)
+        }
+
+        Component.onCompleted: {
+            addImportPath(Qt.resolvedUrl('../py'))
+        }
     }
 
     onAccepted: {
