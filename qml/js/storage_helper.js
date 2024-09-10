@@ -130,9 +130,18 @@ function simpleQuery(query, values, readOnly) {
 
     try {
         var callback = function(tx) {
-            var rs = guardedTx(tx, function(tx){
-                return tx.executeSql(query, values)
-            })
+            var rs = null
+
+            if (readOnly === true) {
+                // Rollbacks are only possible and sensible
+                // in read-write transactions. It is necessary
+                // to skip guardedTx() here.
+                rs = tx.executeSql(query, values)
+            } else {
+                rs = guardedTx(tx, function(tx){
+                    return tx.executeSql(query, values)
+                })
+            }
 
             if (rs.rowsAffected > 0) {
                 res.rowsAffected = rs.rowsAffected;
