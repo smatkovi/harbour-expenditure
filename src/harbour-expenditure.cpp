@@ -10,12 +10,8 @@
 #include <sailfishapp.h>
 #include "requires_defines.h"
 
-#include "File.h" // FileIO
-
 int main(int argc, char *argv[])
 {
-    qmlRegisterType<File>("FileIO", 1, 0, "TextFileIO"); // FileIO
-
     QScopedPointer<QGuiApplication> app(SailfishApp::application(argc, argv));
     app->setOrganizationName("org.tplabs"); // needed for Sailjail
     app->setApplicationName("expenditure");
