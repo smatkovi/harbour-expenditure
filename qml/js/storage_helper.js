@@ -196,6 +196,12 @@ function getSetting(key, fallback) {
 }
 
 function _createSettingsTable(tx) {
+    // It is usually not necessary to call this function manually.
+    // The settings table is created automatically for you.
+    //
+    // You can use this to migrate from an old settings system to
+    // using the internal settings provided by the database helper.
+
     guardedTx(tx, function(tx){
         tx.executeSql('CREATE TABLE IF NOT EXISTS %1 (key TEXT UNIQUE, value TEXT);'.
                       arg(settingsTable));

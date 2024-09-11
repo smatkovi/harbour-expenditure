@@ -15,12 +15,20 @@
 
 function dbOk() { return DB.dbOk }
 
+// The name of the database is a historical relic
+// but it cannot be changed due to limitations in Qt.
 DB.dbName = "Bible_DB"
 DB.dbDescription = "BibleDatabaseComplete"
 DB.dbSize = 2000000
 
 DB.dbMigrations = [
+    // Database versions do not correspond to app versions.
+
     [0.1, function(tx){
+        // This is the original database schema of all
+        // app versions until 0.4. Expenses were stored
+        // in dynamic tables called "table_<project-id>"
+        // that were created on-demand.
         tx.executeSql('\
             CREATE TABLE IF NOT EXISTS settings_table(
                 setting TEXT UNIQUE, value TEXT
