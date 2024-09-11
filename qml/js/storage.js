@@ -41,7 +41,7 @@ DB.dbMigrations = [
             );')
     }],
     [0.2, function(tx){
-        var table = DB.defaultFor(DB._keyValueSettingsTable, "__local_settings")
+        var table = DB.defaultFor(DB.settingsTable, "__local_settings")
         tx.executeSql('DROP TABLE IF EXISTS %1;'.arg(table));
         DB._createSettingsTable(tx);
         tx.executeSql('INSERT INTO %1(key, value) \
@@ -221,7 +221,7 @@ DB.dbMigrations = [
                 WHERE %1.key = "activeProjectID_unixtime"
                     AND %1.value = CAST(projects.project_id_timestamp as INTEGER)
             )
-        '.arg(DB._keyValueSettingsTable))
+        '.arg(DB.settingsTable))
         tx.executeSql('ALTER TABLE projects DROP COLUMN project_id_timestamp;')
         tx.executeSql('DROP TABLE projects_table;')
 
@@ -316,12 +316,12 @@ DB.dbMigrations = [
                 OR key = "exchangeRateModeIndex"
                 OR key = "interativeScrollbarMode"
                 OR key = "recentlyUsedCurrency"
-        ;'.arg(DB._keyValueSettingsTable))
+        ;'.arg(DB.settingsTable))
         tx.executeSql('\
             UPDATE %1
             SET key = "active_project"
             WHERE key = "activeProjectID_unixtime"
-        ;'.arg(DB._keyValueSettingsTable))
+        ;'.arg(DB.settingsTable))
     }],
 
     // add new versions here...

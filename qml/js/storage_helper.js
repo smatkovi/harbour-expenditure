@@ -25,6 +25,13 @@ var dbMigrations = [
     // remember: versions must be numeric, e.g. 0.1 but not 0.1.1
 ]
 
+// The database helper provides easy settings handling
+// through a key-value store in this table. The table
+// name can be changed here initially. The table is
+// created automatically after all migrations have been run.
+// Columns: key TEXT UNIQUE, value TEXT
+var settingsTable = "__local_settings"
+
 
 //
 // BEGIN Database handling boilerplate
@@ -44,8 +51,6 @@ var dbMigrations = [
 // - dbOk: set to false if the database is unavailable due to errors.
 
 var dbOk = true
-
-var _keyValueSettingsTable = "__local_settings"
 
 var __initialized = false
 var __db = null
@@ -172,13 +177,13 @@ function simpleQuery(query, values, readOnly) {
 }
 
 function setSetting(key, value) {
-    simpleQuery('INSERT OR REPLACE INTO %1 VALUES (?, ?);'.arg(_keyValueSettingsTable),
+    simpleQuery('INSERT OR REPLACE INTO %1 VALUES (?, ?);'.arg(settingsTable),
                 [key, value]);
 }
 
 function getSetting(key, fallback) {
     var res = simpleQuery('SELECT value FROM %1 WHERE key=? LIMIT 1;'.
-                            arg(_keyValueSettingsTable),
+                            arg(settingsTable),
                           [key]);
 
     if (res.rows.length > 0) {
@@ -192,7 +197,7 @@ function getSetting(key, fallback) {
 
 function _createSettingsTable(tx) {
     tx.executeSql('CREATE TABLE IF NOT EXISTS %1 (key TEXT UNIQUE, value TEXT);'.
-                  arg(_keyValueSettingsTable));
+                      arg(settingsTable));
 }
 
 function __doInit(db) {
@@ -289,7 +294,7 @@ function __doDatabaseMaintenance() {
     var last_maintenance = simpleQuery(
         'SELECT * FROM %1 WHERE key = "last_maintenance" \
              AND value >= date("now", "-60 day") LIMIT 1;'.
-                arg(_keyValueSettingsTable),
+                arg(settingsTable),
         [], true);
 
     if (last_maintenance.rows.length > 0) {
