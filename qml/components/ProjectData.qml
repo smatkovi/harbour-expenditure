@@ -124,18 +124,29 @@ QtObject {
 
     onRowidChanged: {
         if (rowid == -1) {
-            return
+            // new project, nothing to do
         } else if (rowid < -1) {
+            // reset all current data
             name = ''
             baseCurrency = ''
             members = []
+            lastCurrency = ''
+            lastBeneficiaries = []
+            lastPayer = ''
+            ratesMode = 0
             expenses.clear()
+
+            renamedMembers = {}
+            importedExpenses = []
         } else {
+            // actually load a project
+            renamedMembers = {}
+            importedExpenses = []
             reloadMetadata()
             reloadContents()
-
             console.log("loaded project data:", rowid, name, members)
-            loaded(rowid)
         }
+
+        loaded(rowid)
     }
 }
