@@ -196,8 +196,10 @@ function getSetting(key, fallback) {
 }
 
 function _createSettingsTable(tx) {
-    tx.executeSql('CREATE TABLE IF NOT EXISTS %1 (key TEXT UNIQUE, value TEXT);'.
+    guardedTx(tx, function(tx){
+        tx.executeSql('CREATE TABLE IF NOT EXISTS %1 (key TEXT UNIQUE, value TEXT);'.
                       arg(settingsTable));
+    })
 }
 
 function __doInit(db) {
