@@ -377,6 +377,41 @@ function getSortOrder() {
 // BEGIN Projects
 //
 
+function getActiveProjectId() {
+    var ident = getSetting('active_project', -1000)
+
+    if (!_projectExists(ident)) {
+        return -1000
+    }
+
+    return ident
+}
+
+function setActiveProjectId(ident) {
+    if (!_projectExists(ident)) {
+        ident = -1000
+    }
+
+    setSetting('active_project', ident)
+}
+
+function _projectExists(ident) {
+    if (ident < 0) {
+        return false
+    }
+
+    var res = DB.simpleQuery('\
+        SELECT rowid FROM projects
+        WHERE rowid = ?
+        LIMIT 1;', [ident])
+
+    if (res.rows.length > 0) {
+        return true
+    }
+
+    return false
+}
+
 function saveProjects(projectDataArray) {
     // This function takes an array of ProjectData objects
     // as returned by getProjects().

@@ -68,10 +68,6 @@ ApplicationWindow {
 
     Component.onCompleted: {
         activeProject.loaded.connect(function(){ appWindow.loading = false; })
-        activeProject.rowid = Number(Storage.getSetting("activeProjectID_unixtime", -1000))
-
-        if (activeProject.rowid < 0) {
-            appWindow.loading = false
-        }
+        activeProject.rowid = Storage.getActiveProjectId()
     }
 }

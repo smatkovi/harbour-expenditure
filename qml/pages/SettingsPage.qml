@@ -101,7 +101,7 @@ Dialog {
 
     onAccepted: {
         var newRowids = Storage.saveProjects(allProjects)
-        Storage.setSetting('activeProjectID_unixtime', newRowids[projectCombo.currentIndex])
+        Storage.setActiveProjectId(newRowids[projectCombo.currentIndex])
         appWindow.activeProject.rowid = newRowids[projectCombo.currentIndex]
         appWindow.activeProject.reloadMetadata()
         appWindow.activeProject.reloadContents() // in case members have changed
