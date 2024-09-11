@@ -632,6 +632,7 @@ function _getProjectMembers(ident) {
 
 function _makeProjectEntry(entryRow, projectMembers) {
     var item = entryRow
+    var beneficiaries = splitMembersList(item.beneficiaries)
 
     return {
         rowid: item.rowid,
@@ -649,11 +650,12 @@ function _makeProjectEntry(entryRow, projectMembers) {
         // that would be converted into a ListModel in QML,
         // which is impractical to work with in this case.
         beneficiaries: item.beneficiaries,
+        beneficiaries_list: beneficiaries,
 
         // The screen presentation string is created here
         // to avoid having to recalculate it when bindings are evaluated.
         beneficiaries_string: item.beneficiaries === projectMembers ?
-            qsTr("everyone") : splitMembersList(item.beneficiaries).join(', '),
+            qsTr("everyone") : beneficiaries.join(', '),
     }
 }
 
