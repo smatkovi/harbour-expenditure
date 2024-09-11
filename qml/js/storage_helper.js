@@ -195,7 +195,7 @@ function getSetting(key, fallback) {
     return res;
 }
 
-function _createSettingsTable(tx) {
+function createSettingsTable(tx) {
     // It is usually not necessary to call this function manually.
     // The settings table is created automatically for you.
     //
@@ -277,7 +277,7 @@ function __doInit(db) {
 
     console.log("loaded database version", previousVersion)
 
-    db.transaction(_createSettingsTable);
+    db.transaction(createSettingsTable);
 
     return true
 }

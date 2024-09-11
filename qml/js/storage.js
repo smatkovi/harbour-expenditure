@@ -49,11 +49,10 @@ DB.dbMigrations = [
             );')
     }],
     [0.2, function(tx){
-        var table = DB.defaultFor(DB.settingsTable, "__local_settings")
-        tx.executeSql('DROP TABLE IF EXISTS %1;'.arg(table));
-        DB._createSettingsTable(tx);
+        tx.executeSql('DROP TABLE IF EXISTS %1;'.arg(DB.settingsTable));
+        DB.createSettingsTable(tx);
         tx.executeSql('INSERT INTO %1(key, value) \
-            SELECT setting, value FROM settings_table;'.arg(table))
+            SELECT setting, value FROM settings_table;'.arg(DB.settingsTable))
         tx.executeSql('DROP TABLE settings_table;');
     }],
     [0.3, function(tx){
