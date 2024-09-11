@@ -24,10 +24,6 @@ QML_IMPORT_PATH += qml/modules
 
 SOURCES += \
     src/harbour-expenditure.cpp \
-    src/File.cpp
-
-HEADERS += \
-    src/File.h
 
 DISTFILES += \
     qml/*.qml \
