@@ -309,6 +309,20 @@ DB.dbMigrations = [
         tx.executeSql('DROP TABLE expenses;')
         tx.executeSql('ALTER TABLE expenses_temp RENAME TO expenses;')
     }],
+    [0.6, function(tx){
+        tx.executeSql('\
+            DELETE FROM %1 WHERE
+                   key = "sortOrderExpensesIndex"
+                OR key = "exchangeRateModeIndex"
+                OR key = "interativeScrollbarMode"
+                OR key = "recentlyUsedCurrency"
+        ;'.arg(DB._keyValueSettingsTable))
+        tx.executeSql('\
+            UPDATE %1
+            SET key = "active_project"
+            WHERE key = "activeProjectID_unixtime"
+        ;'.arg(DB._keyValueSettingsTable))
+    }],
 
     // add new versions here...
     //
