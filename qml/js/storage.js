@@ -350,18 +350,18 @@ DB.dbMigrations = [
     }],
     [0.7, function(tx){
         tx.executeSql('\
-                CREATE TABLE exchange_rates(
-                    project INTEGER NOT NULL,
-                    currency TEXT NOT NULL,
-                    rate REAL,
+            CREATE TABLE exchange_rates(
+                project INTEGER NOT NULL,
+                currency TEXT NOT NULL,
+                rate REAL,
 
-                    PRIMARY KEY (project, currency),
+                PRIMARY KEY (project, currency),
 
-                    FOREIGN KEY (project)
-                    REFERENCES projects (rowid)
-                        ON UPDATE CASCADE
-                        ON DELETE CASCADE
-                );
+                FOREIGN KEY (project)
+                REFERENCES projects (rowid)
+                    ON UPDATE CASCADE
+                    ON DELETE CASCADE
+            );
         ')
         tx.executeSql('\
             INSERT INTO exchange_rates(project, currency)
