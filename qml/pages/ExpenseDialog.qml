@@ -345,6 +345,7 @@ Dialog {
                 foreignSum: sumField.value
                 allowEmpty: true
                 emptyValue: NaN
+                value: emptyValue
                 placeholder: project.exchangeRates[currency] || ''
 
                 EnterKey.iconSource: {
