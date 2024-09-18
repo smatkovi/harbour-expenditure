@@ -348,6 +348,41 @@ DB.dbMigrations = [
             WHERE key = "activeProjectID_unixtime"
         ;'.arg(DB.settingsTable))
     }],
+    [0.7, function(tx){
+        tx.executeSql('\
+                CREATE TABLE exchange_rates(
+                    project INTEGER NOT NULL,
+                    currency TEXT NOT NULL,
+                    rate REAL,
+
+                    PRIMARY KEY (project, currency),
+
+                    FOREIGN KEY (project)
+                    REFERENCES projects (rowid)
+                        ON UPDATE CASCADE
+                        ON DELETE CASCADE
+                );
+        ')
+        tx.executeSql('\
+            INSERT INTO exchange_rates(project, currency)
+            SELECT DISTINCT project, currency
+            FROM expenses
+        ;')
+        tx.executeSql('\
+            UPDATE exchange_rates SET rate = (
+                SELECT exchange_rate_value
+                FROM exchange_rates_table
+                WHERE exchange_rates.currency =
+                    exchange_rates_table.exchange_rate_currency
+            ) WHERE EXISTS (
+                SELECT exchange_rate_value
+                FROM exchange_rates_table
+                WHERE exchange_rates.currency =
+                    exchange_rates_table.exchange_rate_currency
+            )
+        ;')
+        tx.executeSql('DROP TABLE exchange_rates_table;')
+    }],
 
     // add new versions here...
     //
@@ -477,6 +512,13 @@ function saveProjects(projectDataArray) {
                                 e.payer, splitMembersList(e.beneficiaries))
         }
 
+        var kExchangeRates = projectDataArray[k].exchangeRates
+        for (var currency in kExchangeRates) {
+            if (!kExchangeRates.hasOwnProperty(currency)) continue
+            setExchangeRate(newIdent, currency, kExchangeRates[currency])
+        }
+
+        _updateExchangeRates(newIdent)
         newRowids.push(newIdent)
     }
 
@@ -704,85 +746,138 @@ function getProjectEntries(ident) {
 }
 
 function getProjectExchangeRates(ident) {
-    // TODO
+    var res = DB.simpleQuery('\
+        SELECT currency, rate
+        FROM exchange_rates
+        WHERE project = ?
+    ;', [ident])
 
-    return {
+    var base = DB.simpleQuery('\
+        SELECT base_currency
+        FROM projects
+        WHERE rowid = ?
+    ;', [ident])
+
+    if (base.rows.length === 0) base = null
+    else base = base.rows.item(0).base_currency
+
+    var ret = {
         rates: {},
         currencies: [],
     }
-}
 
+    if (!!base) ret.rates[base] = 1.0
 
-// all exchange rates used
-function countExchangeRateOccurances (exchange_rate_currency, default_value) {
-    var db = DB.getDatabase();
-    var res="";
-    try {
-        db.transaction(function(tx) {
-            var rs = tx.executeSql('SELECT count(*) AS some_info FROM exchange_rates_table WHERE exchange_rate_currency=?;', [exchange_rate_currency]);
-            if (rs.rows.length > 0) {
-                res = rs.rows.item(0).some_info;
-            } else {
-                res = default_value;
-            }
-        })
-    } catch (err) {
-        //console.log("Database " + err);
-        res = default_value;
-    };
-    return res
-}
-
-function setExchangeRate( exchange_rate_currency, exchange_rate_value ) {
-    var db = DB.getDatabase();
-    var res = "";
-    db.transaction(function(tx) {
-        var rs = tx.executeSql('INSERT OR REPLACE INTO ' + 'exchange_rates_table' + ' VALUES (?,?);', [exchange_rate_currency, exchange_rate_value ]);
-        if (rs.rowsAffected > 0) {
-            res = "OK";
-        } else {
-            res = "Error";
-        }
+    if (res.rows.length === 0) {
+        if (!!base) ret.currencies = [base]
+        return ret
     }
-    );
-    return res;
-}
 
-function updateExchangeRate( exchange_rate_currency, exchange_rate_value ) {
-    var db = DB.getDatabase();
-    var res = "";
-    db.transaction(function(tx) {
-        var rs = tx.executeSql('UPDATE exchange_rates_table SET exchange_rate_value="' + exchange_rate_value + '" WHERE exchange_rate_currency="' + exchange_rate_currency + '";');
-        if (rs.rowsAffected > 0) {
-            res = "OK";
-        } else {
-            res = "Error";
-        }
+    for (var i = 0; i < res.rows.length; i++) {
+        var item = res.rows.item(i)
+        ret.rates[item.currency] = item.rate
+        ret.currencies.push(item.currency)
     }
-    );
-    return res;
+
+    ret.currencies = ret.currencies.sort()
+    if (!!base) ret.currencies = ret.currencies.concat([base])
+
+    return ret
 }
 
-function getExchangeRate(exchange_rate_currency, default_value) {
-    var db = DB.getDatabase();
-    var res=[];
-    try {
-        db.transaction(function(tx) {
-            var rs = tx.executeSql('SELECT * FROM '+ 'exchange_rates_table' +' WHERE exchange_rate_currency=?;', [exchange_rate_currency]);
-            if (rs.rows.length > 0) {
-                for (var i = 0; i < rs.rows.length; i++) {
-                    res.push(rs.rows.item(i).exchange_rate_value)
-                }
-            } else {
-                res = default_value;
-            }
-        })
-    } catch (err) {
-        //console.log("Database " + err);
-        res = default_value;
-    };
-    return res
+function _updateExchangeRates(project) {
+    // drop unused currencies from exchange rates
+    DB.simpleQuery('\
+        DELETE FROM exchange_rates
+            WHERE project = ?
+            AND NOT EXISTS (
+                SELECT currency
+                FROM expenses
+                WHERE exchange_rates.currency = expenses.currency
+                    AND expenses.project = ?
+            )
+    ', [project, project])
+
+    // add missing currencies to exchange rates
+    DB.simpleQuery('\
+        INSERT INTO exchange_rates(project, currency)
+            SELECT DISTINCT project, currency
+            FROM expenses
+            WHERE project = ?
+            AND NOT EXISTS (
+                SELECT currency
+                FROM exchange_rates
+                WHERE exchange_rates.currency = expenses.currency
+                    AND expenses.project = ?
+            )
+    ', [project, project])
 }
+
+//// all exchange rates used
+//function countExchangeRateOccurances (exchange_rate_currency, default_value) {
+//    var db = DB.getDatabase();
+//    var res="";
+//    try {
+//        db.transaction(function(tx) {
+//            var rs = tx.executeSql('SELECT count(*) AS some_info FROM exchange_rates_table WHERE exchange_rate_currency=?;', [exchange_rate_currency]);
+//            if (rs.rows.length > 0) {
+//                res = rs.rows.item(0).some_info;
+//            } else {
+//                res = default_value;
+//            }
+//        })
+//    } catch (err) {
+//        //console.log("Database " + err);
+//        res = default_value;
+//    };
+//    return res
+//}
+
+function setExchangeRate(project, currency, rate) {
+    DB.simpleQuery('\
+        INSERT INTO exchange_rates(project, currency, rate)
+        VALUES (?, ?, ?)
+
+        ON CONFLICT(project, currency) DO
+            UPDATE SET rate = ?
+    ', [project, currency, rate, rate])
+}
+
+//function updateExchangeRate( exchange_rate_currency, exchange_rate_value ) {
+//    var db = DB.getDatabase();
+//    var res = "";
+//    db.transaction(function(tx) {
+//        var rs = tx.executeSql('UPDATE exchange_rates_table SET exchange_rate_value="' + exchange_rate_value + '" WHERE exchange_rate_currency="' + exchange_rate_currency + '";');
+//        if (rs.rowsAffected > 0) {
+//            res = "OK";
+//        } else {
+//            res = "Error";
+//        }
+//    }
+//    );
+//    return res;
+//}
+
+//function getExchangeRate(exchange_rate_currency, default_value) {
+//    var db = DB.getDatabase();
+//    var res=[];
+//    try {
+//        db.transaction(function(tx) {
+//            var rs = tx.executeSql('SELECT * FROM '+ 'exchange_rates_table' +' WHERE exchange_rate_currency=?;', [exchange_rate_currency]);
+//            if (rs.rows.length > 0) {
+//                for (var i = 0; i < rs.rows.length; i++) {
+//                    res.push(rs.rows.item(i).exchange_rate_value)
+//                }
+//            } else {
+//                res = default_value;
+//            }
+//        })
+//    } catch (err) {
+//        //console.log("Database " + err);
+//        res = default_value;
+//    };
+//    return res
+//}
 
 
 //
@@ -829,6 +924,7 @@ function addExpense(projectIdent,
                                   name, info, sum, currency,
                                   rate, percentageFees, fixedFees,
                                   payer, beneficiaries)
+    _updateExchangeRates(projectIdent)
 
     var newEntry = DB.simpleQuery('\
         SELECT rowid, * FROM expenses \
@@ -863,6 +959,7 @@ function updateExpense(projectIdent, rowid,
         numberOrNull(rate), numberOrNull(percentageFees), numberOrNull(fixedFees),
         payer, joinMembersList(beneficiaries),
         projectIdent, rowid])
+    _updateExchangeRates()
 
     var changedEntry = DB.simpleQuery('\
         SELECT rowid, * FROM expenses \
@@ -879,4 +976,5 @@ function updateExpense(projectIdent, rowid,
 function deleteExpense(projectId, entryId) {
     DB.simpleQuery('DELETE FROM expenses WHERE project = ? AND rowid = ?;',
                    [projectId, entryId])
+    _updateExchangeRates()
 }
