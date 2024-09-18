@@ -100,6 +100,10 @@ Page {
 
         model: appWindow.activeProject.expenses
 
+        // this improves scrolling performance but at the
+        // cost of longer loading times...
+        cacheBuffer: 100 * Screen.height
+
         delegate: D.ThreeLineDelegate {
             id: item
             minContentHeight: Theme.itemSizeExtraLarge
