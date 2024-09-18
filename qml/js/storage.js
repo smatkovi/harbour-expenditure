@@ -512,13 +512,7 @@ function saveProjects(projectDataArray) {
                                 e.payer, splitMembersList(e.beneficiaries))
         }
 
-        var kExchangeRates = projectDataArray[k].exchangeRates
-        for (var currency in kExchangeRates) {
-            if (!kExchangeRates.hasOwnProperty(currency)) continue
-            setExchangeRate(newIdent, currency, kExchangeRates[currency])
-        }
-
-        _updateExchangeRates(newIdent)
+        setProjectExchangeRates(newIdent, projectDataArray[k].exchangeRates)
         newRowids.push(newIdent)
     }
 
@@ -785,6 +779,15 @@ function getProjectExchangeRates(ident) {
     return ret
 }
 
+function setProjectExchangeRates(project, exchangeRates) {
+    for (var currency in exchangeRates) {
+        if (!exchangeRates.hasOwnProperty(currency)) continue
+        setExchangeRate(project, currency, exchangeRates[currency])
+    }
+
+    _updateExchangeRates(project)
+}
+
 function _updateExchangeRates(project) {
     // drop unused currencies from exchange rates
     DB.simpleQuery('\
@@ -841,6 +844,14 @@ function setExchangeRate(project, currency, rate) {
         ON CONFLICT(project, currency) DO
             UPDATE SET rate = ?
     ', [project, currency, rate, rate])
+}
+
+function setExpenseExchangeRate(project, rowid, rate) {
+    DB.simpleQuery('\
+        UPDATE expenses
+        SET rate = ?
+        WHERE project = ? AND rowid = ?
+    ', [rate, project, rowid])
 }
 
 //function updateExchangeRate( exchange_rate_currency, exchange_rate_value ) {
