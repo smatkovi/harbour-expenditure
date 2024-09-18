@@ -108,6 +108,7 @@ Dialog {
         Storage.setActiveProjectId(newRowids[projectCombo.currentIndex])
         appWindow.activeProject.rowid = newRowids[projectCombo.currentIndex]
         appWindow.activeProject.reloadMetadata()
+        appWindow.activeProject.reloadRates()
         appWindow.activeProject.reloadContents() // in case members have changed
     }
 
