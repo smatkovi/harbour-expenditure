@@ -114,6 +114,14 @@ Dialog {
             projectCombo.currentIndex = -1
             projectCombo.currentIndex = 0
         }
+
+        if (pageStack.previousPage() === null) {
+            // Load the first project during development when
+            // using SettingsPage as the initial page.
+            appWindow.activeProject.rowid = 0
+            projectCombo.currentIndex = -1
+            projectCombo.currentIndex = 0
+        }
     }
 
     SilicaFlickable {
