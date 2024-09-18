@@ -208,12 +208,17 @@ Page {
             }
 
             EditableRatesList {
-                // TODO save changes, then reload appWindow.activeProject.exchangeRates
                 selectedProject: ProjectData {
                     // cannot assing appWindow.activeProject, but why?
                     rowid: appWindow.activeProject.rowid
                     loadExpenses: false
                     loadRates: true
+                }
+
+                onExchangeRateChanged: {
+                    appWindow.activeProject.exchangeRates[currency] = rate
+                    Storage.setExchangeRate(selectedProject.rowid, currency, rate)
+                    calculate()
                 }
             }
 
