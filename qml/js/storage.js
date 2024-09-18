@@ -769,8 +769,17 @@ function getProjectExchangeRates(ident) {
 
     for (var i = 0; i < res.rows.length; i++) {
         var item = res.rows.item(i)
-        ret.rates[item.currency] = item.rate
-        ret.currencies.push(item.currency)
+
+        if (item.currency === base) {
+            // It can happen that the base currency is saved
+            // in the exchange rates table. It can even happen
+            // that is has a rate other than 1.0. Both cases
+            // are simply being ignored here, which should be ok.
+            continue
+        } else {
+            ret.rates[item.currency] = item.rate
+            ret.currencies.push(item.currency)
+        }
     }
 
     ret.currencies = ret.currencies.sort()
