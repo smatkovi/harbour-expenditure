@@ -6,6 +6,8 @@
 
 import QtQuick 2.6
 import Sailfish.Silica 1.0
+
+import "../enums"
 import "../js/storage.js" as Storage
 
 QtObject {
@@ -30,7 +32,8 @@ QtObject {
     property string lastCurrency
     property string lastPayer
     property var lastBeneficiaries: ([])
-    property int ratesMode: 0
+    property int ratesMode: RatesMode.fixed
+    property int feesMode: FeesMode.hiddenByDefault
     readonly property ListModel expenses: ListModel {}
 
     // IMMEDIATELY APPLIED FUNCTIONS
@@ -102,6 +105,7 @@ QtObject {
         lastPayer = metadata.lastPayer || ''
         lastBeneficiaries = metadata.lastBeneficiaries
         ratesMode = metadata.ratesMode
+        feesMode = metadata.feesMode
     }
 
     function reloadContents() {
@@ -141,7 +145,8 @@ QtObject {
             lastCurrency = ''
             lastBeneficiaries = []
             lastPayer = ''
-            ratesMode = 0
+            ratesMode = RatesMode.fixed
+            feesMode = FeesMode.hiddenByDefault
             expenses.clear()
 
             renamedMembers = {}
