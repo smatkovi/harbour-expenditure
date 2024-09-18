@@ -46,7 +46,7 @@ PaddedDelegate {
             onClicked: {
                 root._displayType = 'B2F'
                 inputField.value = value
-                root._displayDescription = text
+                root._displayDescription = Qt.binding(function(){return text})
             }
         }
         MenuItem {
@@ -55,7 +55,7 @@ PaddedDelegate {
             onClicked: {
                 root._displayType = 'F2B'
                 inputField.value = value > 0 ? 1/value : emptyValue
-                root._displayDescription = text
+                root._displayDescription = Qt.binding(function(){return text})
             }
         }
         MenuItem {
@@ -64,7 +64,7 @@ PaddedDelegate {
             onClicked: {
                 root._displayType = 'paid'
                 inputField.value = value > 0 ? foreignSum*value : emptyValue
-                root._displayDescription = text
+                root._displayDescription = Qt.binding(function(){return text})
             }
         }
     }
