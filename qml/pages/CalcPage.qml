@@ -51,6 +51,9 @@ Page {
     }
 
     function calculate() {
+        var expenses = Storage.getProjectEntries(appWindow.activeProject.rowid)
+        var baseCurrency = appWindow.activeProject.baseCurrency
+
         var payments = {}
         var benefits = {}
         var totalPayments = 0
@@ -92,6 +95,8 @@ Page {
             tmp = payments[p] || (payments[p] = 0)
         }
 
+        root.expenses = expenses
+        root.baseCurrency = baseCurrency
         root.payments = payments
         root.benefits = benefits
         root.totalPayments = totalPayments
@@ -226,29 +231,30 @@ Page {
                 text: qsTr("Transactions and fees")
             }
 
-            BusyIndicator {
-                size: BusyIndicatorSize.Medium
-                anchors.horizontalCenter: parent.horizontalCenter
-                visible: !transactionsLoader.visible
-                running: visible
+            ButtonLayout {
+                preferredWidth: Theme.buttonWidthLarge
+
+                Button {
+                    text: qsTr("Edit transactions")
+                    onClicked: pageStack.animatorPush(Qt.resolvedUrl("FeesRatesPage.qml"),
+                                                      {projectRowid: appWindow.activeProject.rowid})
+                }
             }
 
-            Loader {
-                // TODO use a listview instead because performance is terrible
-                id: transactionsLoader
-                width: parent.width
-                visible: status === Loader.Ready
-                asynchronous: true
-                sourceComponent: Component {
-                    DelegateColumn {
-                        model: appWindow.activeProject.expenses
-                        delegate: Component {
-                            EditableTransactionsListDelegate {
-                                project: exchangeRatesList.selectedProject
-                            }
-                        }
-                    }
-                }
+            Label {
+                width: parent.width - 2*x
+                x: Theme.horizontalPageMargin
+                wrapMode: Text.Wrap
+                color: Theme.secondaryHighlightColor
+                font.pixelSize: Theme.fontSizeExtraSmall
+                topPadding: Theme.paddingLarge
+                bottomPadding: Theme.paddingMedium
+
+                text: qsTr("Click here to review and edit fees and " +
+                           "exchange rates individually for all transactions. " +
+                           "Transactions that do not declare a custom " +
+                           "exchange rate are converted using the base " +
+                           "exchange rates defined above.")
             }
         }
     }

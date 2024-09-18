@@ -19,7 +19,7 @@ ListItem {
     highlighted: false
 
     property int _index: index
-    property string _date: Dates.formatDate(local_time, Dates.fullDateTimeFormat, local_tz)
+    property string _date: Dates.formatDate(local_time, Dates.timeFormat, local_tz)
     property color _evenColor: Theme.rgba(Theme.highlightBackgroundColor, 0.5)
 
     property string _currency: currency
@@ -32,7 +32,7 @@ ListItem {
     property double _percentageFees: percentage_fees
 
     Column {
-        id: inner_column
+        id: column
         width: parent.width
         height: childrenRect.height
 
@@ -40,20 +40,36 @@ ListItem {
             text: item._date
             description: "%1: %2".arg(item._payer).arg(item._title)
             interactive: false
-            showOddEven: true
+//            showOddEven: true
             evenColor: item._evenColor
+
+            textLabel {
+                font.pixelSize: Theme.fontSizeSmall
+                color: Theme.secondaryHighlightColor
+            }
+            descriptionLabel {
+                font.pixelSize: Theme.fontSizeMedium
+                color: Theme.highlightColor
+            }
 
             rightItem: DelegateInfoItem {
                 text: Number(sum).toLocaleString(Qt.locale('de_CH'))
                 description: currency
-                textLabel.font.pixelSize: Theme.fontSizeMedium
-                descriptionLabel.font.pixelSize: Theme.fontSizeSmall
                 alignment: Qt.AlignRight
+
+                textLabel {
+                    font.pixelSize: Theme.fontSizeMedium
+                    color: Theme.highlightColor
+                }
+                descriptionLabel {
+                    font.pixelSize: Theme.fontSizeSmall
+                    color: Theme.secondaryHighlightColor
+                }
             }
         }
 
         EditableRatesListDelegate {
-            showOddEven: true
+//            showOddEven: true
             evenColor: item._evenColor
             project: item.project
             currency: item._currency
@@ -77,12 +93,12 @@ ListItem {
             width: parent.width
             height: Theme.itemSizeSmall + 2*Theme.paddingMedium
 
-            Rectangle {
-                anchors.fill: parent
-                opacity: Theme.opacityFaint
-                color: (item._index % 2 != 0) ? "transparent" : item._evenColor
-                border.color: color
-            }
+//            Rectangle {
+//                anchors.fill: parent
+//                opacity: Theme.opacityFaint
+//                color: (item._index % 2 != 0) ? "transparent" : item._evenColor
+//                border.color: color
+//            }
 
             FeesItem {
                 anchors.verticalCenter: parent.verticalCenter
