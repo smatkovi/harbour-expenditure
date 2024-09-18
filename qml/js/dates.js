@@ -8,7 +8,7 @@
 
 var dbDateFormat = "yyyy-MM-dd hh:mm:ss"
 
-var timeFormat = qsTr("hh':'mm o'''clock",
+var timeFormat = qsTr("hh':'mm",
     "time only format, as in “10:00 o'clock”")
 var dateTimeFormat = qsTr("d MMM yyyy, hh':'mm",
     "date and time format, as in “Dec. 1st 2023, 10:00 o'clock”")
