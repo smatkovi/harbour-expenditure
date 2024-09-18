@@ -11,6 +11,20 @@ TextField {
     EnterKey.onClicked: focus = false
     EnterKey.iconSource: "image://theme/icon-m-enter-close"
 
+    function apply() {
+        if (!!text) {
+            value = Number(text.trim().replace(',', '.'))
+
+            if (precision == 2) {
+                text = value.toLocaleCurrencyString(Qt.locale('de-CH'), ' ').trim()
+            } else {
+                text = value.toFixed(precision)
+            }
+        } else {
+            value = emptyValue
+        }
+    }
+
     onFocusChanged: {
         if (focus) {
             if (isNaN(value) && isNaN(emptyValue)) {
@@ -23,17 +37,7 @@ TextField {
 
             selectAll()
         } else {
-            if (!!text) {
-                value = Number(text.trim().replace(',', '.'))
-
-                if (precision == 2) {
-                    text = value.toLocaleCurrencyString(Qt.locale('de-CH'), ' ').trim()
-                } else {
-                    text = value.toFixed(precision)
-                }
-            } else {
-                value = emptyValue
-            }
+            apply()
         }
     }
 
