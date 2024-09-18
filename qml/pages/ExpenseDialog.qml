@@ -159,6 +159,7 @@ Dialog {
         var properties = [
             "index", "rowid", "utc_time", "local_time",
             "local_tz", "name", "info", "sum",
+            "rate", "percentageFees", "fixedFees",
             "currency", "payer", "beneficiaries"]
         var changed = false
         appWindow._currentlyEditedEntry['initialValuesReadOnly'] = initialValuesReadOnly
