@@ -116,10 +116,6 @@ Page {
             }
 
             SectionHeader {
-                text: qsTr("Exchange rates")
-            }
-
-            SectionHeader {
                 text: qsTr("Spending overview")
             }
 
@@ -192,6 +188,24 @@ Page {
 
             SectionHeader {
                 text: qsTr("Settlement suggestion")
+            }
+
+            SectionHeader {
+                text: qsTr("Base exchange rates")
+            }
+
+            EditableRatesList {
+                // TODO save changes, then reload appWindow.activeProject.exchangeRates
+                selectedProject: ProjectData {
+                    // cannot assing appWindow.activeProject, but why?
+                    rowid: appWindow.activeProject.rowid
+                    loadExpenses: false
+                    loadRates: true
+                }
+            }
+
+            SectionHeader {
+                text: qsTr("Transactions and fees")
             }
         }
     }
