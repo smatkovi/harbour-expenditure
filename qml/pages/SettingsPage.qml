@@ -206,45 +206,6 @@ Dialog {
             }
 
             Spacer { size: Theme.paddingLarge }
-            ComboBox {
-                id: ratesModeCombo
-                width: parent.width
-                label: qsTr("Exchange rate")
-
-                property var indexOfData
-                property int currentData
-                ComboData { dataRole: 'value' }
-
-                menu: ContextMenu {
-                    MenuItem {
-                        property int value: 0
-                        text: qsTr("fixed per currency")
-                    }
-                    MenuItem {
-                        property int value: 1
-                        text: qsTr("per transaction date")
-                    }
-                }
-
-                onCurrentDataChanged: {
-                    if (currentData != selectedProject.ratesMode) {
-                        selectedProject.ratesMode = currentData
-                    }
-                }
-
-                Component.onCompleted: {
-                    currentIndex = indexOfData(selectedProject.ratesMode)
-                }
-
-                Connections {
-                    target: root
-                    onSelectedProjectChanged: {
-                        ratesModeCombo.currentIndex = ratesModeCombo.indexOfData(
-                            selectedProject.ratesMode)
-                    }
-                }
-            }
-
 
             Row {
                 width: parent.width
@@ -300,6 +261,26 @@ Dialog {
                 color: Theme.secondaryColor
                 font.pixelSize: Theme.fontSizeExtraSmall
                 bottomPadding: Theme.paddingMedium
+            }
+
+            Spacer { size: Theme.paddingMedium }
+
+            ProjectOptionCombo {
+                id: ratesModeCombo
+                label: qsTr("Exchange rate")
+                selectedProject: root.selectedProject
+                role: "ratesMode"
+
+                menu: ContextMenu {
+                    MenuItem {
+                        property int value: RatesMode.fixed
+                        text: qsTr("fixed per currency")
+                    }
+                    MenuItem {
+                        property int value: RatesMode.perTransaction
+                        text: qsTr("per transaction")
+                    }
+                }
             }
 
             TextSwitch {
