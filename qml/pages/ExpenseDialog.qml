@@ -7,6 +7,7 @@
 import QtQuick 2.6
 import Sailfish.Silica 1.0
 import Opal.Delegates 1.0 as D
+import Opal.MenuSwitch 1.0 as M
 
 import "../components"
 import "../js/storage.js" as Storage
@@ -35,6 +36,9 @@ Dialog {
 
     property bool _editing: rowid > -1
     property bool _usingCustomTime: false
+    property bool _customExchangeRate: appWindow.activeProject.ratesMode === 1 || rate !== 1.0
+    // TODO add global setting
+    property bool _customFees: false || percentageFees !== 0 || fixedFees !== 0
 
     property int rowid: -1
     property int index: -1
@@ -46,8 +50,11 @@ Dialog {
     property alias info: infoField.text
     property alias sum: sumField.value
     property alias currency: currencyField.text
-    property string payer: appWindow.activeProject.lastPayer
+    property alias rate: rateField.value
+    property alias percentageFees: percentageFeeField.value
+    property alias fixedFees: fixedFeeField.value
 
+    property string payer: appWindow.activeProject.lastPayer
     property string initialBeneficiaries: Storage.joinMembersList(appWindow.activeProject.lastBeneficiaries)
     property var _mergedMembers: {
         // This is an array containing all active members of the project
@@ -110,12 +117,16 @@ Dialog {
             appWindow.activeProject.updateEntry(
                 index, rowid,
                 utc_time, local_time, local_tz,
-                name, info, sum, currency, payer, beneficiaries,
+                name, info, sum, currency,
+                rate, percentageFees, fixedFees,
+                payer, beneficiaries,
                 _usingCustomTime)
         } else {
             appWindow.activeProject.addEntry(
                 utc_time, local_time, local_tz,
-                name, info, sum, currency, payer, beneficiaries,
+                name, info, sum, currency,
+                rate, percentageFees, fixedFees,
+                payer, beneficiaries,
                 _usingCustomTime)
         }
     }
@@ -163,6 +174,23 @@ Dialog {
 
         VerticalScrollDecorator { flickable: flick }
 
+        PullDownMenu {
+            M.MenuSwitch {
+                text: qsTr("Add fees")
+                checked: _customFees
+                automaticCheck: false
+                // TODO reset if disabled?
+                onClicked: _customFees = !_customFees
+            }
+            M.MenuSwitch {
+                text: qsTr("Custom exchange rate")
+                checked: _customExchangeRate
+                automaticCheck: false
+                // TODO reset if disabled?
+                onClicked: _customExchangeRate = !_customExchangeRate
+            }
+        }
+
         Column {
             id: content
             width: parent.width
@@ -204,39 +232,11 @@ Dialog {
                 width: parent.width
                 spacing: Theme.paddingMedium
 
-                TextField {
+                CurrencyInputField {
                     id: sumField
-                    property double value: 0.00
-
-                    width: parent.width / 5 * 3 - parent.spacing
-                    inputMethodHints: Qt.ImhFormattedNumbersOnly
                     label: qsTr("Price")
+                    width: parent.width / 5 * 3 - parent.spacing
                     textRightMargin: 0
-                    EnterKey.onClicked: focus = false
-                    EnterKey.iconSource: "image://theme/icon-m-enter-close"
-
-                    onFocusChanged: {
-                        if (focus) {
-                            if (value == 0.00) {
-                                text = '  %1  '.arg(value.toFixed(2))
-                            } else {
-                                text = '  %1  '.arg(String(value))
-                            }
-
-                            selectAll()
-                        } else {
-                            if (!!text) {
-                                value = Number(text.trim().replace(',', '.'))
-                                text = value.toLocaleCurrencyString(Qt.locale('de-CH'), ' ').trim()
-                            } else {
-                                value = 0.00
-                            }
-                        }
-                    }
-
-                    onValueChanged: {
-                        text = value.toLocaleCurrencyString(Qt.locale('de-CH'), ' ').trim()
-                    }
                 }
 
                 TextField {
@@ -262,6 +262,62 @@ Dialog {
             }
 
             Row {
+                width: parent.width
+                spacing: Theme.paddingMedium
+                visible: _customExchangeRate
+
+                CurrencyInputField {
+                    id: rateField
+                    label: qsTr("Exchange rate")
+                    precision: 4
+                    width: parent.width / 5 * 3 - parent.spacing
+                    textRightMargin: 0
+                }
+
+                CurrencyInputLabel {
+                    // TODO load last used exchange rate
+                    // TODO focus chaining
+                    width: parent.width / 5 * 2 - Theme.horizontalPageMargin
+                    text: "%1 = 1.00 %2".arg(currencyField.text)
+                                        .arg(appWindow.activeProject.baseCurrency)
+                }
+            }
+
+            Row {
+                width: parent.width
+                spacing: Theme.paddingMedium
+                visible: _customFees
+
+                // TODO load last used values
+                // TODO focus chaining
+
+                CurrencyInputField {
+                    id: percentageFeeField
+                    label: qsTr("Fees")
+                    precision: 4
+                    width: parent.width / 6 * 2
+                    textRightMargin: 0
+                }
+
+                CurrencyInputLabel {
+                    width: parent.width / 6 * 1 - 3*parent.spacing
+                    text: "% +"
+                }
+
+                CurrencyInputField {
+                    id: fixedFeeField
+                    label: qsTr("Fees")
+                    width: parent.width / 6 * 2
+                    textRightMargin: 0
+                }
+
+                CurrencyInputLabel {
+                    width: parent.width / 6 * 1
+                    text: appWindow.activeProject.baseCurrency
+                }
+            }
+
+            Row {
                 width: parent.width - 2*Theme.horizontalPageMargin
                 anchors.horizontalCenter: parent.horizontalCenter
                 spacing: Theme.paddingSmall
@@ -281,6 +337,11 @@ Dialog {
                     text: qsTr("Beneficiaries")
                     horizontalAlignment: Text.AlignRight
                 }
+            }
+
+            Item {
+                width: parent.width
+                height: Theme.paddingMedium
             }
 
             D.OneLineDelegate {
