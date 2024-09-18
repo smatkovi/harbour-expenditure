@@ -18,7 +18,6 @@ Page {
     allowedOrientations: Orientation.All
 
     property string baseCurrency: ''
-    property var flatExchangeRates: ({})
     property var expenses: ({})
 
     property var people: ([])
@@ -50,9 +49,11 @@ Page {
         return price
     }
 
-    function collectSums() {
-        payments = {}
-        benefits = {}
+    function calculate() {
+        var payments = {}
+        var benefits = {}
+        var totalPayments = 0
+
         var peopleMap = {}
         var peopleArr = []
 
@@ -90,7 +91,11 @@ Page {
             tmp = payments[p] || (payments[p] = 0)
         }
 
-        people = peopleArr
+        root.payments = payments
+        root.benefits = benefits
+        root.totalPayments = totalPayments
+        root.people = peopleArr
+
         console.log(JSON.stringify(payments))
         console.log(JSON.stringify(benefits))
         console.log(JSON.stringify(people))
@@ -105,7 +110,7 @@ Page {
 
         expenses = Storage.getProjectEntries(appWindow.activeProject.rowid)
         baseCurrency = appWindow.activeProject.baseCurrency
-        collectSums()
+        calculate()
     }
 
     SilicaFlickable {
