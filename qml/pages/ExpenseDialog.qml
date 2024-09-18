@@ -9,6 +9,7 @@ import Sailfish.Silica 1.0
 import Opal.Delegates 1.0 as D
 import Opal.MenuSwitch 1.0 as M
 
+import "../enums"
 import "../components"
 import "../js/storage.js" as Storage
 import "../js/dates.js" as Dates
@@ -36,9 +37,8 @@ Dialog {
 
     property bool _editing: rowid > -1
     property bool _usingCustomTime: false
-    property bool _customExchangeRate: appWindow.activeProject.ratesMode === 1 || rate !== 1.0
-    // TODO add global setting
-    property bool _customFees: false || percentageFees !== 0 || fixedFees !== 0
+    property bool _customExchangeRate: appWindow.activeProject.ratesMode === RatesMode.perTransaction || !isNaN(rate)
+    property bool _customFees: appWindow.activeProject.feesMode === FeesMode.shownByDefault || !isNaN(percentageFees) || !isNaN(fixedFees)
 
     property int rowid: -1
     property int index: -1
@@ -179,15 +179,26 @@ Dialog {
                 text: qsTr("Add fees")
                 checked: _customFees
                 automaticCheck: false
-                // TODO reset if disabled?
-                onClicked: _customFees = !_customFees
+                onClicked: {
+                    if (_customFees) { // reset
+                        _customFees = true // break binding
+                        percentageFees = NaN
+                        fixedFees = NaN
+                    }
+                    _customFees = !_customFees
+                }
             }
             M.MenuSwitch {
                 text: qsTr("Custom exchange rate")
                 checked: _customExchangeRate
                 automaticCheck: false
-                // TODO reset if disabled?
-                onClicked: _customExchangeRate = !_customExchangeRate
+                onClicked: {
+                    if (_customExchangeRate) { // reset
+                        _customExchangeRate = true // break binding
+                        rate = NaN
+                    }
+                    _customExchangeRate = !_customExchangeRate
+                }
             }
         }
 
@@ -269,6 +280,7 @@ Dialog {
                 CurrencyInputField {
                     id: rateField
                     label: qsTr("Exchange rate")
+                    emptyValue: NaN
                     precision: 4
                     width: parent.width / 5 * 3 - parent.spacing
                     textRightMargin: 0
@@ -294,6 +306,7 @@ Dialog {
                 CurrencyInputField {
                     id: percentageFeeField
                     label: qsTr("Fees")
+                    emptyValue: NaN
                     precision: 4
                     width: parent.width / 6 * 2
                     textRightMargin: 0
@@ -307,6 +320,7 @@ Dialog {
                 CurrencyInputField {
                     id: fixedFeeField
                     label: qsTr("Fees")
+                    emptyValue: NaN
                     width: parent.width / 6 * 2
                     textRightMargin: 0
                 }

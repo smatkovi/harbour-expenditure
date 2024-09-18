@@ -652,6 +652,8 @@ function _makeProjectEntry(entryRow, projectMembers) {
     var item = entryRow
     var beneficiaries = splitMembersList(item.beneficiaries)
 
+    function valueOrNan(x) { return x === null ? NaN : x }
+
     return {
         rowid: item.rowid,
         utc_time: item.utc_time,
@@ -662,9 +664,9 @@ function _makeProjectEntry(entryRow, projectMembers) {
         info: item.info,
         sum: item.sum,
         currency: item.currency,
-        rate: item.rate || 1.00,
-        percentage_fees: item.percentage_fees || 0.00,
-        fixed_fees: item.fixed_fees || 0.00,
+        rate: valueOrNan(item.rate),
+        percentage_fees: valueOrNan(item.percentage_fees),
+        fixed_fees: valueOrNan(item.fixed_fees),
         payer: item.payer,
 
         // Beneficiaries are not split into an array because
@@ -782,6 +784,8 @@ function _addExpenseDirectly(projectIdent,
                              name, info, sum, currency,
                              rate, percentageFees, fixedFees,
                              payer, beneficiaries) {
+    function numberOrNull(x) { return isNaN(x) ? null : x }
+
     var res = DB.simpleQuery('\
         INSERT INTO expenses(
             project,
@@ -799,7 +803,7 @@ function _addExpenseDirectly(projectIdent,
     ', [projectIdent,
         utc_time, local_time, local_tz,
         name, info, sum, currency,
-        rate, percentageFees, fixedFees,
+        numberOrNull(rate), numberOrNull(percentageFees), numberOrNull(fixedFees),
         payer, joinMembersList(beneficiaries)])
 
     return res
@@ -833,6 +837,8 @@ function updateExpense(projectIdent, rowid,
                        name, info, sum, currency,
                        rate, percentageFees, fixedFees,
                        payer, beneficiaries) {
+    function numberOrNull(x) { return isNaN(x) ? null : x }
+
     var res = DB.simpleQuery('\
         UPDATE expenses SET
             project = ?,
@@ -844,7 +850,7 @@ function updateExpense(projectIdent, rowid,
     ', [projectIdent,
         utc_time, local_time, local_tz,
         name, info, sum, currency,
-        rate, percentageFees, fixedFees,
+        numberOrNull(rate), numberOrNull(percentageFees), numberOrNull(fixedFees),
         payer, joinMembersList(beneficiaries),
         projectIdent, rowid])
 

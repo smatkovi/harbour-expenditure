@@ -3,7 +3,8 @@ import Sailfish.Silica 1.0
 
 TextField {
     id: root
-    property double value: 0.00
+    property double value: emptyValue
+    property double emptyValue: 0.00
     property int precision: 2
 
     inputMethodHints: Qt.ImhFormattedNumbersOnly
@@ -12,7 +13,9 @@ TextField {
 
     onFocusChanged: {
         if (focus) {
-            if (value == 0.00) {
+            if (isNaN(value) && isNaN(emptyValue)) {
+                text = ''
+            } else if (value == 0.00) {
                 text = '  %1  '.arg(value.toFixed(precision))
             } else {
                 text = '  %1  '.arg(String(value))
@@ -29,12 +32,16 @@ TextField {
                     text = value.toFixed(precision)
                 }
             } else {
-                value = 0.00
+                value = emptyValue
             }
         }
     }
 
     onValueChanged: {
-        text = value.toLocaleCurrencyString(Qt.locale('de-CH'), ' ').trim()
+        if (isNaN(value) && isNaN(emptyValue)) {
+            text = ''
+        } else {
+            text = value.toLocaleCurrencyString(Qt.locale('de-CH'), ' ').trim()
+        }
     }
 }
