@@ -20,6 +20,7 @@ PaddedDelegate {
     property string _displayType: 'B2F'
     property string _displayDescription: "%1 = 1.00 %2".
         arg(project.baseCurrency).arg(currency)
+    property int __isRatesListDelegate  // used for identification
 
     minContentHeight: Theme.itemSizeSmall
     centeredContainer: contentContainer
@@ -29,9 +30,11 @@ PaddedDelegate {
     onClicked: openMenu()
     enabled: currency !== project.baseCurrency
 
-    onFocusChanged: {
+    onActiveFocusChanged: {
         if (focus) {
             inputField.forceActiveFocus()
+        } else {
+            apply(true)
         }
     }
 

@@ -111,6 +111,10 @@ Dialog {
         appWindow.activeProject.reloadContents() // in case members have changed
     }
 
+    onDone: {
+        ratesList.applyAll()
+    }
+
     Component.onCompleted: {
         if (allProjects.length === 0) {
             // if there are no projects, immediately set up a new one
@@ -328,6 +332,7 @@ Dialog {
             }
 
             EditableRatesList {
+                id: ratesList
                 selectedProject: root.selectedProject
             }
 
