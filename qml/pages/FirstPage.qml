@@ -134,7 +134,9 @@ Page {
                         pageStack.push(Qt.resolvedUrl("ExpenseDialog.qml"), {
                             index: index, rowid: rowid,
                             utc_time: utc_time, local_time: local_time, local_tz: local_tz,
-                            name: name, info: info, sum: sum, currency: currency, payer: payer,
+                            name: name, info: info, sum: sum,
+                            rate: rate, percentageFees: percentage_fees, fixedFees: fixed_fees,
+                            currency: currency, payer: payer,
                             initialBeneficiaries: beneficiaries
                         })
                     }
