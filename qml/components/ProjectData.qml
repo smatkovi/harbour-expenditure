@@ -42,12 +42,16 @@ QtObject {
     }
 
     function addEntry(utc_time, local_time, local_tz,
-                      name, info, sum, currency, payer, beneficiaries,
+                      name, info, sum, currency,
+                      rate, percentageFees, fixedFees,
+                      payer, beneficiaries,
                       reload) {
         var newEntry = Storage.addExpense(
             root.rowid,
             utc_time, local_time, local_tz,
-            name, info, sum, currency, payer, beneficiaries)
+            name, info, sum, currency,
+            rate, percentageFees, fixedFees,
+            payer, beneficiaries)
         reloadLastInfo()
 
         if (reload) {
@@ -61,12 +65,16 @@ QtObject {
 
     function updateEntry(index, rowid,
                          utc_time, local_time, local_tz,
-                         name, info, sum, currency, payer, beneficiaries,
+                         name, info, sum, currency,
+                         rate, percentageFees, fixedFees,
+                         payer, beneficiaries,
                          reload) {
         var changedEntry = Storage.updateExpense(
             root.rowid, rowid,
             utc_time, local_time, local_tz,
-            name, info, sum, currency, payer, beneficiaries)
+            name, info, sum, currency,
+            rate, percentageFees, fixedFees,
+            payer, beneficiaries)
         reloadLastInfo()
 
         if (reload) {

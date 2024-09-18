@@ -66,6 +66,9 @@ DB.dbMigrations = [
                 info TEXT DEFAULT "",
                 sum REAL,
                 currency TEXT NOT NULL,
+                rate REAL,
+                percentage_fees REAL,
+                fixed_fees REAL,
                 payer TEXT NOT NULL,
                 beneficiaries TEXT NOT NULL
             );
@@ -105,6 +108,9 @@ DB.dbMigrations = [
                     info,
                     sum,
                     currency,
+                    rate,
+                    percentage_fees,
+                    fixed_fees,
                     payer,
                     beneficiaries)
                 SELECT
@@ -116,6 +122,9 @@ DB.dbMigrations = [
                     expense_info,
                     expense_sum,
                     expense_currency,
+                    NULL,
+                    NULL,
+                    NULL,
                     expense_payer,
                     expense_members
                 FROM table_%2;
@@ -290,6 +299,9 @@ DB.dbMigrations = [
                 name TEXT DEFAULT "",
                 info TEXT DEFAULT "",
                 sum REAL DEFAULT 0.0,
+                rate REAL DEFAULT NULL,
+                percentage_fees REAL DEFAULT NULL,
+                fixed_fees REAL DEFAULT NULL,
                 currency TEXT NOT NULL,
                 payer TEXT NOT NULL,
                 beneficiaries TEXT NOT NULL,
@@ -305,11 +317,13 @@ DB.dbMigrations = [
                 rowid,
                 project, utc_time, local_time, local_tz,
                 name, info, sum, currency,
+                rate, percentage_fees, fixed_fees,
                 payer, beneficiaries
             ) SELECT
                 NULL,
                 project, utc_time, local_time, local_tz,
                 name, info, sum, currency,
+                rate, percentage_fees, fixed_fees,
                 payer, beneficiaries
             FROM expenses;
         ')
@@ -644,6 +658,9 @@ function _makeProjectEntry(entryRow, projectMembers) {
         info: item.info,
         sum: item.sum,
         currency: item.currency,
+        rate: item.rate || 1.00,
+        percentage_fees: item.percentage_fees || 0.00,
+        fixed_fees: item.fixed_fees || 0.00,
         payer: item.payer,
 
         // Beneficiaries are not split into an array because
@@ -758,30 +775,42 @@ function getExchangeRate(exchange_rate_currency, default_value) {
 
 function _addExpenseDirectly(projectIdent,
                              utc_time, local_time, local_tz,
-                             name, info, sum, currency, payer, beneficiaries) {
+                             name, info, sum, currency,
+                             rate, percentageFees, fixedFees,
+                             payer, beneficiaries) {
     var res = DB.simpleQuery('\
         INSERT INTO expenses(
             project,
             utc_time, local_time, local_tz,
-            name, info, sum, currency, payer, beneficiaries
+            name, info, sum, currency,
+            rate, percentage_fees, fixed_fees,
+            payer, beneficiaries
         ) VALUES (
             ?,
             ?, ?, ?,
-            ?, ?, ?, ?, ?, ?
+            ?, ?, ?, ?,
+            ?, ?, ?,
+            ?, ?
         );
     ', [projectIdent,
         utc_time, local_time, local_tz,
-        name, info, sum, currency, payer, joinMembersList(beneficiaries)])
+        name, info, sum, currency,
+        rate, percentageFees, fixedFees,
+        payer, joinMembersList(beneficiaries)])
 
     return res
 }
 
 function addExpense(projectIdent,
                     utc_time, local_time, local_tz,
-                    name, info, sum, currency, payer, beneficiaries) {
+                    name, info, sum, currency,
+                    rate, percentageFees, fixedFees,
+                    payer, beneficiaries) {
     var res = _addExpenseDirectly(projectIdent,
                                   utc_time, local_time, local_tz,
-                                  name, info, sum, currency, payer, beneficiaries)
+                                  name, info, sum, currency,
+                                  rate, percentageFees, fixedFees,
+                                  payer, beneficiaries)
 
     var newEntry = DB.simpleQuery('\
         SELECT rowid, * FROM expenses \
@@ -797,16 +826,22 @@ function addExpense(projectIdent,
 
 function updateExpense(projectIdent, rowid,
                        utc_time, local_time, local_tz,
-                       name, info, sum, currency, payer, beneficiaries) {
+                       name, info, sum, currency,
+                       rate, percentageFees, fixedFees,
+                       payer, beneficiaries) {
     var res = DB.simpleQuery('\
         UPDATE expenses SET
             project = ?,
             utc_time = ?, local_time = ?, local_tz = ?,
-            name = ?, info = ?, sum = ?, currency = ?, payer = ?, beneficiaries = ?
+            name = ?, info = ?, sum = ?, currency = ?,
+            rate = ?, percentage_fees = ?, fixed_fees = ?,
+            payer = ?, beneficiaries = ?
         WHERE project = ? AND rowid = ?;
     ', [projectIdent,
         utc_time, local_time, local_tz,
-        name, info, sum, currency, payer, joinMembersList(beneficiaries),
+        name, info, sum, currency,
+        rate, percentageFees, fixedFees,
+        payer, joinMembersList(beneficiaries),
         projectIdent, rowid])
 
     var changedEntry = DB.simpleQuery('\
