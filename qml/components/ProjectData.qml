@@ -127,8 +127,8 @@ QtObject {
         if (!loadRates) return
 
         var rates = Storage.getProjectExchangeRates(rowid)
-        currencies = rates.currencies
         exchangeRates = rates.rates
+        currencies = rates.currencies
     }
 
     // FUNCTIONS APPLIED ONCE Storage.saveProjects() IS CALLED
