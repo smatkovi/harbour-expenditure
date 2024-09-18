@@ -117,16 +117,10 @@ Dialog {
     }
 
     Component.onCompleted: {
-        if (allProjects.length === 0) {
-            // if there are no projects, immediately set up a new one
-            projectCombo.currentIndex = -1
-            projectCombo.currentIndex = 0
-        }
-
-        if (pageStack.previousPage() === null) {
-            // Load the first project during development when
-            // using SettingsPage as the initial page.
-            appWindow.activeProject.rowid = 1
+        if (appWindow.maybeLoadDebugData() ||
+                allProjects.length === 0) {
+            // during development or if there are no projects,
+            // immediately set up a new one
             projectCombo.currentIndex = -1
             projectCombo.currentIndex = 0
         }

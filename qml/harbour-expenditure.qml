@@ -46,6 +46,17 @@ ApplicationWindow {
         remorse.canceled.connect(callback)
     }
 
+    function maybeLoadDebugData() {
+        if (pageStack.previousPage() === null) {
+            // Load a project during development when
+            // using a custom page as the initial page.
+            appWindow.activeProject.rowid = 1
+            return appWindow.activeProject.rowid
+        }
+
+        return null
+    }
+
     // We have to explicitly set the \c _defaultPageOrientations property
     // to \c Orientation.All so the page stack's default placeholder page
     // will be allowed to be in landscape mode. (The default value is

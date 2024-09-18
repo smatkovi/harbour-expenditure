@@ -103,14 +103,7 @@ Page {
     }
 
     Component.onCompleted: {
-        if (pageStack.previousPage() === null) {
-            // Load the first project during development when
-            // using SettingsPage as the initial page.
-            appWindow.activeProject.rowid = 1
-        }
-
-        expenses = Storage.getProjectEntries(appWindow.activeProject.rowid)
-        baseCurrency = appWindow.activeProject.baseCurrency
+        appWindow.maybeLoadDebugData()
         calculate()
     }
 
