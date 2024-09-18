@@ -322,6 +322,16 @@ Dialog {
             }
 
             SectionHeader {
+                text: qsTr("Base exchange rates")
+                topPadding: 2 * Theme.paddingLarge
+                bottomPadding: Theme.paddingLarge
+            }
+
+            EditableRatesList {
+                selectedProject: root.selectedProject
+            }
+
+            SectionHeader {
                 text: qsTr("Backup options")
                 topPadding: 2 * Theme.paddingLarge
                 bottomPadding: 2 * Theme.paddingLarge

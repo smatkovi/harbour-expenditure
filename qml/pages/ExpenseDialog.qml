@@ -276,6 +276,23 @@ Dialog {
                     label: qsTr("Price")
                     width: parent.width / 5 * 3 - parent.spacing
                     textRightMargin: 0
+
+                    EnterKey.iconSource: {
+                        if (_customExchangeRate || _customFees) {
+                            "image://theme/icon-m-enter-next"
+                        } else {
+                            "image://theme/icon-m-enter-close"
+                        }
+                    }
+                    EnterKey.onClicked: {
+                        if (_customExchangeRate) {
+                            rateField.forceActiveFocus()
+                        } else if (_customFees) {
+                            percentageFeeField.forceActiveFocus()
+                        } else {
+                            focus = false
+                        }
+                    }
                 }
 
                 TextField {
@@ -285,9 +302,24 @@ Dialog {
                     acceptableInput: text.length < 100
                     label: qsTr("Currency")
                     inputMethodHints: Qt.ImhNoPredictiveText
-                    EnterKey.onClicked: focus = false
-                    EnterKey.iconSource: "image://theme/icon-m-enter-close"
                     onFocusChanged: if (focus) selectAll()
+
+                    EnterKey.iconSource: {
+                        if (_customExchangeRate || _customFees) {
+                            "image://theme/icon-m-enter-next"
+                        } else {
+                            "image://theme/icon-m-enter-close"
+                        }
+                    }
+                    EnterKey.onClicked: {
+                        if (_customExchangeRate) {
+                            rateField.forceActiveFocus()
+                        } else if (_customFees) {
+                            percentageFeeField.forceActiveFocus()
+                        } else {
+                            focus = false
+                        }
+                    }
                 }
             }
 
@@ -300,27 +332,40 @@ Dialog {
                 EnterKey.iconSource: "image://theme/icon-m-enter-close"
             }
 
-            Row {
-                width: parent.width
-                spacing: Theme.paddingMedium
+            EditableRatesListDelegate {
+                id: rateField
                 visible: _customExchangeRate
-
-                CurrencyInputField {
-                    id: rateField
-                    label: qsTr("Exchange rate")
-                    emptyValue: NaN
-                    precision: 4
-                    width: parent.width / 5 * 3 - parent.spacing
-                    textRightMargin: 0
+                project: ProjectData {
+                    // cannot assing appWindow.activeProject, but why?
+                    rowid: appWindow.activeProject.rowid
+                    loadExpenses: false
+                    loadRates: true
                 }
+                currency: currencyField.text
+                foreignSum: sumField.value
+                allowEmpty: true
+                emptyValue: NaN
+                placeholder: project.exchangeRates[currency] || ''
 
-                CurrencyInputLabel {
-                    // TODO load last used exchange rate
-                    // TODO focus chaining
-                    width: parent.width / 5 * 2 - Theme.horizontalPageMargin
-                    text: "%1 = 1.00 %2".arg(currencyField.text)
-                                        .arg(appWindow.activeProject.baseCurrency)
+                EnterKey.iconSource: {
+                    if (_customFees) {
+                        "image://theme/icon-m-enter-next"
+                    } else {
+                        "image://theme/icon-m-enter-close"
+                    }
                 }
+                EnterKey.onClicked: {
+                    if (_customFees) {
+                        percentageFeeField.forceActiveFocus()
+                    } else {
+                        focus = false
+                    }
+                }
+            }
+
+            Spacer {
+                size: Theme.paddingLarge
+                visible: _customExchangeRate && !_customFees
             }
 
             Row {
@@ -328,8 +373,7 @@ Dialog {
                 spacing: Theme.paddingMedium
                 visible: _customFees
 
-                // TODO load last used values
-                // TODO focus chaining
+                // TODO load last used values for the current payer
 
                 CurrencyInputField {
                     id: percentageFeeField
@@ -338,6 +382,8 @@ Dialog {
                     precision: 4
                     width: parent.width / 6 * 2
                     textRightMargin: 0
+                    EnterKey.iconSource: "image://theme/icon-m-enter-next"
+                    EnterKey.onClicked: fixedFeeField.forceActiveFocus()
                 }
 
                 CurrencyInputLabel {
@@ -351,6 +397,8 @@ Dialog {
                     emptyValue: NaN
                     width: parent.width / 6 * 2
                     textRightMargin: 0
+                    EnterKey.iconSource: "image://theme/icon-m-enter-close"
+                    EnterKey.onClicked: focus = false
                 }
 
                 CurrencyInputLabel {
@@ -381,10 +429,13 @@ Dialog {
                 }
             }
 
-            Item {
-                width: parent.width
-                height: Theme.paddingMedium
-            }
+            Spacer { size: Theme.paddingMedium }
+
+            // TODO add "personal account" special item below allItem
+            //      Users can exchange cash and enter it into their
+            //      "personal account" with the actually used exchange rate
+            //      and any fees. This is then used to calculate the
+            //      effective exchange rate when the money is being used.
 
             D.OneLineDelegate {
                 id: allItem

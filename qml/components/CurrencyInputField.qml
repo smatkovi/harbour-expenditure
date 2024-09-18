@@ -21,7 +21,7 @@ TextField {
                 if (precision == 2) {
                     text = value.toLocaleCurrencyString(Qt.locale('de-CH'), ' ').trim()
                 } else {
-                    text = value.toFixed(precision)
+                    text = value.toPrecision(precision)
                 }
 
                 focus = false
@@ -55,7 +55,11 @@ TextField {
         if (isNaN(value) && isNaN(emptyValue)) {
             text = ''
         } else {
-            text = value.toLocaleCurrencyString(Qt.locale('de-CH'), ' ').trim()
+            if (precision == 2) {
+                text = value.toLocaleCurrencyString(Qt.locale('de-CH'), ' ').trim()
+            } else {
+                text = value.toPrecision(precision)
+            }
         }
     }
 }
