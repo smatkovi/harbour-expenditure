@@ -16,9 +16,9 @@ Label {
     property color _negativeColor: Theme.colorScheme == Theme.LightOnDark ?
                                        Theme.rgba("red", 0.9) : "red"
     property string _valueText: {
-        if (value == 0) Number(0).toFixed(2)
-        else if (value < 0) "- " + Number(Math.abs(value)).toFixed(2)
-        else (asSaldo ? "+ " : "") + Number(value).toFixed(2)
+        if (value == 0) Number(0).toLocaleString(Qt.locale('de_CH'))
+        else if (value < 0) "- " + Number(Math.abs(value)).toLocaleString(Qt.locale('de_CH'))
+        else (asSaldo ? "+ " : "") + Number(value).toLocaleString(Qt.locale('de_CH'))
     }
     property color _valueColor: {
         if (value == 0) _zeroColor
