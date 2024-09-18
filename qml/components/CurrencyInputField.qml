@@ -15,19 +15,25 @@ TextField {
         // only convert text to value if it was unformatted,
         // i.e. if the field has or had focus
         if (activeFocus || hadFocus) {
-            if (!!text) {
-                value = Number(text.trim().replace(',', '.'))
-
-                if (precision == 2) {
-                    text = value.toLocaleCurrencyString(Qt.locale('de-CH'), ' ').trim()
-                } else {
-                    text = value.toPrecision(precision)
-                }
-
+            if (!acceptableInput) {
+                console.log("not saving invalid input:", text)
+                _updateDisplayText()
+                focus = false
+            } else if (!!text) {
+                value = Number(text.trim().replace(Qt.locale().decimalPoint, '.'))
+                _updateDisplayText()
                 focus = false
             } else {
                 value = emptyValue
             }
+        }
+    }
+
+    function _updateDisplayText() {
+        if (precision == 2) {
+            text = value.toLocaleCurrencyString(Qt.locale('de-CH'), ' ').trim()
+        } else {
+            text = value.toPrecision(precision)
         }
     }
 
@@ -55,11 +61,7 @@ TextField {
         if (isNaN(value) && isNaN(emptyValue)) {
             text = ''
         } else {
-            if (precision == 2) {
-                text = value.toLocaleCurrencyString(Qt.locale('de-CH'), ' ').trim()
-            } else {
-                text = value.toPrecision(precision)
-            }
+            _updateDisplayText()
         }
     }
 }
