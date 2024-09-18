@@ -703,6 +703,15 @@ function getProjectEntries(ident) {
     return entries
 }
 
+function getProjectExchangeRates(ident) {
+    // TODO
+
+    return {
+        rates: {},
+        currencies: [],
+    }
+}
+
 
 // all exchange rates used
 function countExchangeRateOccurances (exchange_rate_currency, default_value) {

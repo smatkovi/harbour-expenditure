@@ -26,7 +26,10 @@ Dialog {
 
     Component {
         id: projectDataComponent
-        ProjectData { loadExpenses: false }
+        ProjectData {
+            loadExpenses: false
+            loadRates: true
+        }
     }
 
     function deleteCurrentProject() {

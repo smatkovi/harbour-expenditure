@@ -19,6 +19,7 @@ QtObject {
 
     // CONFIGURATION
     property bool loadExpenses: true
+    property bool loadRates: true
     property var renamedMembers: ({})
     property var importedExpenses: ([])
 
@@ -34,6 +35,9 @@ QtObject {
     property var lastBeneficiaries: ([])
     property int ratesMode: RatesMode.fixed
     property int feesMode: FeesMode.hiddenByDefault
+
+    property var currencies: ([])
+    property var exchangeRates: ({})
     readonly property ListModel expenses: ListModel {}
 
     // IMMEDIATELY APPLIED FUNCTIONS
@@ -110,7 +114,18 @@ QtObject {
 
     function reloadContents() {
         expenses.clear()
-        expenses.append(Storage.getProjectEntries(rowid))
+
+        if (loadExpenses) {
+            expenses.append(Storage.getProjectEntries(rowid))
+        }
+    }
+
+    function reloadRates() {
+        if (!loadRates) return
+
+        var rates = Storage.getProjectExchangeRates(rowid)
+        currencies = rates.currencies
+        exchangeRates = rates.rates
     }
 
     // FUNCTIONS APPLIED ONCE Storage.saveProjects() IS CALLED
@@ -147,6 +162,8 @@ QtObject {
             lastPayer = ''
             ratesMode = RatesMode.fixed
             feesMode = FeesMode.hiddenByDefault
+            exchangeRates = {}
+            currencies = []
             expenses.clear()
 
             renamedMembers = {}
@@ -156,6 +173,7 @@ QtObject {
             renamedMembers = {}
             importedExpenses = []
             reloadMetadata()
+            reloadRates()
             reloadContents()
             console.log("loaded project data:", rowid, name, members)
         }
