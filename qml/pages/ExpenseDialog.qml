@@ -147,10 +147,14 @@ Dialog {
 
         // Do nothing else if no relevant data has been entered.
         // Rates, fees, and beneficiaries are ignored here, and that is ok.
+        var changed = false
+
         if (name == "" && info == "" && sum === 0.00
             && (currency == "" ||
                 currency == appWindow.activeProject.lastCurrency)) {
             return
+        } else if (!_editing) {
+            changed = true
         }
 
         // Check if any field has been changed. If so, save it, and show
@@ -161,7 +165,6 @@ Dialog {
             "local_tz", "name", "info", "sum",
             "rate", "percentageFees", "fixedFees",
             "currency", "payer", "beneficiaries"]
-        var changed = false
         appWindow._currentlyEditedEntry['initialValuesReadOnly'] = initialValuesReadOnly
 
         for (var i in properties) {
