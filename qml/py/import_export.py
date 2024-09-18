@@ -31,6 +31,9 @@ EXPENSES_COLUMNS = [
     'info',
     'sum',
     'currency',
+    'rate',
+    'percentage_fees',
+    'fixed_fees',
     'payer',
     'beneficiaries'
 ]
