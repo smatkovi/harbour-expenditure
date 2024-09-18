@@ -362,7 +362,7 @@ Dialog {
                 width: parent.width - 2*x
                 x: Theme.horizontalPageMargin
                 wrapMode: Text.Wrap
-                color: Theme.secondaryColor
+                color: Theme.secondaryHighlightColor
                 font.pixelSize: Theme.fontSizeExtraSmall
                 topPadding: Theme.paddingLarge
                 bottomPadding: Theme.paddingMedium
