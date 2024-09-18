@@ -111,6 +111,16 @@ Page {
                 (info + "\nfor %1".arg(beneficiaries_string)).trim()
             }
 
+            property double effectiveRate: {
+                if (!!rate) {
+                    rate
+                } else if (appWindow.activeProject.exchangeRates.hasOwnProperty(currency)) {
+                    appWindow.activeProject.exchangeRates[currency] || NaN
+                } else {
+                    NaN
+                }
+            }
+
             textLabel.wrapped: true
             descriptionLabel.wrapped: true
             titleLabel.font.pixelSize: Theme.fontSizeExtraSmall
@@ -119,7 +129,8 @@ Page {
 
             rightItem: D.DelegateInfoItem {
                 title: payer
-                text: Number(sum).toLocaleString(Qt.locale("de_CH")) // XXX translate
+                text: Number(sum).toLocaleCurrencyString(Qt.locale("de_CH"), ' ') + (
+                          (!!percentage_fees || !!fixed_fees) ? '*' : '')
                 description: currency.toString()
                 textLabel.font.pixelSize: Theme.fontSizeMedium
                 alignment: Qt.AlignRight
@@ -127,7 +138,51 @@ Page {
 
             onClicked: openMenu()
 
-            menu: ContextMenu {
+            menu: Component {
+                ContextMenu {
+                MenuLabel {
+                    text: {
+                        if (Storage.isSameValue(item.effectiveRate, NaN)) {
+                            qsTr("set %1 → %2 exchange rate in project settings")
+                                .arg(currency).arg(appWindow.activeProject.baseCurrency)
+                        } else {
+                            '%1 %2 · %3 = %4 %5'
+                                .arg(Number(sum).toLocaleString(Qt.locale("de_CH")))
+                                .arg(currency)
+                                .arg(item.effectiveRate)
+                                .arg(Number(sum * item.effectiveRate).toLocaleString(Qt.locale("de_CH")))
+                                .arg(appWindow.activeProject.baseCurrency)
+                        }
+                    }
+                }
+                MenuLabel {
+                    visible: !isNaN(item.effectiveRate) && (!!fixed_fees || !!percentage_fees)
+                    text: {
+                        if (!visible) return ''
+
+                        var text = ''
+                        var total = sum * item.effectiveRate
+
+                        if (!!percentage_fees) {
+                            total += total * (percentage_fees/100)
+                            text += "+ %1 %2 (%3%) "
+                                .arg(sum * item.effectiveRate * (percentage_fees/100))
+                                .arg(appWindow.activeProject.baseCurrency)
+                                .arg(Number(percentage_fees).toLocaleString(Qt.locale("de_CH")))
+                        }
+                        if (!!fixed_fees) {
+                            total += fixed_fees
+                            text += "+ %1 %2 "
+                                .arg(Number(fixed_fees).toLocaleString(Qt.locale("de_CH")))
+                                .arg(appWindow.activeProject.baseCurrency)
+                        }
+
+                        text += "= %1 %2"
+                            .arg(Number(total).toLocaleString(Qt.locale("de_CH")))
+                            .arg(appWindow.activeProject.baseCurrency)
+                        return text
+                    }
+                }
                 MenuItem {
                     text: qsTr("Edit")
                     onClicked: {
@@ -148,6 +203,7 @@ Page {
                     text: qsTr("Remove")
                     onClicked: appWindow.activeProject.removeEntry(item, rowid, index)
                 }
+            }
             }
         }
 
