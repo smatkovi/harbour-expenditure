@@ -301,104 +301,13 @@ Dialog {
                 text: qsTr("Project members")
             }
 
-            D.DelegateColumn {
-                id: membersList
-                model: selectedProject.members
-                width: parent.width
-
-                delegate: D.PaddedDelegate {
-                    id: delegate
-                    minContentHeight:Theme.itemSizeSmall
-                    centeredContainer: contentContainer
-                    interactive: false
-                    padding.topBottom: 0
-
-                    Column {
-                        id: contentContainer
-                        width: parent.width
-
-                        TextField {
-                            width: parent.width
-                            acceptableInput: !!text.trim() && text.indexOf(Storage.fieldSeparator) < 0
-                            text: selectedProject.renamedMembers[modelData] || modelData
-                            textMargin: 0
-                            textTopPadding: 0
-                            labelVisible: false
-                            EnterKey.onClicked: focus = false
-                            EnterKey.iconSource: "image://theme/icon-m-enter-close"
-
-                            onTextChanged: {
-                                if (text.trim()) {
-                                    selectedProject.renameMember(modelData, text.trim())
-                                }
-                            }
-                        }
-                    }
-
-                    rightItem: IconButton {
-                        width: Theme.iconSizeSmallPlus
-                        icon.source: "image://theme/icon-splus-remove"
-                        onClicked: {
-                            var item = modelData
-                            var project = selectedProject
-                            delegate.remorseDelete(function(){
-                                project.removeMember(item)
-                            })
-                        }
-                    }
-                }
+            EditableMembersList {
+                selectedProject: root.selectedProject
             }
 
-            D.PaddedDelegate {
-                id: addMemberItem
-                minContentHeight:Theme.itemSizeSmall
-                centeredContainer: contentContainer2
-                interactive: false
-                padding.topBottom: 0
-
-                property int index: 0
-                property bool canApply: !!newMemberField.text.trim()
-
-                function apply() {
-                    if (canApply) {
-                        selectedProject.addMember(newMemberField.text.trim())
-                        flick.scrollToBottom()
-                        newMemberField.text = ''
-                        newMemberField.forceActiveFocus()
-                    }
-                }
-
-                Column {
-                    id: contentContainer2
-                    width: parent.width
-
-                    TextField {
-                        id: newMemberField
-                        width: parent.width
-                        textMargin: 0
-                        textTopPadding: 0
-                        labelVisible: false
-                        EnterKey.onClicked: {
-                            if (addMemberItem.canApply) addMemberItem.apply()
-                            else focus = false
-                        }
-                        EnterKey.iconSource: addMemberItem.canApply ?
-                            "image://theme/icon-m-add" :
-                            "image://theme/icon-m-enter-close"
-                        onFocusChanged: {
-                            if (!focus && addMemberItem.canApply) {
-                                addMemberItem.apply()
-                            }
-                        }
-                    }
-                }
-
-                rightItem: IconButton {
-                    enabled: !!newMemberField.text
-                    width: Theme.iconSizeSmallPlus
-                    icon.source: "image://theme/icon-splus-add"
-                    onClicked: addMemberItem.apply()
-                }
+            EditableMembersListAdder {
+                selectedProject: root.selectedProject
+                onApplied: flick.scrollToBottom() // TODO scroll to input field
             }
 
             SectionHeader {
