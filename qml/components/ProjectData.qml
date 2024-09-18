@@ -46,6 +46,8 @@ QtObject {
             Storage.deleteExpense(root.rowid, rowid)
             root.expenses.remove(index)
         })
+
+        reloadRates()
     }
 
     function addEntry(utc_time, local_time, local_tz,
@@ -60,6 +62,7 @@ QtObject {
             rate, percentageFees, fixedFees,
             payer, beneficiaries)
         reloadLastInfo()
+        reloadRates()
 
         if (reload) {
             reloadContents()
@@ -83,6 +86,7 @@ QtObject {
             rate, percentageFees, fixedFees,
             payer, beneficiaries)
         reloadLastInfo()
+        reloadRates()
 
         if (reload) {
             reloadContents()
