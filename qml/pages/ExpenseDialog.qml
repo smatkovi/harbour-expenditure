@@ -217,7 +217,7 @@ Dialog {
                 }
             }
 
-            Item { width: parent.width; height: Theme.paddingMedium }
+            Spacer { size: Theme.paddingMedium }
 
             TextField {
                 id: nameField

@@ -204,6 +204,7 @@ Dialog {
                 }
             }
 
+            Spacer { size: Theme.paddingLarge }
             ComboBox {
                 id: ratesModeCombo
                 width: parent.width
@@ -243,7 +244,6 @@ Dialog {
                 }
             }
 
-            Item { width: parent.width; height: Theme.paddingLarge }
 
             Row {
                 width: parent.width

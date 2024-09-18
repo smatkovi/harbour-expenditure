@@ -155,6 +155,6 @@ Page {
             }
         }
 
-        footer: Item { width: parent.width; height: Theme.horizontalPageMargin }
+        footer: Spacer { size: Theme.horizontalPageMargin }
     }
 }
