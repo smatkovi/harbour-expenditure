@@ -190,6 +190,7 @@ DB.dbMigrations = [
                 last_payer TEXT,
                 last_beneficiaries TEXT,
                 rates_mode INTEGER,
+                fees_mode INTEGER,
                 project_id_timestamp TEXT
             );
         ')
@@ -203,6 +204,7 @@ DB.dbMigrations = [
                 last_payer,
                 last_beneficiaries,
                 rates_mode,
+                fees_mode,
                 project_id_timestamp
             ) SELECT
                 NULL,
@@ -212,6 +214,7 @@ DB.dbMigrations = [
                 project_base_currency,
                 project_recent_payer_boolarray,
                 project_recent_beneficiaries_boolarray,
+                0,
                 0,
                 project_id_timestamp
             FROM projects_table;
@@ -495,18 +498,18 @@ function _saveNewProject(projectData) {
             members,
             last_currency, last_payer,
             last_beneficiaries,
-            rates_mode
+            rates_mode, fees_mode
         ) VALUES (
             NULL,
             ?, ?, ?,
             ?, ?, ?,
-            ?
+            ?, ?
         );
     ', [projectData.name, projectData.baseCurrency,
         joinMembersList(projectData.members),
         projectData.lastCurrency, projectData.lastPayer,
         joinMembersList(projectData.lastBeneficiaries),
-        projectData.ratesMode])
+        projectData.ratesMode, projectData.feesMode])
 
     return res.insertId
 }
@@ -557,13 +560,13 @@ function _updateProject(projectData) {
             members = ?,
             last_currency = ?, last_payer = ?,
             last_beneficiaries = ?,
-            rates_mode = ?
+            rates_mode = ?, fees_mode = ?
         WHERE rowid = ?;
     ', [projectData.name, projectData.baseCurrency,
         joinMembersList(newMembers),
         projectData.lastCurrency, lastPayer,
         joinMembersList(lastBeneficiaries),
-        projectData.ratesMode,
+        projectData.ratesMode, projectData.feesMode,
         projectData.rowid])
 
     return projectData.rowid
@@ -611,6 +614,7 @@ function getProjectMetadata(ident) {
             lastPayer: item.last_payer,
             lastBeneficiaries: splitMembersList(item.last_beneficiaries),
             ratesMode: item.rates_mode,
+            feesMode: item.fees_mode
         }
     }
 
