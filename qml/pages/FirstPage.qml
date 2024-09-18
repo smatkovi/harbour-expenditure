@@ -6,12 +6,12 @@
 
 import QtQuick 2.6
 import Sailfish.Silica 1.0
+import Opal.Delegates 1.0 as D
+import Opal.SmartScrollbar 1.0 as S
 
 import "../components"
 import "../js/dates.js" as Dates
 import "../js/storage.js" as Storage
-import "../modules/Opal/Delegates" as D
-import "../modules/Opal/SmartScrollbar" as S
 
 Page {
     id: root
