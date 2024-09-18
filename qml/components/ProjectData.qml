@@ -45,9 +45,8 @@ QtObject {
         item.remorseDelete(function() {
             Storage.deleteExpense(root.rowid, rowid)
             root.expenses.remove(index)
+            reloadRates()
         })
-
-        reloadRates()
     }
 
     function addEntry(utc_time, local_time, local_tz,

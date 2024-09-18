@@ -959,7 +959,7 @@ function updateExpense(projectIdent, rowid,
         numberOrNull(rate), numberOrNull(percentageFees), numberOrNull(fixedFees),
         payer, joinMembersList(beneficiaries),
         projectIdent, rowid])
-    _updateExchangeRates()
+    _updateExchangeRates(projectIdent)
 
     var changedEntry = DB.simpleQuery('\
         SELECT rowid, * FROM expenses \
@@ -976,5 +976,5 @@ function updateExpense(projectIdent, rowid,
 function deleteExpense(projectId, entryId) {
     DB.simpleQuery('DELETE FROM expenses WHERE project = ? AND rowid = ?;',
                    [projectId, entryId])
-    _updateExchangeRates()
+    _updateExchangeRates(projectId)
 }
