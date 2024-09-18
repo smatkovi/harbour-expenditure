@@ -6,13 +6,200 @@
  */
 
 import QtQuick 2.6
+import QtQuick.Layouts 1.1
 import Sailfish.Silica 1.0
 import Sailfish.Share 1.0
 
+import "../components"
 import "../js/storage.js" as Storage
+
+Page {
+    id: root
+    allowedOrientations: Orientation.All
+
+    // properties...
+    property string baseCurrency: ''
+    property var flatExchangeRates: ({})
+    property var expenses: ({})
+
+    property var people: ([])
+    property var payments: ({})
+    property var benefits: ({})
+    property real totalPayments: 0.00
+
+    function convertToBase(sum, currency) {
+        if (flatExchangeRates.hasOwnProperty(currency)) {
+            return flatExchangeRates[currency] * sum
+        }
+
+        console.warn("no flat exchange rate for currency", currency, "found")
+        return 1.0 * sum
+    }
+
+    function collectSums() {
+        payments = {}
+        benefits = {}
+        var peopleMap = {}
+        var peopleArr = []
+
+        for (var i in expenses) {
+            var x = expenses[i]
+
+            if (!payments.hasOwnProperty(x.payer)) {
+                payments[x.payer] = 0
+            }
+
+            var convertedSum = convertToBase(x.sum, x.currency)
+            totalPayments += convertedSum
+            payments[x.payer] += convertedSum
+            var individualBenefit = convertedSum / x.beneficiaries_list.length
+
+            for (var b in x.beneficiaries_list) {
+                var bb = x.beneficiaries_list[b]
+
+                if (!benefits.hasOwnProperty(bb)) {
+                    benefits[bb] = 0
+                }
+
+                benefits[bb] += individualBenefit
+                peopleMap[bb] = true
+            }
+
+            peopleMap[x.payer] = true
+        }
+
+        for (var p in peopleMap) {
+            if (!peopleMap.hasOwnProperty(p)) continue
+            peopleArr.push(p)
+
+            var tmp = benefits[p] || (benefits[p] = 0)
+            tmp = payments[p] || (payments[p] = 0)
+        }
+
+        people = peopleArr
+        console.log(JSON.stringify(payments))
+        console.log(JSON.stringify(benefits))
+        console.log(JSON.stringify(people))
+    }
+
+    Component.onCompleted: {
+//        appWindow.activeProject.rowid = 1 // DEBUG
+        expenses = Storage.getProjectEntries(appWindow.activeProject.rowid)
+        baseCurrency = appWindow.activeProject.baseCurrency
+        flatExchangeRates = {'CHF': 1.0, 'AMD': 0.0022, 'GEL': 0.3}
+
+        collectSums()
+    }
+
+    SilicaFlickable {
+        id: flick
+        anchors.fill: parent
+        contentHeight: content.height + Theme.paddingLarge
+
+        VerticalScrollDecorator { flickable: flick }
+
+        Column {
+            id: content
+            width: parent.width
+            height: childrenRect.height
+
+            PageHeader {
+                title: qsTr("Calculations")
+                description: appWindow.activeProject.active ?
+                                 "%1 [%2]".arg(appWindow.activeProject.name)
+                                          .arg(appWindow.activeProject.baseCurrency) :
+                                 " "
+            }
+
+            SectionHeader {
+                text: qsTr("Exchange rates")
+            }
+
+            SectionHeader {
+                text: qsTr("Spending overview")
+            }
+
+            GridLayout {
+                x: Theme.horizontalPageMargin
+                width: parent.width - 2*x
+                columns: 4
+                columnSpacing: Theme.paddingSmall
+                rowSpacing: 0
+
+                TotalsGridHeader {
+                    text: qsTr("Name")
+                    horizontalAlignment: Text.AlignLeft
+                }
+                TotalsGridHeader { text: qsTr("Payments") }
+                TotalsGridHeader { text: qsTr("Benefits") }
+                TotalsGridHeader { text: qsTr("Saldo") }
+
+                Repeater {
+                    model: [].concat(people).concat([null, undefined])
+
+                    Repeater {
+                        id: innerRepeater
+                        model: 4
+                        property var person: modelData
+
+                        CurrencyLabel {
+                            property int i: index
+                            text: {
+                                if (innerRepeater.person === null) {
+                                    " "
+                                } else if (innerRepeater.person === undefined) {
+                                    if (i == 0) qsTr("total")
+                                    else if (i == 2) _valueText
+                                    else if (i == 3) baseCurrency
+                                    else " "
+                                } else {
+                                    i == 0 ? innerRepeater.person : _valueText
+                                }
+                            }
+                            font.pixelSize: innerRepeater.person !== null ? Theme.fontSizeSmall : 20
+                            horizontalAlignment: {
+                                if (innerRepeater.person === undefined && i == 3) Text.AlignLeft
+                                else i == 0 ? Text.AlignLeft : Text.AlignRight
+                            }
+                            color: {
+                                if (innerRepeater.person === undefined && i == 3) Theme.primaryColor
+                                else i == 0 ? Theme.highlightColor : _valueColor
+                            }
+                            leftPadding: i == 3 ? Theme.paddingMedium : 0
+                            asSaldo: i == 3
+                            value: {
+                                if (innerRepeater.person === null) 0
+                                else if (innerRepeater.person === undefined) {
+                                    if (i == 2) totalPayments
+                                    else 0
+                                } else {
+                                    if (i == 0) 0
+                                    else if (i == 1) payments[innerRepeater.person]
+                                    else if (i == 2) benefits[innerRepeater.person]
+                                    else if (i == 3) payments[innerRepeater.person]
+                                                     - benefits[innerRepeater.person]
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+
+            SectionHeader {
+                text: qsTr("Settlement suggestion")
+            }
+        }
+    }
+}
+
+
+/* ************************
+
 
 
 //    property int exchangeRateMode : Number(Storage.getSetting("exchangeRateModeIndex", 0)) // 0=collective, 1=individual
+
 
 
 Page {
@@ -571,3 +758,5 @@ Page {
     }
 
 }
+
+*/
