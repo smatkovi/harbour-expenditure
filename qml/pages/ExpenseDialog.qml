@@ -132,6 +132,14 @@ Dialog {
     }
 
     onDone: {
+        // Apply changes to all CurrencyInputField components
+        // where values are only committed on focus change.
+        sumField.apply()
+        rateField.apply()
+        percentageFeeField.apply()
+        fixedFeeField.apply()
+
+        // Do nothing else if the dialog was accepted.
         if (result != DialogResult.Rejected && result != DialogResult.None) {
             return
         }
