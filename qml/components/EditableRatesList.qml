@@ -27,6 +27,7 @@ DelegateColumn {
         id: delegate
         project: selectedProject
         currency: modelData
+        value: fallback
         onValueChanged: {
             root.exchangeRateChanged(value, currency)
         }

@@ -15,7 +15,7 @@ PaddedDelegate {
 
     // effective value is: X base currency = 1.00 foreign currency (B2F)
     property double fallback: project.exchangeRates[currency] || NaN
-    property double value: fallback
+    property double value: emptyValue
 
     property string _displayType: 'B2F'
     property string _displayDescription: "%1 = 1.00 %2".
