@@ -12,6 +12,7 @@ import io.thp.pyotherside 1.5
 import Opal.ComboData 1.0
 import Opal.Delegates 1.0 as D
 
+import "../enums"
 import "../components"
 import "../js/storage.js" as Storage
 
@@ -299,6 +300,20 @@ Dialog {
                 color: Theme.secondaryColor
                 font.pixelSize: Theme.fontSizeExtraSmall
                 bottomPadding: Theme.paddingMedium
+            }
+
+            TextSwitch {
+                text: qsTr("Always show fees")
+                description: qsTr("If this option is enabled, the field for " +
+                                  "entering fees is always shown when adding a " +
+                                  "new transaction.")
+                automaticCheck: false
+                checked: selectedProject.feesMode == FeesMode.shownByDefault
+
+                onClicked: {
+                    if (checked) selectedProject.feesMode = FeesMode.hiddenByDefault // toggled
+                    else selectedProject.feesMode = FeesMode.shownByDefault
+                }
             }
 
             SectionHeader {
