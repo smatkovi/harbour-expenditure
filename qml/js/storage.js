@@ -616,6 +616,12 @@ function _deleteProject(rowid) {
 
     console.log("deleting project id", rowid, "...")
     DB.simpleQuery('DELETE FROM projects WHERE rowid = ?;', [rowid])
+
+    // for some reason, the 'on delete cascade' directive is
+    // not followed when running on Sailfish 4.5, so we have to
+    // delete leftover data manually
+    DB.simpleQuery('DELETE FROM expenses WHERE project = ?;', [rowid])
+    DB.simpleQuery('DELETE FROM exchange_rates WHERE project = ?;', [rowid])
 }
 
 function getProjects(projectDataComponent, parent) {
