@@ -131,14 +131,17 @@ Page {
                 MenuItem {
                     text: qsTr("Edit")
                     onClicked: {
-                        pageStack.push(Qt.resolvedUrl("ExpenseDialog.qml"), {
+                        var initialValues = {
                             index: index, rowid: rowid,
                             utc_time: utc_time, local_time: local_time, local_tz: local_tz,
                             name: name, info: info, sum: sum,
                             rate: rate, percentageFees: percentage_fees, fixedFees: fixed_fees,
                             currency: currency, payer: payer,
                             initialBeneficiaries: beneficiaries
-                        })
+                        }
+                        var properties = initialValues
+                        properties['initialValuesReadOnly'] = initialValues
+                        pageStack.push(Qt.resolvedUrl("ExpenseDialog.qml"), properties)
                     }
                 }
                 MenuItem {

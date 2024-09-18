@@ -39,6 +39,7 @@ Dialog {
     property bool _usingCustomTime: false
     property bool _customExchangeRate: appWindow.activeProject.ratesMode === RatesMode.perTransaction || !isNaN(rate)
     property bool _customFees: appWindow.activeProject.feesMode === FeesMode.shownByDefault || !isNaN(percentageFees) || !isNaN(fixedFees)
+    property var initialValuesReadOnly: ({})
 
     property int rowid: -1
     property int index: -1
@@ -144,23 +145,38 @@ Dialog {
             return
         }
 
+        // Do nothing else if no relevant data has been entered.
+        // Rates, fees, and beneficiaries are ignored here, and that is ok.
         if (name == "" && info == "" && sum === 0.00
             && (currency == "" ||
                 currency == appWindow.activeProject.lastCurrency)) {
             return
         }
 
-        appWindow._currentlyEditedEntry.index         = index
-        appWindow._currentlyEditedEntry.rowid         = rowid
-        appWindow._currentlyEditedEntry.utc_time      = utc_time
-        appWindow._currentlyEditedEntry.local_time    = local_time
-        appWindow._currentlyEditedEntry.local_tz      = local_tz
-        appWindow._currentlyEditedEntry.name          = name
-        appWindow._currentlyEditedEntry.info          = info
-        appWindow._currentlyEditedEntry.sum           = sum
-        appWindow._currentlyEditedEntry.currency      = currency
-        appWindow._currentlyEditedEntry.payer         = payer
-        appWindow._currentlyEditedEntry.beneficiaries = beneficiaries
+        // Check if any field has been changed. If so, save it, and show
+        // a remorse timer to allow reopening the rejected dialog.
+        // The check is not 100% thorough but it is close enough.
+        var properties = [
+            "index", "rowid", "utc_time", "local_time",
+            "local_tz", "name", "info", "sum",
+            "currency", "payer", "beneficiaries"]
+        var changed = false
+        appWindow._currentlyEditedEntry['initialValuesReadOnly'] = initialValuesReadOnly
+
+        for (var i in properties) {
+            var prop = properties[i]
+            appWindow._currentlyEditedEntry[prop] = root[prop]
+
+            if (initialValuesReadOnly.hasOwnProperty(prop) &&
+                    !Storage.isSameValue(root[prop], initialValuesReadOnly[prop])) {
+                changed = true
+                console.log("field changed:", prop)
+            }
+        }
+
+        if (!changed) {
+            return
+        }
 
         try {
             var page = pageStack.previousPage(page)
