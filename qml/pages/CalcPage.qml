@@ -26,13 +26,28 @@ Page {
     property var benefits: ({})
     property real totalPayments: 0.00
 
-    function convertToBase(sum, currency) {
-        if (flatExchangeRates.hasOwnProperty(currency)) {
-            return flatExchangeRates[currency] * sum
+    function convertToBase(expense) {
+        var effectiveRate = 1.00
+
+        if (!!expense.rate) {
+            effectiveRate = expense.rate
+        } else if (appWindow.activeProject.exchangeRates.hasOwnProperty(expense.currency)) {
+            effectiveRate = appWindow.activeProject.exchangeRates[expense.currency] || NaN
+        } else {
+            effectiveRate = NaN
         }
 
-        console.warn("no flat exchange rate for currency", currency, "found")
-        return 1.0 * sum
+        var price = expense.sum * effectiveRate
+
+        if (!!expense.percentage_fees) {
+            price += price / 100 * expense.percentage_fees
+        }
+
+        if (!!expense.fixed_fees) {
+            price += expense.fixed_fees
+        }
+
+        return price
     }
 
     function collectSums() {
@@ -48,7 +63,7 @@ Page {
                 payments[x.payer] = 0
             }
 
-            var convertedSum = convertToBase(x.sum, x.currency)
+            var convertedSum = convertToBase(x)
             totalPayments += convertedSum
             payments[x.payer] += convertedSum
             var individualBenefit = convertedSum / x.beneficiaries_list.length
@@ -90,8 +105,6 @@ Page {
 
         expenses = Storage.getProjectEntries(appWindow.activeProject.rowid)
         baseCurrency = appWindow.activeProject.baseCurrency
-        flatExchangeRates = {'CHF': 1.0, 'AMD': 0.0022, 'GEL': 0.3}
-
         collectSums()
     }
 
