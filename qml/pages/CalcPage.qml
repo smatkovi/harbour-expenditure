@@ -17,7 +17,6 @@ Page {
     id: root
     allowedOrientations: Orientation.All
 
-    // properties...
     property string baseCurrency: ''
     property var flatExchangeRates: ({})
     property var expenses: ({})
@@ -83,7 +82,12 @@ Page {
     }
 
     Component.onCompleted: {
-//        appWindow.activeProject.rowid = 1 // DEBUG
+        if (pageStack.previousPage() === null) {
+            // Load the first project during development when
+            // using SettingsPage as the initial page.
+            appWindow.activeProject.rowid = 1
+        }
+
         expenses = Storage.getProjectEntries(appWindow.activeProject.rowid)
         baseCurrency = appWindow.activeProject.baseCurrency
         flatExchangeRates = {'CHF': 1.0, 'AMD': 0.0022, 'GEL': 0.3}
