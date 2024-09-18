@@ -28,7 +28,9 @@ var dbMigrations = [
 // The database helper provides easy settings handling
 // through a key-value store in this table. The table
 // name can be changed here initially. The table is
-// created automatically after all migrations have been run.
+// created automatically when the database is first
+// created, before any migrations are run.
+//
 // Columns: key TEXT UNIQUE, value TEXT
 var settingsTable = "__local_settings"
 
@@ -40,7 +42,8 @@ var settingsTable = "__local_settings"
 // Functions:
 // - simpleQuery(query, values): for most queries.
 // - readQuery(query, values): for read-only queries.
-// - guardedTx(tx, callback): run callback(tx) in a transaction and rollback on errors.
+// - guardedTx(tx, callback): run callback(tx) in a transaction
+//                            and roll back on errors.
 // - getDatabase(): to get full access to the database.
 //
 // - defaultFor(arg, val): to use a fallback value 'val' if 'arg' is nullish.
@@ -197,7 +200,7 @@ function getSetting(key, fallback) {
 
 function createSettingsTable(tx) {
     // It is usually not necessary to call this function manually.
-    // The settings table is created automatically for you.
+    // The settings table is created automatically for you when the database is first created.
     //
     // You can use this to migrate from an old settings system to
     // using the internal settings provided by the database helper.
@@ -233,6 +236,11 @@ function __doInit(db) {
     var initialVersion = db.version
     var previousVersion = Number(initialVersion)
     var nextVersion = null
+
+    if (initialVersion === "") {
+        console.log("initializing a new database...")
+        db.transaction(createSettingsTable);
+    }
 
     if (initialVersion !== String(latestVersion)) {
         for (var i in dbMigrations) {
@@ -276,8 +284,6 @@ function __doInit(db) {
     }
 
     console.log("loaded database version", previousVersion)
-
-    db.transaction(createSettingsTable);
 
     return true
 }
