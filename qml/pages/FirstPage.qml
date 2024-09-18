@@ -140,70 +140,70 @@ Page {
 
             menu: Component {
                 ContextMenu {
-                MenuLabel {
-                    text: {
-                        if (Storage.isSameValue(item.effectiveRate, NaN)) {
-                            qsTr("set %1 → %2 exchange rate in project settings")
-                                .arg(currency).arg(appWindow.activeProject.baseCurrency)
-                        } else {
-                            '%1 %2 · %3 = %4 %5'
-                                .arg(Number(sum).toLocaleString(Qt.locale("de_CH")))
-                                .arg(currency)
-                                .arg(item.effectiveRate)
-                                .arg(Number(sum * item.effectiveRate).toLocaleString(Qt.locale("de_CH")))
-                                .arg(appWindow.activeProject.baseCurrency)
+                    MenuLabel {
+                        text: {
+                            if (Storage.isSameValue(item.effectiveRate, NaN)) {
+                                qsTr("set %1 → %2 exchange rate in project settings")
+                                    .arg(currency).arg(appWindow.activeProject.baseCurrency)
+                            } else {
+                                '%1 %2 · %3 = %4 %5'
+                                    .arg(Number(sum).toLocaleString(Qt.locale("de_CH")))
+                                    .arg(currency)
+                                    .arg(item.effectiveRate)
+                                    .arg(Number(sum * item.effectiveRate).toLocaleString(Qt.locale("de_CH")))
+                                    .arg(appWindow.activeProject.baseCurrency)
+                            }
                         }
                     }
-                }
-                MenuLabel {
-                    visible: !isNaN(item.effectiveRate) && (!!fixed_fees || !!percentage_fees)
-                    text: {
-                        if (!visible) return ''
+                    MenuLabel {
+                        visible: !isNaN(item.effectiveRate) && (!!fixed_fees || !!percentage_fees)
+                        text: {
+                            if (!visible) return ''
 
-                        var text = ''
-                        var total = sum * item.effectiveRate
+                            var text = ''
+                            var total = sum * item.effectiveRate
 
-                        if (!!percentage_fees) {
-                            total += total * (percentage_fees/100)
-                            text += "+ %1 %2 (%3%) "
-                                .arg(sum * item.effectiveRate * (percentage_fees/100))
+                            if (!!percentage_fees) {
+                                total += total * (percentage_fees/100)
+                                text += "+ %1 %2 (%3%) "
+                                    .arg(sum * item.effectiveRate * (percentage_fees/100))
+                                    .arg(appWindow.activeProject.baseCurrency)
+                                    .arg(Number(percentage_fees).toLocaleString(Qt.locale("de_CH")))
+                            }
+                            if (!!fixed_fees) {
+                                total += fixed_fees
+                                text += "+ %1 %2 "
+                                    .arg(Number(fixed_fees).toLocaleString(Qt.locale("de_CH")))
+                                    .arg(appWindow.activeProject.baseCurrency)
+                            }
+
+                            text += "= %1 %2"
+                                .arg(Number(total).toLocaleString(Qt.locale("de_CH")))
                                 .arg(appWindow.activeProject.baseCurrency)
-                                .arg(Number(percentage_fees).toLocaleString(Qt.locale("de_CH")))
+                            return text
                         }
-                        if (!!fixed_fees) {
-                            total += fixed_fees
-                            text += "+ %1 %2 "
-                                .arg(Number(fixed_fees).toLocaleString(Qt.locale("de_CH")))
-                                .arg(appWindow.activeProject.baseCurrency)
+                    }
+                    MenuItem {
+                        text: qsTr("Edit")
+                        onClicked: {
+                            var initialValues = {
+                                index: index, rowid: rowid,
+                                utc_time: utc_time, local_time: local_time, local_tz: local_tz,
+                                name: name, info: info, sum: sum,
+                                rate: rate, percentageFees: percentage_fees, fixedFees: fixed_fees,
+                                currency: currency, payer: payer,
+                                initialBeneficiaries: beneficiaries
+                            }
+                            var properties = initialValues
+                            properties['initialValuesReadOnly'] = initialValues
+                            pageStack.push(Qt.resolvedUrl("ExpenseDialog.qml"), properties)
                         }
-
-                        text += "= %1 %2"
-                            .arg(Number(total).toLocaleString(Qt.locale("de_CH")))
-                            .arg(appWindow.activeProject.baseCurrency)
-                        return text
+                    }
+                    MenuItem {
+                        text: qsTr("Remove")
+                        onClicked: appWindow.activeProject.removeEntry(item, rowid, index)
                     }
                 }
-                MenuItem {
-                    text: qsTr("Edit")
-                    onClicked: {
-                        var initialValues = {
-                            index: index, rowid: rowid,
-                            utc_time: utc_time, local_time: local_time, local_tz: local_tz,
-                            name: name, info: info, sum: sum,
-                            rate: rate, percentageFees: percentage_fees, fixedFees: fixed_fees,
-                            currency: currency, payer: payer,
-                            initialBeneficiaries: beneficiaries
-                        }
-                        var properties = initialValues
-                        properties['initialValuesReadOnly'] = initialValues
-                        pageStack.push(Qt.resolvedUrl("ExpenseDialog.qml"), properties)
-                    }
-                }
-                MenuItem {
-                    text: qsTr("Remove")
-                    onClicked: appWindow.activeProject.removeEntry(item, rowid, index)
-                }
-            }
             }
         }
 
