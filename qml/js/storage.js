@@ -14,6 +14,7 @@
 //
 
 function dbOk() { return DB.dbOk }
+var isSameValue = DB.isSameValue
 
 // The name of the database is a historical relic
 // but it cannot be changed due to limitations in Qt.

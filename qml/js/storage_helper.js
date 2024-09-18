@@ -62,6 +62,14 @@ function defaultFor(arg, val) {
     return typeof arg !== 'undefined' ? arg : val
 }
 
+function isSameValue(x, y) {
+    // Polyfill for Object.is() which is not available in ancient Qt.
+    // - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
+    // - https://github.com/zloirock/core-js/blob/master/packages/core-js/internals/same-value.js
+    // - https://stackoverflow.com/a/48300450
+    return x === y ? x !== 0 || 1 / x === 1 / y : x !== x && y !== y;
+}
+
 function getDatabase() {
     if (!dbOk) {
         console.error("database is not available, check previous logs")
