@@ -11,6 +11,7 @@ import "../components"
 import "../js/dates.js" as Dates
 import "../js/storage.js" as Storage
 import "../modules/Opal/Delegates" as D
+import "../modules/Opal/SmartScrollbar" as S
 
 Page {
     id: root
@@ -45,7 +46,7 @@ Page {
                              " "
         }
 
-        SmartScrollbar {
+        S.SmartScrollbar {
             flickable: listView
             property date date: new Date(listView.currentSection)
             text: date.toLocaleString(Qt.locale(), Dates.dateNoYearFormat)
