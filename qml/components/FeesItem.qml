@@ -13,6 +13,9 @@ Row {
     property alias percentageFees: percentageFeeField.value
     property alias fixedFees: fixedFeeField.value
 
+    property alias percentageFeesField: percentageFeeField
+    property alias fixedFeesField: fixedFeeField
+
     width: parent.width
     spacing: Theme.paddingMedium
 

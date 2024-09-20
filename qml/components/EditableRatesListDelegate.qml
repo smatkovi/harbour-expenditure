@@ -8,10 +8,12 @@ PaddedDelegate {
     id: root
     property ProjectData project
     property string currency
-    property alias allowEmpty: inputField.allowEmpty
-    property alias emptyValue: inputField.emptyValue
+    property alias allowEmpty: _inputField.allowEmpty
+    property alias emptyValue: _inputField.emptyValue
     property double foreignSum: NaN
     property string placeholder: ''
+
+    property alias inputField: _inputField
 
     // effective value is: X base currency = 1.00 foreign currency (B2F)
     property double fallback: project.exchangeRates[currency] || NaN
@@ -35,7 +37,7 @@ PaddedDelegate {
                                 .arg(currency)
             onClicked: {
                 root._displayType = 'B2F'
-                inputField.value = value
+                _inputField.value = value
                 root._displayDescription = Qt.binding(function(){return text})
             }
         }
@@ -44,7 +46,7 @@ PaddedDelegate {
                                 .arg(project.baseCurrency)
             onClicked: {
                 root._displayType = 'F2B'
-                inputField.value = value > 0 ? 1/value : emptyValue
+                _inputField.value = value > 0 ? 1/value : emptyValue
                 root._displayDescription = Qt.binding(function(){return text})
             }
         }
@@ -53,7 +55,7 @@ PaddedDelegate {
             text: qsTr("%1 paid").arg(project.baseCurrency)
             onClicked: {
                 root._displayType = 'paid'
-                inputField.value = value > 0 ? foreignSum*value : emptyValue
+                _inputField.value = value > 0 ? foreignSum*value : emptyValue
                 root._displayDescription = Qt.binding(function(){return text})
             }
         }
@@ -78,7 +80,7 @@ PaddedDelegate {
             spacing: Theme.paddingMedium
 
             CurrencyInputField {
-                id: inputField
+                id: _inputField
                 readOnly: !root.enabled
                 width: parent.width / 2 - parent.spacing
                 label: qsTr("Exchange rate")
@@ -111,11 +113,11 @@ PaddedDelegate {
                     var newValue = emptyValue
 
                     if (_displayType === 'B2F') {
-                        newValue = inputField.value
+                        newValue = _inputField.value
                     } else if (_displayType === 'F2B') {
-                        newValue = value > 0 ? 1/inputField.value : emptyValue
+                        newValue = value > 0 ? 1/_inputField.value : emptyValue
                     } else if (_displayType === 'paid') {
-                        newValue = value > 0 ? inputField.value/foreignSum : emptyValue
+                        newValue = value > 0 ? _inputField.value/foreignSum : emptyValue
                     }
 
                     if (!Storage.isSameValue(newValue, root.value)) {
