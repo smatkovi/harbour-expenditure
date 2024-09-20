@@ -224,8 +224,21 @@ Dialog {
                     label: qsTr("Name")
                     textRightMargin: 0
                     acceptableInput: !!text
-                    EnterKey.onClicked: focus = false
-                    EnterKey.iconSource: "image://theme/icon-m-enter-close"
+
+                    EnterKey.iconSource: {
+                        if (selectedProject.members.length === 0) {
+                            return "image://theme/icon-m-enter-next"
+                        } else {
+                            return "image://theme/icon-m-enter-close"
+                        }
+                    }
+                    EnterKey.onClicked: {
+                        if (selectedProject.members.length === 0) {
+                            newMemberAdder.textField.forceActiveFocus()
+                        }
+                        focus = false
+                    }
+
                     onFocusChanged: {
                         if (focus && text === _newProjectName) {
                             selectAll()
@@ -307,6 +320,7 @@ Dialog {
             }
 
             EditableMembersListAdder {
+                id: newMemberAdder
                 selectedProject: root.selectedProject
                 onApplied: flick.scrollToBottom() // TODO scroll to input field
             }
