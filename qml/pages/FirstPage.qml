@@ -146,6 +146,8 @@ Page {
             menu: Component {
                 ContextMenu {
                     MenuLabel {
+                        visible: currency !== appWindow.activeProject.baseCurrency ||
+                                 item.effectiveRate !== 1.00
                         text: {
                             if (Storage.isSameValue(item.effectiveRate, NaN)) {
                                 qsTr("set %1 → %2 exchange rate in project settings")
