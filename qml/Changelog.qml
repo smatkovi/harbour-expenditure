@@ -9,6 +9,19 @@ import "modules/Opal/About"
 
 ChangelogList {
     ChangelogItem {
+        version: "1.0.0-1"
+        date: "2024-09-20"
+        author: "Mirian Margiani (ichthyosaurus)"
+        paragraphs: [
+            "- Complete rewrite of the app with a brand new user interface, improved stability, and many new features<br>" +
+            "- Added support for fees and exchange rates per transaction<br>" +
+            "- Added changelog<br>" +
+            "- Added support for backups using MyBackup<br>" +
+            "- Updated readme with details on required permissions<br>" +
+            "- and much more"
+        ]
+    }
+    ChangelogItem {
         version: "0.4-1"
         date: "2023-12-16"
         author: "yajo10"
