@@ -9,7 +9,7 @@
     </message>
     <message>
         <source>A simple app for tracking expenses in groups.</source>
-        <translation type="unfinished"></translation>
+        <translation>Eine App zur Verwaltung von Ausgaben in Gruppen.</translation>
     </message>
     <message>
         <source>Development</source>
@@ -43,90 +43,90 @@
     <name>CalcPage</name>
     <message>
         <source>Calculations</source>
-        <translation type="unfinished"></translation>
+        <translation>Berechnungen</translation>
     </message>
     <message>
         <source>Spending overview</source>
-        <translation type="unfinished"></translation>
+        <translation>Ausgabenübersicht</translation>
     </message>
     <message>
         <source>Settlement suggestion</source>
-        <translation type="unfinished"></translation>
+        <translation>Teilungsvorschlag</translation>
     </message>
     <message>
         <source>Base exchange rates</source>
-        <translation type="unfinished"></translation>
+        <translation>Basis-Wechselkurse</translation>
     </message>
     <message>
         <source>Transactions and fees</source>
-        <translation type="unfinished"></translation>
+        <translation>Transaktionen und Gebühren</translation>
     </message>
     <message>
         <source>Click here to review and edit fees and exchange rates individually for all transactions. Transactions that do not declare a custom exchange rate are converted using the base exchange rates defined above.</source>
-        <translation type="unfinished"></translation>
+        <translation>Klicken Sie hier, um individuelle Gebühren und Wechselkurse für alle Transaktionen anzugeben. Posten ohne Wechselkurs werden mit den Basis-Wechselkursen umgerechnet.</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Name</translation>
     </message>
     <message>
         <source>Payments</source>
-        <translation type="unfinished"></translation>
+        <translation>Zahlungen</translation>
     </message>
     <message>
         <source>Benefits</source>
-        <translation type="unfinished"></translation>
+        <translation>Begünst.</translation>
     </message>
     <message>
         <source>total</source>
-        <translation type="unfinished"></translation>
+        <translation>total</translation>
     </message>
     <message>
         <source>Balance</source>
-        <translation type="unfinished"></translation>
+        <translation>Saldo</translation>
     </message>
     <message>
         <source>Payer</source>
-        <translation type="unfinished"></translation>
+        <translation>Zahler</translation>
     </message>
     <message>
         <source>Recipient</source>
-        <translation type="unfinished"></translation>
+        <translation>Empfänger</translation>
     </message>
     <message>
         <source>Sum [%1]</source>
-        <translation type="unfinished"></translation>
+        <translation>Summe [%1]</translation>
     </message>
     <message>
         <source>Review transactions</source>
-        <translation type="unfinished"></translation>
+        <translation>Transaktionen prüfen</translation>
     </message>
     <message>
         <source>Share detailed report</source>
-        <translation type="unfinished"></translation>
+        <translation>Detaillierten Bericht teilen</translation>
     </message>
     <message>
         <source>Share compact report</source>
-        <translation type="unfinished"></translation>
+        <translation>Kompakten Bericht teilen</translation>
     </message>
     <message>
         <source>A detailed report has been copied to the clipboard.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ein detaillierter Bericht wurde in die Zwischenablage kopiert.</translation>
     </message>
     <message>
         <source>A compact report has been copied to the clipboard.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ein kompakter Bericht wurde in die Zwischenablage kopiert.</translation>
     </message>
     <message>
         <source>Spendings report</source>
-        <translation type="unfinished"></translation>
+        <translation>Ausgabenbericht</translation>
     </message>
 </context>
 <context>
     <name>DateTimePickerCombo</name>
     <message>
         <source>never</source>
-        <translation type="unfinished"></translation>
+        <translation>nie</translation>
     </message>
 </context>
 <context>
@@ -144,147 +144,147 @@
     <name>EditableRatesListDelegate</name>
     <message>
         <source>%1 paid</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 bezahlt</translation>
     </message>
     <message>
         <source>Exchange rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Wechselkurs</translation>
     </message>
 </context>
 <context>
     <name>ExpenseDialog</name>
     <message>
         <source>Discarded all changes</source>
-        <translation type="unfinished"></translation>
+        <translation>Änderungen verworfen</translation>
     </message>
     <message>
         <source>Discarded the entry</source>
-        <translation type="unfinished"></translation>
+        <translation>Eintrag verworfen</translation>
     </message>
     <message>
         <source>Add fees</source>
-        <translation type="unfinished"></translation>
+        <translation>Gebühren hinzufügen</translation>
     </message>
     <message>
         <source>Custom exchange rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Wechselkurs setzen</translation>
     </message>
     <message>
         <source>Edit expense</source>
-        <translation type="unfinished"></translation>
+        <translation>Eintrag bearbeiten</translation>
     </message>
     <message>
         <source>New expense</source>
-        <translation type="unfinished"></translation>
+        <translation>Neuer Eintrag</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Speichern</translation>
     </message>
     <message>
         <source>Discard</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwerfen</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Datum</translation>
     </message>
     <message>
         <source>Expense</source>
-        <translation type="unfinished"></translation>
+        <translation>Ausgabe</translation>
     </message>
     <message>
         <source>Price</source>
-        <translation type="unfinished"></translation>
+        <translation>Preis</translation>
     </message>
     <message>
         <source>Currency</source>
-        <translation type="unfinished"></translation>
+        <translation>Währung</translation>
     </message>
     <message>
         <source>Additional notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Anmerkungen</translation>
     </message>
     <message>
         <source>Payer</source>
-        <translation type="unfinished"></translation>
+        <translation>Zahler</translation>
     </message>
     <message>
         <source>Beneficiaries</source>
-        <translation type="unfinished"></translation>
+        <translation>Begünstigte</translation>
     </message>
     <message>
         <source>everyone</source>
-        <translation type="unfinished"></translation>
+        <translation>alle</translation>
     </message>
 </context>
 <context>
     <name>FeesItem</name>
     <message>
         <source>Fees</source>
-        <translation type="unfinished"></translation>
+        <translation>Gebühr</translation>
     </message>
 </context>
 <context>
     <name>FeesRatesPage</name>
     <message>
         <source>Transactions</source>
-        <translation type="unfinished"></translation>
+        <translation>Transaktionen</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Speichern</translation>
     </message>
     <message>
         <source>Discard</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwerfen</translation>
     </message>
 </context>
 <context>
     <name>FirstPage</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Einstellungen</translation>
     </message>
     <message>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Bearbeiten</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Löschen</translation>
     </message>
     <message>
         <source>Calculate</source>
-        <translation type="unfinished"></translation>
+        <translation>Berechnen</translation>
     </message>
     <message>
         <source>Expenses</source>
-        <translation type="unfinished"></translation>
+        <translation>Ausgaben</translation>
     </message>
     <message>
         <source>About</source>
-        <translation type="unfinished">Über</translation>
+        <translation>Über</translation>
     </message>
     <message>
         <source>No entries yet</source>
-        <translation type="unfinished"></translation>
+        <translation>Keine Einträge</translation>
     </message>
     <message>
         <source>Add a project</source>
-        <translation type="unfinished"></translation>
+        <translation>Projekt hinzufügen</translation>
     </message>
     <message>
         <source>Pull down to open the settings page.</source>
-        <translation type="unfinished"></translation>
+        <translation>Herunterziehen, um die Einstellungen zu öffnen.</translation>
     </message>
     <message>
         <source>set %1 → %2 exchange rate in project settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Wechselkurs %1 → %2 in den Einstellungen definieren</translation>
     </message>
     <message>
         <source>Swipe to the left to add an entry.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nach links wischen, um einen Eintrag hinzuzufügen.</translation>
     </message>
 </context>
 <context>
@@ -298,14 +298,14 @@
     <name>LimitedDatePickerDialog</name>
     <message>
         <source>The date cannot be in the future.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das Datum darf nicht in der Zukunft liegen.</translation>
     </message>
 </context>
 <context>
     <name>LimitedTimePickerDialog</name>
     <message>
         <source>The time has been reset. It cannot be in the future.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Zeit wurde zurückgesetzt. Sie darf nicht in der Zukunft liegen.</translation>
     </message>
 </context>
 <context>
@@ -438,19 +438,19 @@
     </message>
     <message>
         <source>External Link</source>
-        <translation type="unfinished">Externer Link</translation>
+        <translation>Externer Link</translation>
     </message>
     <message>
         <source>Open in browser</source>
-        <translation type="unfinished">Im Browser öffnen</translation>
+        <translation>Im Browser öffnen</translation>
     </message>
     <message>
         <source>Copied to clipboard: %1</source>
-        <translation type="unfinished">In die Zwischenablage kopiert: %1</translation>
+        <translation>In die Zwischenablage kopiert: %1</translation>
     </message>
     <message>
         <source>Copy to clipboard</source>
-        <translation type="unfinished">In die Zwischenablage kopieren</translation>
+        <translation>In die Zwischenablage kopieren</translation>
     </message>
     <message>
         <source>Please refer to &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;</source>
@@ -514,7 +514,7 @@
     <name>ProjectData</name>
     <message>
         <source>User</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzer</translation>
     </message>
 </context>
 <context>
@@ -522,109 +522,110 @@
     <message>
         <source>An error occurred in the Python backend.
 Please restart the app and check the logs.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ein Fehler ist im Python-Backend aufgetreten.
+Bitte starten Sie die App neu und prüfen Sie die Logs.</translation>
     </message>
 </context>
 <context>
     <name>SettingsPage</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Einstellungen</translation>
     </message>
     <message>
         <source>Project</source>
-        <translation type="unfinished"></translation>
+        <translation>Projekt</translation>
     </message>
     <message>
         <source>Exchange rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Wechselkurs</translation>
     </message>
     <message>
         <source>New project</source>
-        <translation type="unfinished"></translation>
+        <translation>Neues Projekt</translation>
     </message>
     <message>
         <source>Export to</source>
         <comment>Page title for the backup output folder picker</comment>
-        <translation type="unfinished"></translation>
+        <translation>Exportieren nach</translation>
     </message>
     <message>
         <source>Exported expenses to “%1”</source>
-        <translation type="unfinished"></translation>
+        <translation>Ausgaben wurden nach „%1“ exportiert.</translation>
     </message>
     <message>
         <source>Import expenses</source>
         <comment>Page title for the file import picker</comment>
-        <translation type="unfinished"></translation>
+        <translation>Ausgaben importieren</translation>
     </message>
     <message>
         <source>Imported %1 expenses into “%2”.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 Ausgaben wurden in „%2“ importiert.</translation>
     </message>
     <message>
         <source>Failed to import “%1”.</source>
         <comment>%1 is a filename</comment>
-        <translation type="unfinished"></translation>
+        <translation>„%1“ konnte nicht importiert werden.</translation>
     </message>
     <message>
         <source>New project ...</source>
-        <translation type="unfinished"></translation>
+        <translation>Neues Projekt ...</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Name</translation>
     </message>
     <message>
         <source>Currency</source>
-        <translation type="unfinished"></translation>
+        <translation>Währung</translation>
     </message>
     <message>
         <source>The settlement suggestion is calculated in this currency. Select the most used currency in your group for this.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Teilungsvorschlag wird in dieser Währung berechnet. Wählen Sie eine Währung, die für alle Mitglieder praktisch ist.</translation>
     </message>
     <message>
         <source>fixed per currency</source>
-        <translation type="unfinished"></translation>
+        <translation>fix nach Währung</translation>
     </message>
     <message>
         <source>per transaction</source>
-        <translation type="unfinished"></translation>
+        <translation>pro Transaktion</translation>
     </message>
     <message>
         <source>Always show fees</source>
-        <translation type="unfinished"></translation>
+        <translation>Gebühren immer zeigen</translation>
     </message>
     <message>
         <source>If this option is enabled, the field for entering fees is always shown when adding a new transaction.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wenn diese Option aktiviert ist, wird das Gebühren-Eingabefeld bei neuen Einträgen immer angezeigt.</translation>
     </message>
     <message>
         <source>Project members</source>
-        <translation type="unfinished"></translation>
+        <translation>Projekt-Mitglieder</translation>
     </message>
     <message>
         <source>Base exchange rates</source>
-        <translation type="unfinished"></translation>
+        <translation>Basis-Wechselkurse</translation>
     </message>
     <message>
         <source>Backup options</source>
-        <translation type="unfinished"></translation>
+        <translation>Backup-Optionen</translation>
     </message>
     <message>
         <source>Import</source>
-        <translation type="unfinished"></translation>
+        <translation>Importieren</translation>
     </message>
     <message>
         <source>Export</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportieren</translation>
     </message>
     <message>
         <source>You can import and export expenses of the current project to CSV. Project metadata is not included.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sie können Einträge (ohne Projekt-Metadaten) aus dem gewählten Projekt als CSV-Datei exportieren.</translation>
     </message>
     <message>
         <source>When importing, imported entries will be added to the current project and old entries will be kept.</source>
-        <translation type="unfinished"></translation>
+        <translation>Importierte Einträge werden zum gewählten Projekt hinzugefügt. Vorhandene Einträge werden beibehalten.</translation>
     </message>
 </context>
 <context>
@@ -655,48 +656,48 @@ Please restart the app and check the logs.</source>
     <message>
         <source>hh&apos;:&apos;mm</source>
         <comment>time only format, as in “10:00 o&apos;clock”</comment>
-        <translation type="unfinished"></translation>
+        <translation>hh&apos;:&apos;mm &apos;Uhr&apos;</translation>
     </message>
     <message>
         <source>d MMM yyyy, hh&apos;:&apos;mm</source>
         <comment>date and time format, as in “Dec. 1st 2023, 10:00 o&apos;clock”</comment>
-        <translation type="unfinished"></translation>
+        <translation>d. MMM yyyy, hh&apos;:&apos;mm &apos;Uhr&apos;</translation>
     </message>
     <message>
         <source>ddd d MMM yyyy, hh&apos;:&apos;mm</source>
         <comment>full date and time format, as in “Fri., Dec. 1st 2023, 10:00 o&apos;clock”</comment>
-        <translation type="unfinished"></translation>
+        <translation>ddd, d. MMM yyyy, hh&apos;:&apos;mm &apos;Uhr&apos;</translation>
     </message>
     <message>
         <source>ddd d MMM yyyy</source>
         <comment>full date format, as in “Fri., Dec. 1st 2023”</comment>
-        <translation type="unfinished"></translation>
+        <translation>ddd, d. MMM yyyy</translation>
     </message>
     <message>
         <source>d MMM yyyy</source>
         <comment>date format, as in “Dec. 1st 2023”</comment>
-        <translation type="unfinished"></translation>
+        <translation>d. MMM yyyy</translation>
     </message>
     <message>
         <source>d MMM</source>
         <comment>date format without year, as in “Dec. 1st”</comment>
-        <translation type="unfinished"></translation>
+        <translation>d. MMM</translation>
     </message>
     <message>
         <source>%1 (%2)</source>
         <comment>1: date, 2: time zone info</comment>
-        <translation type="unfinished"></translation>
+        <translation>%1 (%2)</translation>
     </message>
 </context>
 <context>
     <name>storage</name>
     <message>
         <source>everyone</source>
-        <translation type="unfinished"></translation>
+        <translation>alle</translation>
     </message>
     <message>
         <source>User</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzer</translation>
     </message>
 </context>
 </TS>
