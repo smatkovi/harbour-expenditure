@@ -4,6 +4,7 @@ import Opal.Delegates 1.0
 DelegateColumn {
     id: root
     property ProjectData selectedProject
+    readonly property int count: selectedProject.currencies.length
     signal exchangeRateChanged(var rate, var currency)
 
     onExchangeRateChanged: {

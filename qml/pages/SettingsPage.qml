@@ -320,11 +320,13 @@ Dialog {
                 text: qsTr("Base exchange rates")
                 topPadding: 2 * Theme.paddingLarge
                 bottomPadding: Theme.paddingLarge
+                visible: ratesList.visible
             }
 
             EditableRatesList {
                 id: ratesList
                 selectedProject: root.selectedProject
+                visible: count > 0
             }
 
             SectionHeader {
