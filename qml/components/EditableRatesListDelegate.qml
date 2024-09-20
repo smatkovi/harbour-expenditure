@@ -98,23 +98,12 @@ PaddedDelegate {
                 labelVisible: false
                 emptyValue: NaN
                 allowEmpty: false
+                allowNull: false
                 precision: 4
                 value: root.value || root.emptyValue
                 textRightMargin: 0
                 textMargin: 0
                 textTopPadding: Theme.paddingMedium
-
-                acceptableInput: {
-                    var value = Number(text.trim().replace(Qt.locale().decimalPoint, '.'))
-
-                    if (!text.trim()) {
-                        return allowEmpty ? true : false
-                    } else if (isNaN(value) || value == 0) {
-                        return false
-                    } else {
-                        return true
-                    }
-                }
 
                 Component.onCompleted: value = root.value || root.emptyValue
 

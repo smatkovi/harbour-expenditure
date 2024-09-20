@@ -1,6 +1,8 @@
 import QtQuick 2.6
 import Sailfish.Silica 1.0
 
+import "../js/storage.js" as Storage
+
 TextField {
     id: root
 
@@ -8,10 +10,40 @@ TextField {
     property double emptyValue: 0.00
     property int precision: 2
     property bool allowEmpty: false
+    property bool allowNull: true
 
     inputMethodHints: Qt.ImhFormattedNumbersOnly
     EnterKey.onClicked: focus = false
     EnterKey.iconSource: "image://theme/icon-m-enter-close"
+
+    acceptableInput: isAcceptable()
+
+    Binding on acceptableInput {
+        when: root.focus
+        value: isAcceptable()
+    }
+
+    function _textToValue(text) {
+        return Number(text.trim().replace(Qt.locale().decimalPoint, '.'))
+    }
+
+    function isAcceptable() {
+        return !isEmpty() || allowEmpty
+    }
+
+    function isEmpty() {
+        var value = _textToValue(text)
+
+        if (!text.trim()) {
+            return true
+        } else if (value === 0.00) {
+            return allowNull ? false : true
+        } else if (isNaN(value) || Storage.isSameValue(value, emptyValue)) {
+            return true
+        } else {
+            return false
+        }
+    }
 
     function apply(hadFocus) {
         // only convert text to value if it was unformatted,
@@ -22,7 +54,7 @@ TextField {
                 _updateDisplayText()
                 focus = false
             } else if (!!text) {
-                value = Number(text.trim().replace(Qt.locale().decimalPoint, '.'))
+                value = _textToValue(text)
                 _updateDisplayText()
                 focus = false
             } else {
@@ -44,7 +76,7 @@ TextField {
     onActiveFocusChanged: {
         if (activeFocus) {
             // set unformatted text
-            if (isNaN(value) && isNaN(emptyValue)) {
+            if (isNaN(value)) {
                 text = ''
             } else if (value == 0.00) {
                 text = '  %1  '.arg(value.toFixed(precision))
@@ -60,7 +92,16 @@ TextField {
         }
     }
 
+    onTextChanged: {
+        if (!focus || !isAcceptable()) return
+        value = _textToValue(text)
+    }
+
     onValueChanged: {
+        console.log("VALUE CHANGED:", value, "'%1'".arg(text), emptyValue)
+
+        if (focus) return // only update when not editing
+
         // set formatted text
         if (isNaN(value) && isNaN(emptyValue)) {
             text = ''
