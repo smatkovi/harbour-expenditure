@@ -385,6 +385,10 @@ DB.dbMigrations = [
         ;')
         tx.executeSql('DROP TABLE exchange_rates_table;')
     }],
+    [1, function(tx){
+        // This is an empty migration marking the step from 0.x to 1.
+        // Future versions must increase in integer steps.
+    }],
 
     // add new versions here...
     //
