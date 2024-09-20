@@ -402,6 +402,7 @@ Dialog {
 
             D.OneLineDelegate {
                 id: allItem
+                visible: _mergedMembers.length > 1
 
                 property bool allSelected: {
                     for (var i in _mergedMembers) {
