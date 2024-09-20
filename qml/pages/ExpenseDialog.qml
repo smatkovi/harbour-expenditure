@@ -526,15 +526,15 @@ Dialog {
                         root.payer = modelData
                     }
 
-                    function setBeneficiary() {
-                        root.beneficiaries[modelData] = !(!!root.beneficiaries[modelData])
+                    function setBeneficiary(force) {
+                        root.beneficiaries[modelData] = !(!!root.beneficiaries[modelData]) || force
                         root.beneficiaries = root.beneficiaries
                     }
 
                     Component.onCompleted: {
                         if (root._mergedMembers.length === 1) {
                             setPayer()
-                            setBeneficiary()
+                            setBeneficiary(true)
                         }
                     }
                 }
