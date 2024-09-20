@@ -257,16 +257,11 @@ Dialog {
                 }
             }
 
-            Label {
+            InfoLabel {
                 text: qsTr("The settlement suggestion is calculated in this " +
                            "currency. Select the most used currency in your " +
                            "group for this.")
-                width: parent.width - 2*x
-                x: Theme.horizontalPageMargin
-                wrapMode: Text.Wrap
                 color: Theme.secondaryColor
-                font.pixelSize: Theme.fontSizeExtraSmall
-                bottomPadding: Theme.paddingMedium
             }
 
             Spacer { size: Theme.paddingMedium }
@@ -352,7 +347,6 @@ Dialog {
                       qsTr("When importing, imported entries will be added to " +
                            "the current project and old entries will be kept.")
                 topPadding: Theme.paddingLarge
-                bottomPadding: Theme.paddingMedium
             }
         }
     }
