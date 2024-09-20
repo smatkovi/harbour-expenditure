@@ -35,7 +35,7 @@ EXPENSES_COLUMNS = [
     'percentage_fees',
     'fixed_fees',
     'payer',
-    'beneficiaries'
+    'beneficiaries',
 ]
 
 
@@ -55,7 +55,7 @@ def move_aside(path):
             break
 
 
-def doExport(entries, outputFolder, name, currency):
+def doExport(entries, outputFolder, name, currency) -> str:
     outputPath = Path(outputFolder) / f'{name} [{currency}].csv'
     move_aside(outputPath)
 
@@ -70,7 +70,7 @@ def doExport(entries, outputFolder, name, currency):
     return outputPath
 
 
-def doImport(inputPath):
+def doImport(inputPath: str) -> None:
     if not Path(inputPath).is_file():
         return None
 
