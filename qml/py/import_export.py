@@ -7,6 +7,7 @@
 
 import shutil
 import csv
+import math
 from pathlib import Path
 
 
@@ -92,3 +93,70 @@ def doImport(inputPath: str) -> None:
         return result
 
     return None
+
+
+def doCreateReport(metadata, entries, rates,
+                   payments, benefits, balances,
+                   totalPayments, settlement,
+                   detailed: bool) -> str:
+    cur = metadata['baseCurrency']
+
+    report = f'''
+# Project: {metadata['name']} [{cur}]
+
+total expenses: {totalPayments} {cur}
+
+## Project members
+    '''.strip()
+
+    for k, v in balances.items():
+        report += '\n\n\n'
+        report += f'''
+### {k}
+
+- paid: {payments[k]} {cur}
+- received: {benefits[k]} {cur}
+- balance: {balances[k]} {cur}
+        '''.strip()
+
+    if settlement and len(settlement) > 0:
+        report += '\n\n\n'
+        report += '## Settlement suggestion\n\n'
+
+        for group in settlement:
+            report += f'''
+- {group['from']} pays {group['to']} the sum of {group['value']} {cur}
+            '''.strip()
+
+    if detailed:
+        report += '\n\n\n'
+        report += '## Detailed spendings'
+
+        for x in entries:
+            report += '\n\n'
+            report += f'''
+**{x['name']}**:
+- date: {x['local_time']} ({x['local_tz']})
+- price: {x['sum']} {x['currency']}
+- paid by {x['payer']} for {x['beneficiaries_string']}
+            '''.strip()
+
+            if x['rate'] and not math.isnan(x['rate']):
+                log(x['rate'], type(x['rate']))
+                report += f"\n- exchange rate: {x['rate']}"
+
+            if x['fixed_fees'] and not math.isnan(x['fixed_fees']):
+                report += f"\n- fixed fees: {x['fixed_fees']} {cur}"
+
+            if x['percentage_fees'] and not math.isnan(x['percentage_fees']):
+                report += f"\n- percentage fees: {x['percentage_fees']}"
+
+            if x['info']:
+                report += f"\n- additional info: {x['info']}"
+
+    report = report.strip()
+    report += '\n'
+
+    log(report)
+
+    return report
