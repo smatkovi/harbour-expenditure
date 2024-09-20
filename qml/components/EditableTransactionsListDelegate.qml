@@ -40,6 +40,8 @@ ListItem {
             description: "%1: %2".arg(item._payer).arg(item._title)
             interactive: false
 
+            onClicked: toggleWrappedText(descriptionLabel)
+
             textLabel {
                 font.pixelSize: Theme.fontSizeSmall
                 color: Theme.secondaryHighlightColor
