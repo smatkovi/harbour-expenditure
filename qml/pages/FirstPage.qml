@@ -51,6 +51,7 @@ Page {
             property date date: new Date(listView.currentSection)
             text: date.toLocaleString(Qt.locale(), Dates.dateNoYearFormat)
             description: date.toLocaleString(Qt.locale(), 'yyyy')
+            smartWhen: listView.contentHeight > Screen.height
         }
 
         PullDownMenu {

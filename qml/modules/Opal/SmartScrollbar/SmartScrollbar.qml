@@ -18,7 +18,8 @@ console.warn("[BUG] this probably means the private API has changed")
 }}}property int _headerHeight:!!flickable&&flickable.headerItem?flickable.headerItem.height:0
 property VerticalScrollDecorator _fallback:VerticalScrollDecorator{parent:root.flickable
 flickable:root.flickable
-visible:!root._scrollbar||!root.smartWhen
+visible: (!root._scrollbar || !root.smartWhen)
+                 && !! flickable && flickable.contentHeight > Screen.height
 }
 property Item _scrollbar:null
 property Binding __quickScroll:Binding{target:flickable
