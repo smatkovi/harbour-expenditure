@@ -11,6 +11,7 @@ import Sailfish.Silica 1.0
 import Sailfish.Share 1.0
 import Opal.Delegates 1.0
 
+import "../py"
 import "../components"
 import "../js/storage.js" as Storage
 import "../js/calculation.js" as Calculation
@@ -53,6 +54,35 @@ Page {
         })
     }
 
+    function createReport(detailed) {
+        py.importModule('import_export', function() {
+            calculate()
+            var project = appWindow.activeProject.rowid
+            var entries = Storage.getProjectEntries(project)
+            var metadata = Storage.getProjectMetadata(project)
+            var rates = Storage.getProjectExchangeRates(project)
+
+            var payments = root.payments
+            var benefits = root.benefits
+            var balances = root.balances
+            var settlement = root.settlement
+            var totalPayments = root.totalPayments
+
+            py.call('import_export.doCreateReport',
+                    [metadata, entries, rates,
+                     payments, benefits, balances,
+                     totalPayments, settlement,
+                     detailed],
+            function(report){
+                Notices.show(report, 5000, Notice.Center)
+            })
+        })
+    }
+
+    PythonBackend {
+        id: py
+    }
+
     Component.onCompleted: {
         appWindow.maybeLoadDebugData()
         calculate()
@@ -69,6 +99,14 @@ Page {
             MenuItem {
                 text: qsTr("Review transactions")
                 onClicked: editTransactions()
+            }
+            MenuItem {
+                text: qsTr("Share detailed report")
+                onClicked: createReport(true)
+            }
+            MenuItem {
+                text: qsTr("Share compact report")
+                onClicked: createReport(false)
             }
         }
 
