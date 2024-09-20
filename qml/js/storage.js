@@ -442,7 +442,7 @@ function getSortOrder(orderFlag) {
 
     orderFlag = DB.defaultFor(orderFlag, 0)
 
-    if (orderFlag === 0) {
+    if (orderFlag === 1) {
         return 'ASC'
     }
 
