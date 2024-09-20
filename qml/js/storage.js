@@ -549,6 +549,10 @@ function saveProjects(projectDataArray) {
 }
 
 function _saveNewProject(projectData) {
+    if (projectData.members.length === 0) {
+        projectData.members.push(qsTr("User"))
+    }
+
     var res = DB.simpleQuery('\
         INSERT INTO projects(
             rowid,
@@ -609,6 +613,10 @@ function _updateProject(projectData) {
                 _renameProjectMember(projectData.rowid, k, renamedMembers[k])
             }
         }
+    }
+
+    if (newMembers.length === 0) {
+        newMembers.push(qsTr("User"))
     }
 
     var lastBeneficiaries = projectData.lastBeneficiaries.filter(

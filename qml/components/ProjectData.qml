@@ -109,7 +109,7 @@ QtObject {
 
         name = metadata.name
         baseCurrency = metadata.baseCurrency
-        members = metadata.members
+        members = metadata.members.length > 0 ? metadata.members : [qsTr("User")]
         lastCurrency = metadata.lastCurrency || metadata.baseCurrency
         lastPayer = metadata.lastPayer || ''
         lastBeneficiaries = metadata.lastBeneficiaries
@@ -166,7 +166,7 @@ QtObject {
             // reset all current data
             name = ''
             baseCurrency = ''
-            members = []
+            members = [qsTr("User")]
             lastCurrency = ''
             lastBeneficiaries = []
             lastPayer = ''
