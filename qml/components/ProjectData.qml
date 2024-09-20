@@ -67,7 +67,7 @@ QtObject {
 
         if (reload) {
             reloadContents()
-        } else if (Storage.getSortOrder() === 'DESC') {
+        } else if (Storage.getSortOrder(sortOrder) === 'DESC') {
             expenses.insert(0, newEntry)
         } else {
             expenses.append(newEntry)
@@ -122,7 +122,12 @@ QtObject {
         expenses.clear()
 
         if (loadExpenses) {
-            expenses.append(Storage.getProjectEntries(rowid, sortOrder))
+            // The list must be cleared right before adding new entries
+            // to avoid a race condition during initialization. If reloadContents()
+            // is called twice it could lead to entries being duplicated...
+            var data = Storage.getProjectEntries(rowid, sortOrder)
+            expenses.clear()
+            expenses.append(data)
         }
     }
 
@@ -155,11 +160,8 @@ QtObject {
         renamedMembers[name] = newName
     }
 
-    onSortOrderChanged: {
-        reloadContents()
-    }
-
-    onRowidChanged: {
+    // PRIVATE FUNCTIONS
+    function _initialize() {
         if (rowid == -1) {
             // new project, nothing to do
         } else if (rowid < -1) {
@@ -190,5 +192,13 @@ QtObject {
         }
 
         loaded(rowid)
+    }
+
+    onSortOrderChanged: {
+        reloadContents()
+    }
+
+    onRowidChanged: {
+        _initialize()
     }
 }

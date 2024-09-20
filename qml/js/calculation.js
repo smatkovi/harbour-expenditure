@@ -65,11 +65,12 @@ function defaultFor(arg, val) {
 
 function _reset(projectData) {
     _project = projectData
+    var metadata = Storage.getProjectMetadata(_project.rowid)
     _expenses = Storage.getProjectEntries(_project.rowid)
-    _members = Storage.getProjectMetadata(_project.rowid).members
+    _members = metadata.members
     _exchangeRates = _project.exchangeRates
-    _baseCurrency = _project.baseCurrency
-    _settlementPrecision = _project.precision
+    _baseCurrency = metadata.baseCurrency
+    _settlementPrecision = metadata.precision
 
     _payments = {}
     _benefits = {}
