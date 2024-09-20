@@ -12,6 +12,7 @@
 
 var _project = null
 var _expenses = null
+var _members = []
 var _exchangeRates = {}
 var _baseCurrency = ''
 var _settlementPrecision = 2
@@ -65,6 +66,7 @@ function defaultFor(arg, val) {
 function _reset(projectData) {
     _project = projectData
     _expenses = Storage.getProjectEntries(_project.rowid)
+    _members = Storage.getProjectMetadata(_project.rowid).members
     _exchangeRates = _project.exchangeRates
     _baseCurrency = _project.baseCurrency
     _settlementPrecision = _project.precision
@@ -105,6 +107,16 @@ function _collectSumsAndPeople() {
         _peopleMap[x.payer] = true
     }
 
+    for (var m in _members) {
+        // ensure all project members are mentioned even if they
+        // have no payments/benefits
+        //
+        // Note: the members array is not used for collecting sums
+        // because there may be names mentioned in expenses that
+        // have been removed from the active members list.
+        _peopleMap[_members[m]] = true
+    }
+
     for (var p in _peopleMap) {
         if (!_peopleMap.hasOwnProperty(p)) continue
         _peopleArr.push(p)
@@ -112,6 +124,8 @@ function _collectSumsAndPeople() {
         // set missing fields to zero
         var tmp = _benefits[p] || (_benefits[p] = 0)
         tmp = _payments[p] || (_payments[p] = 0)
+
+        console.log("PEOP", p, _benefits[p], _payments[p])
 
         // collect balances: paid minus received
         _balances[p] = _payments[p] - _benefits[p]
@@ -240,9 +254,15 @@ function _validate() {
                 Number(checkBalances[j]).toFixed(12)) {
             console.log("settlement ok for", j, "at", _balances[j])
         } else {
-            console.error("!!! settlement failed for", j, "- expected",
-                          _balances[j], "but got", checkBalances[j])
-            success = false
+            if (_balances[j] === 0.00 && !checkBalances.hasOwnProperty(j)) {
+                // this person has an even balance and does not appear
+                // in the settlement - that's ok
+                continue
+            } else {
+                console.error("!!! settlement failed for", j, "- expected",
+                              _balances[j], "but got", checkBalances[j])
+                success = false
+            }
         }
     }
 
