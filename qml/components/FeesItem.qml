@@ -9,8 +9,16 @@ import Sailfish.Silica 1.0
 
 Row {
     id: root
+
+    property alias percentageFees: percentageFeeField.value
+    property alias fixedFees: fixedFeeField.value
+
     width: parent.width
     spacing: Theme.paddingMedium
+
+    onFocusChanged: {
+        if (focus) percentageFeeField.forceActiveFocus()
+    }
 
     CurrencyInputField {
         id: percentageFeeField

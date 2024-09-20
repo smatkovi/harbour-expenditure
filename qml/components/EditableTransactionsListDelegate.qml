@@ -27,8 +27,8 @@ ListItem {
     property string _title: name
 
     property double _rate: rate
-    property double _fixedFees: fixed_fees
-    property double _percentageFees: percentage_fees
+    readonly property double _fixedFees: fixed_fees
+    readonly property double _percentageFees: percentage_fees
 
     Column {
         id: column
@@ -92,6 +92,8 @@ ListItem {
 
             FeesItem {
                 anchors.verticalCenter: parent.verticalCenter
+                percentageFees: item._percentageFees
+                fixedFees: item._fixedFees
             }
         }
     }
