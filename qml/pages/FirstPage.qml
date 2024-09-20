@@ -65,8 +65,9 @@ Page {
             }
             MenuItem {
                 text: qsTr("Calculate")
-                enabled: appWindow.activeProject.active
+                enabled: visible
                 onClicked: pageStack.animatorPush(Qt.resolvedUrl("CalcPage.qml"))
+                visible: appWindow.activeProject.active && !emptyPlaceholder.enabled
             }
         }
 
@@ -88,7 +89,7 @@ Page {
                      appWindow.activeProject.active &&
                      listView.count == 0
             text: qsTr("No entries yet")
-            hintText: qsTr("Swipe to the left to add entries")
+            hintText: qsTr("Swipe to the left to add an entry.")
         }
 
         ViewPlaceholder {
