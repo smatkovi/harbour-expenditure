@@ -39,6 +39,10 @@ EXPENSES_COLUMNS = [
 ]
 
 
+def log(*args) -> None:
+    pyotherside.send('log', ' '.join([str(x) for x in args]))
+
+
 def move_aside(path):
     turn = 0
 

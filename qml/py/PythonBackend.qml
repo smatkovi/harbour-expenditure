@@ -5,12 +5,18 @@ import io.thp.pyotherside 1.5
 Python {
     id: root
 
+    function _log(data) {
+        console.log("[PY]", data)
+    }
+
     Component.onCompleted: {
         addImportPath(Qt.resolvedUrl('../py'))
+        setHandler('log', _log)
     }
 
     onReceived: {
-        Notices.show(data); console.log(data)
+        console.log(data)
+        Notices.show(data)
     }
 
     onError: {
