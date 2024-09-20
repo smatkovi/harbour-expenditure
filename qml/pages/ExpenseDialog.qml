@@ -276,6 +276,8 @@ Dialog {
                     label: qsTr("Price")
                     width: parent.width / 5 * 3 - parent.spacing
                     textRightMargin: 0
+                    allowNull: true
+                    emptyValue: 0.00
 
                     EnterKey.iconSource: {
                         if (_customExchangeRate || _customFees) {

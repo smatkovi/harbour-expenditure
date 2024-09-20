@@ -50,7 +50,7 @@ TextField {
         // i.e. if the field has or had focus
         if (activeFocus || hadFocus) {
             if (!acceptableInput) {
-                console.log("not saving invalid input:", text)
+                console.log("not saving invalid input [2]:", text)
                 _updateDisplayText()
                 focus = false
             } else if (!!text) {
@@ -93,7 +93,11 @@ TextField {
     }
 
     onTextChanged: {
-        if (!focus || !isAcceptable()) return
+        if (!focus) return
+        if (!isAcceptable()) {
+            console.log("not saving invalid input:", text)
+            return
+        }
         value = _textToValue(text)
     }
 
@@ -108,5 +112,12 @@ TextField {
         } else {
             _updateDisplayText()
         }
+    }
+
+    Component.onCompleted: {
+        // workaround for 0.00 (default value) not being
+        // displayed because it doesn't initially trigger
+        // valueChanged()
+        if (value === 0.00 && !focus) text = '0.00'
     }
 }
