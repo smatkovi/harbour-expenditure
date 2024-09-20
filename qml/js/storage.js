@@ -316,7 +316,7 @@ DB.dbMigrations = [
                 FOREIGN KEY (project)
                 REFERENCES projects (rowid)
                     ON UPDATE CASCADE
-                    ON DELETE CASCADE
+                    ON DELETE NO ACTION
             );
         ')
         tx.executeSql('\
@@ -363,7 +363,7 @@ DB.dbMigrations = [
                 FOREIGN KEY (project)
                 REFERENCES projects (rowid)
                     ON UPDATE CASCADE
-                    ON DELETE CASCADE
+                    ON DELETE NO ACTION
             );
         ')
         tx.executeSql('\
@@ -644,9 +644,9 @@ function _deleteProject(rowid) {
     console.log("deleting project id", rowid, "...")
     DB.simpleQuery('DELETE FROM projects WHERE rowid = ?;', [rowid])
 
-    // for some reason, the 'on delete cascade' directive is
-    // not followed when running on Sailfish 4.5, so we have to
-    // delete leftover data manually
+    // Leftover data must be deleted manually because no 'cascade'
+    // is defined for these foreign keys. This is to allow changing
+    // the projects table later without deleting everything.
     DB.simpleQuery('DELETE FROM expenses WHERE project = ?;', [rowid])
     DB.simpleQuery('DELETE FROM exchange_rates WHERE project = ?;', [rowid])
 }
