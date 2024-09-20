@@ -126,8 +126,6 @@ function _collectSumsAndPeople() {
         var tmp = _benefits[p] || (_benefits[p] = 0)
         tmp = _payments[p] || (_payments[p] = 0)
 
-        console.log("PEOP", p, _benefits[p], _payments[p])
-
         // collect balances: paid minus received
         _balances[p] = _payments[p] - _benefits[p]
     }
