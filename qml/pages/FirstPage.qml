@@ -150,7 +150,7 @@ Page {
                                 qsTr("set %1 → %2 exchange rate in project settings")
                                     .arg(currency).arg(appWindow.activeProject.baseCurrency)
                             } else {
-                                '%1 %2 · %3 = %4 %5'
+                                '%1 %2 × %3 = %4 %5'
                                     .arg(Number(sum).toLocaleString(Qt.locale("de_CH")))
                                     .arg(currency)
                                     .arg(item.effectiveRate)
