@@ -20,6 +20,7 @@ QtObject {
     // CONFIGURATION
     property bool loadExpenses: true
     property bool loadRates: true
+    property int sortOrder: SortOrder.decreasing
     property var renamedMembers: ({})
     property var importedExpenses: ([])
 
@@ -119,7 +120,7 @@ QtObject {
         expenses.clear()
 
         if (loadExpenses) {
-            expenses.append(Storage.getProjectEntries(rowid))
+            expenses.append(Storage.getProjectEntries(rowid, sortOrder))
         }
     }
 
@@ -131,7 +132,7 @@ QtObject {
         currencies = rates.currencies
     }
 
-    // FUNCTIONS APPLIED ONCE Storage.saveProjects() IS CALLED
+    // FUNCTIONS APPLIED ONCE Storage.saveProjects(...) IS CALLED
     function removeMember(name) {
         members = members.filter(function(item) {
             return item !== name
@@ -150,6 +151,10 @@ QtObject {
         // note: the members array is not updated in this case
         // to avoid a binding loop when editing members
         renamedMembers[name] = newName
+    }
+
+    onSortOrderChanged: {
+        reloadContents()
     }
 
     onRowidChanged: {

@@ -4,3 +4,4 @@ module Enums
 # SPDX-License-Identifier: GPL-3.0-or-later
 singleton FeesMode 1.0 FeesMode.qml
 singleton RatesMode 1.0 RatesMode.qml
+singleton SortOrder 1.0 SortOrder.qml

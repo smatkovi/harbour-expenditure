@@ -428,7 +428,25 @@ function getSetting(key, fallback) {
     return DB.getSetting(key, fallback)
 }
 
-function getSortOrder() {
+function getSortOrder(orderFlag) {
+    // 0 = increasing
+    // 1 = decreasing
+    //
+    // Values are defined in ../enums/SortOrder.qml
+    // but importing this singleton in JS somehow doesn't
+    // work on Sailfish.
+    //
+    // The correct import statement is:
+    // .import Enums.SortOrder 1.0 as SortOrder
+    // but the imported SortOrder is always null.
+
+    orderFlag = DB.defaultFor(orderFlag, 0)
+
+    if (orderFlag === 0) {
+        return 'ASC'
+    }
+
+    // default sort order
     return 'DESC'
 }
 
@@ -725,8 +743,8 @@ function _makeProjectEntry(entryRow, projectMembers) {
     }
 }
 
-function getProjectEntries(ident) {
-    var order = getSortOrder()
+function getProjectEntries(ident, sortOrder) {
+    var order = getSortOrder(sortOrder)
 
     var res = DB.simpleQuery('\
         SELECT rowid, * FROM expenses \
