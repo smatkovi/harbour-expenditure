@@ -180,20 +180,14 @@ Page {
                 }
             }
 
-            Label {
-                width: parent.width - 2*x
-                x: Theme.horizontalPageMargin
-                wrapMode: Text.Wrap
-                color: Theme.secondaryHighlightColor
-                font.pixelSize: Theme.fontSizeExtraSmall
-                topPadding: Theme.paddingLarge
-                bottomPadding: Theme.paddingMedium
-
+            InfoLabel {
                 text: qsTr("Click here to review and edit fees and " +
                            "exchange rates individually for all transactions. " +
                            "Transactions that do not declare a custom " +
                            "exchange rate are converted using the base " +
                            "exchange rates defined above.")
+                bottomPadding: Theme.paddingMedium
+                topPadding: Theme.paddingLarge
             }
         }
     }

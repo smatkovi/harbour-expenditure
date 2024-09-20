@@ -344,16 +344,11 @@ Dialog {
                 }
             }
 
-            Label {
+            InfoLabel {
                 text: qsTr("You can import and export expenses of the current " +
                            "project to CSV. Project metadata is not included.") + " " +
                       qsTr("When importing, imported entries will be added to " +
                            "the current project and old entries will be kept.")
-                width: parent.width - 2*x
-                x: Theme.horizontalPageMargin
-                wrapMode: Text.Wrap
-                color: Theme.secondaryHighlightColor
-                font.pixelSize: Theme.fontSizeExtraSmall
                 topPadding: Theme.paddingLarge
                 bottomPadding: Theme.paddingMedium
             }
