@@ -452,6 +452,7 @@ Dialog {
                 padding.topBottom: 0
 
                 leftItem: TextSwitch {
+                    // empty invisible placeholder
                     opacity: 0
                     enabled: false
                     leftMargin: 0
@@ -460,7 +461,7 @@ Dialog {
                 }
                 rightItem: TextSwitch {
                     onClicked: allItem.toggle()
-                    highlighted: down
+                    highlighted: down || allItem.highlighted
                     checked: allItem.allSelected
                     automaticCheck: false
                     LayoutMirroring.enabled: true
