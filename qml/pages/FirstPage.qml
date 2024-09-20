@@ -100,7 +100,6 @@ Page {
             hintText: qsTr("Pull down to open the settings page.")
         }
 
-
         model: appWindow.activeProject.expenses
 
         // this improves scrolling performance but at the
