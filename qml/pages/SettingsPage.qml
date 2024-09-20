@@ -112,6 +112,12 @@ Dialog {
         appWindow.activeProject.reloadContents() // in case members have changed
     }
 
+    onDone: {
+        if (result === DialogResult.Accepted) {
+            newMemberAdder.apply()
+        }
+    }
+
     Component.onCompleted: {
         if (appWindow.maybeLoadDebugData() ||
                 allProjects.length === 0) {
