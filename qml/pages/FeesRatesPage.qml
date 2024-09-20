@@ -18,6 +18,17 @@ Dialog {
         loadExpenses: true
         loadRates: true
         sortOrder: SortOrder.increasing
+
+        function setUpdated(rowid, key, value) {
+            if (!updatedExpenses.hasOwnProperty(rowid)) {
+                updatedExpenses[rowid] = {}
+            }
+
+            console.log("UPDATED:", rowid, key, value)
+            updatedExpenses[rowid][key] = value
+        }
+
+        property var updatedExpenses: ({})
     }
 
     onAccepted: {
@@ -62,6 +73,10 @@ Dialog {
         delegate: Component {
             EditableTransactionsListDelegate {
                 project: _project
+
+                onRateUpdated: _project.setUpdated(rowid, 'rate', value)
+                onFixedFeesUpdated: _project.setUpdated(rowid, 'fixed_fees', value)
+                onPercentageFeesUpdated: _project.setUpdated(rowid, 'percentage_fees', value)
             }
         }
 

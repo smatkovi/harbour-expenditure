@@ -3,11 +3,15 @@ import Sailfish.Silica 1.0
 import Opal.Delegates 1.0
 
 import "../js/dates.js" as Dates
+import "../js/storage.js" as Storage
 
 ListItem {
     id: item
 
     property ProjectData project
+    signal rateUpdated(var value)
+    signal fixedFeesUpdated(var value)
+    signal percentageFeesUpdated(var value)
 
     contentHeight: Theme.itemSizeMedium
                    + Theme.itemSizeSmall
@@ -18,15 +22,16 @@ ListItem {
     _backgroundColor: "transparent"
     highlighted: false
 
-    property int _index: index
-    property string _date: Dates.formatDate(local_time, Dates.timeFormat, local_tz)
+    readonly property int _index: index
+    readonly property int _rowid: rowid
+    readonly property string _date: Dates.formatDate(local_time, Dates.timeFormat, local_tz)
 
-    property string _currency: currency
-    property double _sum: sum
-    property string _payer: payer
-    property string _title: name
+    readonly property string _currency: currency
+    readonly property double _sum: sum
+    readonly property string _payer: payer
+    readonly property string _title: name
 
-    property double _rate: rate
+    readonly property double _rate: rate
     readonly property double _fixedFees: fixed_fees
     readonly property double _percentageFees: percentage_fees
 
@@ -68,6 +73,7 @@ ListItem {
         }
 
         EditableRatesListDelegate {
+            id: ratesItem
             project: item.project
             currency: item._currency
             foreignSum: item._sum
@@ -75,14 +81,14 @@ ListItem {
             emptyValue: NaN
             value: item._rate
             placeholder: project.exchangeRates[currency] || ''
-
             EnterKey.iconSource: "image://theme/icon-m-enter-next"
-            EnterKey.onClicked: {
-                //                                if (_customFees) {
-                //                                    percentageFeeField.forceActiveFocus()
-                //                                } else {
-                //                                    focus = false
-                //                                }
+            EnterKey.onClicked: feesItem.forceActiveFocus()
+
+            onValueChanged: {
+                if (!Storage.isSameValue(value, item._rate)) {
+                    project.expenses.set(_index, {'rate': value})
+                    rateUpdated(value)
+                }
             }
         }
 
@@ -91,9 +97,23 @@ ListItem {
             height: Theme.itemSizeSmall + 2*Theme.paddingMedium
 
             FeesItem {
+                id: feesItem
                 anchors.verticalCenter: parent.verticalCenter
                 percentageFees: item._percentageFees
                 fixedFees: item._fixedFees
+
+                onPercentageFeesChanged: {
+                    if (!Storage.isSameValue(percentageFees, item._percentageFees)) {
+                        project.expenses.set(_index, {'percentage_fees': percentageFees})
+                        percentageFeesUpdated(percentageFees)
+                    }
+                }
+                onFixedFeesChanged: {
+                    if (!Storage.isSameValue(fixedFees, item._fixedFees)) {
+                        project.expenses.set(_index, {'fixed_fees': fixedFees})
+                        fixedFeesUpdated(fixedFees)
+                    }
+                }
             }
         }
     }
