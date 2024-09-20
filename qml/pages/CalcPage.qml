@@ -142,6 +142,7 @@ Page {
             }
 
             GridLayout {
+                visible: !!settlement
                 width: parent.width - 2*x
                 x: Theme.horizontalPageMargin
                 columnSpacing: Theme.paddingSmall
