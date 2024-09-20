@@ -23,6 +23,8 @@ Row {
     CurrencyInputField {
         id: percentageFeeField
         label: qsTr("Fees")
+        allowEmpty: true
+        allowNull: true
         emptyValue: NaN
         precision: 4
         width: parent.width / 6 * 2
@@ -40,6 +42,8 @@ Row {
         id: fixedFeeField
         label: qsTr("Fees")
         emptyValue: NaN
+        allowEmpty: true
+        allowNull: true
         width: parent.width / 6 * 2
         textRightMargin: 0
         EnterKey.iconSource: "image://theme/icon-m-enter-close"
