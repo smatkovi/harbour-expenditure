@@ -1,7 +1,7 @@
 /*
- * This file is part of Expenditure.
- * SPDX-FileCopyrightText: Mirian Margiani
+ * This file is part of harbour-expenditure.
  * SPDX-License-Identifier: GPL-3.0-or-later
+ * SPDX-FileCopyrightText: Mirian Margiani
  */
 
 import QtQuick 2.0
