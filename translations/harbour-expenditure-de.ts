@@ -657,17 +657,17 @@ Bitte starten Sie die App neu und prüfen Sie die Logs.</translation>
 <context>
     <name>SettingsPage</name>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="135"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="155"/>
         <source>Settings</source>
         <translation>Einstellungen</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="144"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="164"/>
         <source>Project</source>
         <translation>Projekt</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="281"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="291"/>
         <source>Exchange rate</source>
         <translation>Wechselkurs</translation>
     </message>
@@ -705,77 +705,78 @@ Bitte starten Sie die App neu und prüfen Sie die Logs.</translation>
         <translation>„%1“ konnte nicht importiert werden.</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="175"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="144"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="185"/>
         <source>New project ...</source>
         <translation>Neues Projekt ...</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="221"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="231"/>
         <source>Name</source>
         <translation>Name</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="257"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="267"/>
         <source>Currency</source>
         <translation>Währung</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="271"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="281"/>
         <source>The settlement suggestion is calculated in this currency. Select the most used currency in your group for this.</source>
         <translation>Der Teilungsvorschlag wird in dieser Währung berechnet. Wählen Sie eine Währung, die für alle Mitglieder praktisch ist.</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="288"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="298"/>
         <source>fixed per currency</source>
         <translation>fix nach Währung</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="292"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="302"/>
         <source>per transaction</source>
         <translation>pro Transaktion</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="298"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="308"/>
         <source>Always show fees</source>
         <translation>Gebühren immer zeigen</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="299"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="309"/>
         <source>If this option is enabled, the field for entering fees is always shown when adding a new transaction.</source>
         <translation>Wenn diese Option aktiviert ist, wird das Gebühren-Eingabefeld bei neuen Einträgen immer angezeigt.</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="312"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="322"/>
         <source>Project members</source>
         <translation>Projekt-Mitglieder</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="326"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="336"/>
         <source>Base exchange rates</source>
         <translation>Basis-Wechselkurse</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="339"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="349"/>
         <source>Backup options</source>
         <translation>Backup-Optionen</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="346"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="356"/>
         <source>Import</source>
         <translation>Importieren</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="350"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="360"/>
         <source>Export</source>
         <translation>Exportieren</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="356"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="366"/>
         <source>You can import and export expenses of the current project to CSV. Project metadata is not included.</source>
         <translation>Sie können Einträge (ohne Projekt-Metadaten) aus dem gewählten Projekt als CSV-Datei exportieren.</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="358"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="368"/>
         <source>When importing, imported entries will be added to the current project and old entries will be kept.</source>
         <translation>Importierte Einträge werden zum gewählten Projekt hinzugefügt. Vorhandene Einträge werden beibehalten.</translation>
     </message>
@@ -856,13 +857,13 @@ Bitte starten Sie die App neu und prüfen Sie die Logs.</translation>
 <context>
     <name>storage</name>
     <message>
-        <location filename="../qml/js/storage.js" line="763"/>
+        <location filename="../qml/js/storage.js" line="765"/>
         <source>everyone</source>
         <translation>alle</translation>
     </message>
     <message>
-        <location filename="../qml/js/storage.js" line="556"/>
-        <location filename="../qml/js/storage.js" line="622"/>
+        <location filename="../qml/js/storage.js" line="558"/>
+        <location filename="../qml/js/storage.js" line="624"/>
         <source>User</source>
         <translation>Benutzer</translation>
     </message>
