@@ -138,11 +138,11 @@ Page {
 
             SectionHeader {
                 text: qsTr("Settlement suggestion")
-                visible: !!settlement
+                visible: !!settlement && settlement.length > 0
             }
 
             GridLayout {
-                visible: !!settlement
+                visible: !!settlement && settlement.length > 0
                 width: parent.width - 2*x
                 x: Theme.horizontalPageMargin
                 columnSpacing: Theme.paddingSmall
