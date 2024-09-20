@@ -29,10 +29,6 @@ PaddedDelegate {
     onClicked: openMenu()
     enabled: currency !== project.baseCurrency
 
-    onActiveFocusChanged: {
-        if (focus) inputField.forceActiveFocus()
-    }
-
     menu: ContextMenu {
         MenuItem {
             text: "%1 = 1.00 %2".arg(project.baseCurrency)

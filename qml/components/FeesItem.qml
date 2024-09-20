@@ -17,7 +17,7 @@ Row {
     spacing: Theme.paddingMedium
 
     onFocusChanged: {
-        if (focus) percentageFeeField.forceActiveFocus()
+        if (focus) percentageFeeField.focus = true
     }
 
     CurrencyInputField {
