@@ -50,7 +50,7 @@ ApplicationWindow {
         if (pageStack.previousPage() === null) {
             // Load a project during development when
             // using a custom page as the initial page.
-            appWindow.activeProject.rowid = 1
+            appWindow.activeProject.rowid = Storage.getActiveProjectId()
             return appWindow.activeProject.rowid
         }
 
