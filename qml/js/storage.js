@@ -2,7 +2,6 @@
  * This file is part of harbour-expenditure.
  * SPDX-License-Identifier: GPL-3.0-or-later
  * SPDX-FileCopyrightText: 2018-2024 Mirian Margiani
- * SPDX-FileCopyrightText: 2022 Tobias Planitzer
  */
 
 .pragma library
@@ -867,26 +866,6 @@ function _updateExchangeRates(project) {
     ', [project, project])
 }
 
-//// all exchange rates used
-//function countExchangeRateOccurances (exchange_rate_currency, default_value) {
-//    var db = DB.getDatabase();
-//    var res="";
-//    try {
-//        db.transaction(function(tx) {
-//            var rs = tx.executeSql('SELECT count(*) AS some_info FROM exchange_rates_table WHERE exchange_rate_currency=?;', [exchange_rate_currency]);
-//            if (rs.rows.length > 0) {
-//                res = rs.rows.item(0).some_info;
-//            } else {
-//                res = default_value;
-//            }
-//        })
-//    } catch (err) {
-//        //console.log("Database " + err);
-//        res = default_value;
-//    };
-//    return res
-//}
-
 function setExchangeRate(project, currency, rate) {
     DB.simpleQuery('\
         INSERT INTO exchange_rates(project, currency, rate)
@@ -913,42 +892,6 @@ function setExpenseRateAndFees(project, rowid, values) {
     _setIfExists('percentage_fees')
     _setIfExists('fixed_fees')
 }
-
-//function updateExchangeRate( exchange_rate_currency, exchange_rate_value ) {
-//    var db = DB.getDatabase();
-//    var res = "";
-//    db.transaction(function(tx) {
-//        var rs = tx.executeSql('UPDATE exchange_rates_table SET exchange_rate_value="' + exchange_rate_value + '" WHERE exchange_rate_currency="' + exchange_rate_currency + '";');
-//        if (rs.rowsAffected > 0) {
-//            res = "OK";
-//        } else {
-//            res = "Error";
-//        }
-//    }
-//    );
-//    return res;
-//}
-
-//function getExchangeRate(exchange_rate_currency, default_value) {
-//    var db = DB.getDatabase();
-//    var res=[];
-//    try {
-//        db.transaction(function(tx) {
-//            var rs = tx.executeSql('SELECT * FROM '+ 'exchange_rates_table' +' WHERE exchange_rate_currency=?;', [exchange_rate_currency]);
-//            if (rs.rows.length > 0) {
-//                for (var i = 0; i < rs.rows.length; i++) {
-//                    res.push(rs.rows.item(i).exchange_rate_value)
-//                }
-//            } else {
-//                res = default_value;
-//            }
-//        })
-//    } catch (err) {
-//        //console.log("Database " + err);
-//        res = default_value;
-//    };
-//    return res
-//}
 
 
 //
