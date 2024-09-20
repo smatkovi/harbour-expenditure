@@ -287,8 +287,8 @@ Page {
                 }
 
                 onExchangeRateChanged: {
-                    appWindow.activeProject.exchangeRates[currency] = rate
                     Storage.setExchangeRate(selectedProject.rowid, currency, rate)
+                    appWindow.activeProject.reloadRates()
                     calculate()
                 }
             }
