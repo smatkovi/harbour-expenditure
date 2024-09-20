@@ -3,6 +3,7 @@ import Sailfish.Silica 1.0
 import Opal.Delegates 1.0
 import Opal.SmartScrollbar 1.0
 
+import "../enums"
 import "../components"
 import "../js/storage.js" as Storage
 import "../js/dates.js" as Dates
@@ -16,6 +17,7 @@ Dialog {
         rowid: projectRowid
         loadExpenses: true
         loadRates: true
+        sortOrder: SortOrder.increasing
     }
 
     onAccepted: {
