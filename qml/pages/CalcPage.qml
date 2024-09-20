@@ -74,13 +74,30 @@ Page {
                      totalPayments, settlement,
                      detailed],
             function(report){
-                Notices.show(report, 5000, Notice.Center)
+                var msg = detailed ?
+                    qsTr("A detailed report has been copied to the clipboard.") :
+                    qsTr("A compact report has been copied to the clipboard.")
+                Notices.show(msg, 5000, Notice.Top)
+
+                Clipboard.text = report
+                shareAction.mimeType = "text/plain"  // actually Markdown...
+                shareAction.resources = [{
+                    "data": report,
+                    "name": "%1 [%2].txt".arg(metadata.name)
+                                         .arg(metadata.baseCurrency),
+                }]
+                shareAction.trigger()
             })
         })
     }
 
     PythonBackend {
         id: py
+    }
+
+    ShareAction {
+        id: shareAction
+        title: qsTr("Spendings report")
     }
 
     Component.onCompleted: {
