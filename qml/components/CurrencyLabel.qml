@@ -7,7 +7,7 @@ import "../js/storage.js" as Storage
 
 Label {
     property real value: 0.00
-    property bool asSaldo: false
+    property bool asBalance: false
 
     property color _neutralColor: Theme.primaryColor
     property color _zeroColor: Theme.secondaryColor
@@ -18,11 +18,11 @@ Label {
     property string _valueText: {
         if (value == 0) Number(0).toLocaleString(Qt.locale('de_CH'))
         else if (value < 0) "- " + Number(Math.abs(value)).toLocaleString(Qt.locale('de_CH'))
-        else (asSaldo ? "+ " : "") + Number(value).toLocaleString(Qt.locale('de_CH'))
+        else (asBalance ? "+ " : "") + Number(value).toLocaleString(Qt.locale('de_CH'))
     }
     property color _valueColor: {
         if (value == 0) _zeroColor
-        else if (!asSaldo || (asSaldo && value == 0)) _neutralColor
+        else if (!asBalance || (asBalance && value == 0)) _neutralColor
         else if (value > 0) _positiveColor
         else _negativeColor
     }

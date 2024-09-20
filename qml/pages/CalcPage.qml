@@ -79,7 +79,7 @@ Page {
                 }
                 TotalsGridHeader { text: qsTr("Payments") }
                 TotalsGridHeader { text: qsTr("Benefits") }
-                TotalsGridHeader { text: qsTr("Saldo") }
+                TotalsGridHeader { text: qsTr("Balance") }
 
                 Repeater {
                     model: [].concat(people).concat([null, undefined])
@@ -113,7 +113,7 @@ Page {
                                 else i == 0 ? Theme.highlightColor : _valueColor
                             }
                             leftPadding: i == 3 ? Theme.paddingMedium : 0
-                            asSaldo: i == 3
+                            asBalance: i == 3
                             value: {
                                 if (innerRepeater.person === null) 0
                                 else if (innerRepeater.person === undefined) {
