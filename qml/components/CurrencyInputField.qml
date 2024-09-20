@@ -3,9 +3,11 @@ import Sailfish.Silica 1.0
 
 TextField {
     id: root
+
     property double value: emptyValue
     property double emptyValue: 0.00
     property int precision: 2
+    property bool allowEmpty: false
 
     inputMethodHints: Qt.ImhFormattedNumbersOnly
     EnterKey.onClicked: focus = false

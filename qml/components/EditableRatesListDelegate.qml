@@ -8,8 +8,8 @@ PaddedDelegate {
     id: root
     property ProjectData project
     property string currency
-    property bool allowEmpty: false
-    property double emptyValue: NaN
+    property alias allowEmpty: inputField.allowEmpty
+    property alias emptyValue: inputField.emptyValue
     property double foreignSum: NaN
     property string placeholder: ''
 
@@ -96,7 +96,8 @@ PaddedDelegate {
                 width: parent.width / 2 - parent.spacing
                 label: qsTr("Exchange rate")
                 labelVisible: false
-                emptyValue: root.emptyValue
+                emptyValue: NaN
+                allowEmpty: false
                 precision: 4
                 value: root.value || root.emptyValue
                 textRightMargin: 0
