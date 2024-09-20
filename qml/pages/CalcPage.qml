@@ -138,6 +138,65 @@ Page {
 
             SectionHeader {
                 text: qsTr("Settlement suggestion")
+                visible: !!settlement
+            }
+
+            GridLayout {
+                width: parent.width - 2*x
+                x: Theme.horizontalPageMargin
+                columnSpacing: Theme.paddingSmall
+                rowSpacing: 0
+                columns: 4
+
+                TotalsGridHeader {
+                    text: qsTr("Payer")
+                    horizontalAlignment: Text.AlignLeft
+                    Layout.fillWidth: true
+                }
+                TotalsGridHeader {
+                    text: ''
+                    Layout.fillWidth: false
+                    Layout.preferredWidth: parent.width / 5
+                }
+                TotalsGridHeader {
+                    text: qsTr("Recipient")
+                    horizontalAlignment: Text.AlignLeft
+                    Layout.fillWidth: true
+                }
+                TotalsGridHeader {
+                    text: qsTr("Sum [%1]").arg(baseCurrency)
+                    Layout.fillWidth: true
+                }
+
+                Repeater {
+                    model: settlement
+
+                    Repeater {
+                        id: innerRepeater2
+                        model: 4
+
+                        property var set: [
+                            modelData.from,
+                            '→',
+                            modelData.to,
+                            Number(modelData.value).toLocaleString(Qt.locale('de_CH'))
+                        ]
+
+                        Label {
+                            Layout.preferredWidth: parent.width / 7
+                            Layout.maximumWidth: parent.width / 3
+                            Layout.minimumWidth: 0
+                            Layout.fillWidth: index !== 1
+
+                            wrapMode: Text.Wrap
+                            color: index == 3 ? Theme.primaryColor : Theme.highlightColor
+                            font.pixelSize: Theme.fontSizeSmall
+                            text: innerRepeater2.set[index]
+                            horizontalAlignment: index == 3 ?
+                                Text.AlignRight : Text.AlignLeft
+                        }
+                    }
+                }
             }
 
             SectionHeader {
