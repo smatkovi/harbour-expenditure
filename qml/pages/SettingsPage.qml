@@ -90,6 +90,19 @@ Dialog {
         })
     }
 
+    function createNewProject() {
+        var newProjectData = {
+            rowid: -1,
+            name: _newProjectName,
+            baseCurrency: Qt.locale().currencySymbol(Locale.CurrencyIsoCode)
+        }
+
+        allProjects.push(projectDataComponent.createObject(root, newProjectData))
+        selectedProject = allProjects[allProjects.length-1]
+        allProjects = allProjects
+        nameField.forceActiveFocus()
+    }
+
     PythonBackend {
         id: py
     }
@@ -126,6 +139,13 @@ Dialog {
 
         VerticalScrollDecorator { flickable: flick }
 
+        PullDownMenu {
+            MenuItem {
+                text: qsTr("New project ...")
+                onClicked: createNewProject()
+            }
+        }
+
         Column {
             id: content
             width: parent.width
@@ -149,19 +169,9 @@ Dialog {
                         if (currentIndex < 0) return
 
                         if (currentIndex >= allProjects.length) {
-                            var newProjectData = {
-                                rowid: -1,
-                                name: _newProjectName,
-                                baseCurrency: Qt.locale().currencySymbol(Locale.CurrencyIsoCode)
-                            }
-
-                            allProjects.push(projectDataComponent.createObject(root, newProjectData))
-                        }
-
-                        selectedProject = allProjects[currentIndex]
-
-                        if (!!newProjectData) {
-                            allProjects = allProjects
+                            createNewProject()
+                        } else {
+                            selectedProject = allProjects[currentIndex]
                         }
                     }
 
