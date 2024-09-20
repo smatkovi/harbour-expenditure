@@ -13,6 +13,7 @@ import Opal.Delegates 1.0
 
 import "../components"
 import "../js/storage.js" as Storage
+import "../js/calculation.js" as Calculation
 
 Page {
     id: root
@@ -26,85 +27,14 @@ Page {
     property var benefits: ({})
     property real totalPayments: 0.00
 
-    function convertToBase(expense) {
-        var effectiveRate = 1.00
-
-        if (!!expense.rate) {
-            effectiveRate = expense.rate
-        } else if (appWindow.activeProject.exchangeRates.hasOwnProperty(expense.currency)) {
-            effectiveRate = appWindow.activeProject.exchangeRates[expense.currency] || NaN
-        } else {
-            effectiveRate = NaN
-        }
-
-        var price = expense.sum * effectiveRate
-
-        if (!!expense.percentage_fees) {
-            price += price / 100 * expense.percentage_fees
-        }
-
-        if (!!expense.fixed_fees) {
-            price += expense.fixed_fees
-        }
-
-        return price
-    }
-
     function calculate() {
-        var expenses = Storage.getProjectEntries(appWindow.activeProject.rowid)
-        var baseCurrency = appWindow.activeProject.baseCurrency
-
-        var payments = {}
-        var benefits = {}
-        var totalPayments = 0
-
-        var peopleMap = {}
-        var peopleArr = []
-
-        for (var i in expenses) {
-            var x = expenses[i]
-
-            if (!payments.hasOwnProperty(x.payer)) {
-                payments[x.payer] = 0
-            }
-
-            var convertedSum = convertToBase(x)
-            totalPayments += convertedSum
-            payments[x.payer] += convertedSum
-            var individualBenefit = convertedSum / x.beneficiaries_list.length
-
-            for (var b in x.beneficiaries_list) {
-                var bb = x.beneficiaries_list[b]
-
-                if (!benefits.hasOwnProperty(bb)) {
-                    benefits[bb] = 0
-                }
-
-                benefits[bb] += individualBenefit
-                peopleMap[bb] = true
-            }
-
-            peopleMap[x.payer] = true
-        }
-
-        for (var p in peopleMap) {
-            if (!peopleMap.hasOwnProperty(p)) continue
-            peopleArr.push(p)
-
-            var tmp = benefits[p] || (benefits[p] = 0)
-            tmp = payments[p] || (payments[p] = 0)
-        }
-
-        root.expenses = expenses
-        root.baseCurrency = baseCurrency
-        root.payments = payments
-        root.benefits = benefits
-        root.totalPayments = totalPayments
-        root.people = peopleArr
-
-        console.log(JSON.stringify(payments))
-        console.log(JSON.stringify(benefits))
-        console.log(JSON.stringify(people))
+        var results = Calculation.calculate(appWindow.activeProject)
+        expenses = results.expenses
+        baseCurrency = results.baseCurrency
+        payments = results.payments
+        benefits = results.benefits
+        totalPayments = results.totalPayments
+        people = results.people
     }
 
     Component.onCompleted: {
