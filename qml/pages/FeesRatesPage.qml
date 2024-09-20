@@ -40,10 +40,6 @@ Dialog {
 //        appWindow.activeProject.reloadContents() // in case members have changed
     }
 
-    onDone: {
-//        ratesList.applyAll()
-    }
-
     Component.onCompleted: {
         if (appWindow.maybeLoadDebugData()) {
             projectRowid = appWindow.activeProject.rowid

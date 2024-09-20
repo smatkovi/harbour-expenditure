@@ -45,24 +45,6 @@ TextField {
         }
     }
 
-    function apply(hadFocus) {
-        // only convert text to value if it was unformatted,
-        // i.e. if the field has or had focus
-        if (activeFocus || hadFocus) {
-            if (!acceptableInput) {
-                console.log("not saving invalid input [2]:", text)
-                _updateDisplayText()
-                focus = false
-            } else if (!!text) {
-                value = _textToValue(text)
-                _updateDisplayText()
-                focus = false
-            } else {
-                value = emptyValue
-            }
-        }
-    }
-
     function _updateDisplayText() {
         if (isNaN(value)) {
             text = ''
@@ -88,7 +70,17 @@ TextField {
         } else {
             // save unformatted text as value
             // and format it to legibility
-            apply(true)
+            if (!acceptableInput) {
+                console.log("not saving invalid input [2]:", text)
+                _updateDisplayText()
+                focus = false
+            } else if (!!text) {
+                value = _textToValue(text)
+                _updateDisplayText()
+                focus = false
+            } else {
+                value = emptyValue
+            }
         }
     }
 
@@ -102,8 +94,6 @@ TextField {
     }
 
     onValueChanged: {
-        console.log("VALUE CHANGED:", value, "'%1'".arg(text), emptyValue)
-
         if (focus) return // only update when not editing
 
         // set formatted text

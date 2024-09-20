@@ -6,16 +6,6 @@ DelegateColumn {
     property ProjectData selectedProject
     signal exchangeRateChanged(var rate, var currency)
 
-    function applyAll() {
-        for (var i in root.children) {
-            var child = root.children[i]
-
-            if (child.hasOwnProperty('__isRatesListDelegate')) {
-                child.apply(child.focus)
-            }
-        }
-    }
-
     onExchangeRateChanged: {
         selectedProject.exchangeRates[currency] = rate
     }
