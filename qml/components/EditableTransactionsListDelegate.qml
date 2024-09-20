@@ -20,7 +20,6 @@ ListItem {
 
     property int _index: index
     property string _date: Dates.formatDate(local_time, Dates.timeFormat, local_tz)
-    property color _evenColor: Theme.rgba(Theme.highlightBackgroundColor, 0.5)
 
     property string _currency: currency
     property double _sum: sum
@@ -40,8 +39,6 @@ ListItem {
             text: item._date
             description: "%1: %2".arg(item._payer).arg(item._title)
             interactive: false
-//            showOddEven: true
-            evenColor: item._evenColor
 
             textLabel {
                 font.pixelSize: Theme.fontSizeSmall
@@ -69,8 +66,6 @@ ListItem {
         }
 
         EditableRatesListDelegate {
-//            showOddEven: true
-            evenColor: item._evenColor
             project: item.project
             currency: item._currency
             foreignSum: item._sum
@@ -92,13 +87,6 @@ ListItem {
         Item {
             width: parent.width
             height: Theme.itemSizeSmall + 2*Theme.paddingMedium
-
-//            Rectangle {
-//                anchors.fill: parent
-//                opacity: Theme.opacityFaint
-//                color: (item._index % 2 != 0) ? "transparent" : item._evenColor
-//                border.color: color
-//            }
 
             FeesItem {
                 anchors.verticalCenter: parent.verticalCenter
