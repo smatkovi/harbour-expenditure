@@ -13,6 +13,9 @@ Dialog {
     allowedOrientations: Orientation.All
 
     property int projectRowid
+    readonly property bool dataHasChanged: _dataHasChanged
+
+    property bool _dataHasChanged: false
     readonly property ProjectData _project: ProjectData {
         rowid: projectRowid
         loadExpenses: true
@@ -24,7 +27,6 @@ Dialog {
                 updatedExpenses[rowid] = {}
             }
 
-            console.log("UPDATED:", rowid, key, value)
             updatedExpenses[rowid][key] = value
         }
 
@@ -32,12 +34,22 @@ Dialog {
     }
 
     onAccepted: {
-//        var newRowids = Storage.saveProjects(allProjects)
-//        Storage.setActiveProjectId(newRowids[projectCombo.currentIndex])
-//        appWindow.activeProject.rowid = newRowids[projectCombo.currentIndex]
-//        appWindow.activeProject.reloadMetadata()
-//        appWindow.activeProject.reloadRates()
-//        appWindow.activeProject.reloadContents() // in case members have changed
+        var updatedCount = 0
+
+        for (var rowid in _project.updatedExpenses) {
+            if (_project.updatedExpenses.hasOwnProperty(rowid)) {
+                var values = _project.updatedExpenses[rowid]
+
+                Storage.setExpenseRateAndFees(
+                    _project.rowid, rowid, _project.updatedExpenses[rowid])
+                ++updatedCount
+            }
+        }
+
+        if (updatedCount) {
+            console.log("updated", updatedCount, "entries")
+            _dataHasChanged = true
+        }
     }
 
     Component.onCompleted: {

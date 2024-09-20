@@ -879,12 +879,21 @@ function setExchangeRate(project, currency, rate) {
     ', [project, currency, rate, rate])
 }
 
-function setExpenseExchangeRate(project, rowid, rate) {
-    DB.simpleQuery('\
-        UPDATE expenses
-        SET rate = ?
-        WHERE project = ? AND rowid = ?
-    ', [rate, project, rowid])
+function setExpenseRateAndFees(project, rowid, values) {
+    function _setIfExists(key) {
+        if (!values.hasOwnProperty(key)) return
+
+        DB.simpleQuery('\
+            UPDATE expenses
+            SET %1 = ?
+            WHERE project = ? AND rowid = ?
+        '.arg(key), [values[key], project, rowid])
+    }
+
+    console.log('updating expense:', project, rowid, JSON.stringify(values))
+    _setIfExists('rate')
+    _setIfExists('percentage_fees')
+    _setIfExists('fixed_fees')
 }
 
 //function updateExchangeRate( exchange_rate_currency, exchange_rate_value ) {

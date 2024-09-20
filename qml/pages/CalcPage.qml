@@ -236,8 +236,17 @@ Page {
 
                 Button {
                     text: qsTr("Edit transactions")
-                    onClicked: pageStack.animatorPush(Qt.resolvedUrl("FeesRatesPage.qml"),
-                                                      {projectRowid: appWindow.activeProject.rowid})
+                    onClicked: {
+                        var dialog = pageStack.push(Qt.resolvedUrl("FeesRatesPage.qml"),
+                                                    {projectRowid: appWindow.activeProject.rowid})
+                        dialog.accepted.connect(function(){
+                            if (dialog.dataHasChanged) {
+                                console.log("recalculating...")
+                                appWindow.activeProject.reloadContents()
+                                calculate()
+                            }
+                        })
+                    }
                 }
             }
 
