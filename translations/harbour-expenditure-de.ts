@@ -1,263 +1,242 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1">
+<TS version="2.1" language="de_DE">
 <context>
     <name>AboutPage</name>
     <message>
-        <source>Expenditure</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>License: GPL v3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Expenditure is a tool to track and split bills, project or trip expenses in multiple currencies among groups.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Thanksgiving, feedback and support is always welcome.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>In case of any database error tap 10x on the word &apos;Settings&apos; for cleanup options.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>First author:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Tobias Planitzer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>About</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Troubleshooting</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Source code</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Translations</source>
+        <translation>Übersetzungen</translation>
+    </message>
+    <message>
+        <source>A simple app for tracking expenses in groups.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Swedish translation by eson57. Thank you :)</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>BannerAddExpense</name>
-    <message>
-        <source>expense</source>
-        <translation type="unfinished"></translation>
+        <source>Development</source>
+        <translation>Entwicklung</translation>
     </message>
     <message>
-        <source>info</source>
-        <translation type="unfinished"></translation>
+        <source>Programming</source>
+        <translation>Programmierung</translation>
     </message>
     <message>
-        <source>payment by</source>
-        <translation type="unfinished"></translation>
+        <source>Icon Design</source>
+        <translation>Symbol-Design</translation>
     </message>
     <message>
-        <source>Save</source>
-        <translation type="unfinished"></translation>
+        <source>Swedish</source>
+        <translation>Schwedisch</translation>
     </message>
     <message>
-        <source>Add</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>price</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>currency</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>beneficiary</source>
-        <translation type="unfinished"></translation>
+        <source>German</source>
+        <translation>Deutsch</translation>
     </message>
 </context>
 <context>
-    <name>BannerAddProject</name>
+    <name>AskForSupport</name>
     <message>
-        <source>Add</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Project</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>base currency</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Members</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>rename</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>remove</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Delete this project?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Clear all transactions?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>create</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>edit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Backup</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Delete</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Reset</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Restore</source>
-        <translation type="unfinished"></translation>
+        <source>Please take a moment to consider if you can contribute to this project in one way or another.</source>
+        <translation>Bitte nimm dir einen Moment Zeit, um zu überlegen, ob du auf die ein oder andere Weise zu diesem Projekt beitragen kannst.</translation>
     </message>
 </context>
 <context>
     <name>CalcPage</name>
     <message>
-        <source>payments</source>
+        <source>Calculations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>saldo</source>
+        <source>Spending overview</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>owes</source>
+        <source>Settlement suggestion</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>EXCHANGE RATES</source>
+        <source>Base exchange rates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>SPENDING OVERVIEW</source>
+        <source>Transactions and fees</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>SETTLEMENT SUGGESTION</source>
+        <source>Click here to review and edit fees and exchange rates individually for all transactions. Transactions that do not declare a custom exchange rate are converted using the base exchange rates defined above.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>the sum of</source>
+        <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Project:</source>
+        <source>Payments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Total expenses</source>
+        <source>Benefits</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>payed</source>
+        <source>total</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>received</source>
+        <source>Balance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Settlement suggestion:</source>
+        <source>Payer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>item:</source>
+        <source>Recipient</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>payer:</source>
+        <source>Sum [%1]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>price:</source>
+        <source>Review transactions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>info:</source>
+        <source>Share detailed report</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>beneficiaries:</source>
+        <source>Share compact report</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Detailed Spendings:</source>
+        <source>A detailed report has been copied to the clipboard.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Expense #</source>
+        <source>A compact report has been copied to the clipboard.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>date:</source>
+        <source>Spendings report</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DateTimePickerCombo</name>
+    <message>
+        <source>never</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DetailsDrawer</name>
+    <message>
+        <source>show less</source>
+        <translation>weniger zeigen</translation>
+    </message>
+    <message>
+        <source>show more</source>
+        <translation>mehr zeigen</translation>
+    </message>
+</context>
+<context>
+    <name>EditableRatesListDelegate</name>
+    <message>
+        <source>%1 paid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Share detailed</source>
+        <source>Exchange rate</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ExpenseDialog</name>
+    <message>
+        <source>Discarded all changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Share compact</source>
+        <source>Discarded the entry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>name</source>
+        <source>Add fees</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>benefits</source>
+        <source>Custom exchange rate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Results</source>
+        <source>Edit expense</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>constant</source>
+        <source>New expense</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Discard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Expense</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Price</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Currency</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Additional notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Payer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Beneficiaries</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>everyone</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>FeesItem</name>
+    <message>
+        <source>Fees</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>FeesRatesPage</name>
+    <message>
+        <source>Transactions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Discard</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -265,14 +244,6 @@
     <name>FirstPage</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Create new project.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Nothing loaded yet.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -288,23 +259,269 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>group:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Expenses</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add</source>
+        <source>About</source>
+        <translation type="unfinished">Über</translation>
+    </message>
+    <message>
+        <source>No entries yet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Remove entry?</source>
+        <source>Add a project</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Pull down to open the settings page.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>set %1 → %2 exchange rate in project settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Swipe to the left to add an entry.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>LicenseListPart</name>
+    <message>
+        <source>License text</source>
+        <translation>Lizenztext</translation>
+    </message>
+</context>
+<context>
+    <name>LimitedDatePickerDialog</name>
+    <message>
+        <source>The date cannot be in the future.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>LimitedTimePickerDialog</name>
+    <message>
+        <source>The time has been reset. It cannot be in the future.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MySupportDialog</name>
+    <message>
+        <source>Donate on Liberapay</source>
+        <translation>Spende auf Liberapay</translation>
+    </message>
+    <message>
+        <source>Pay the amount of a cup of coffee, a slice of pizza, or a ticket to the theater.</source>
+        <translation>Spende den Betrag für eine Tasse Kaffee, ein Stück Pizza oder einen Theaterbesuch.</translation>
+    </message>
+    <message>
+        <source>Translate on Weblate</source>
+        <translation>Übersetze auf Weblate</translation>
+    </message>
+    <message>
+        <source>Help with translating this app in as many languages as possible.</source>
+        <translation>Hilf dabei, die App in so viele Sprachen wie möglich zu übersetzen.</translation>
+    </message>
+    <message>
+        <source>Develop on Github</source>
+        <translation>Entwickle auf Github</translation>
+    </message>
+    <message>
+        <source>Support with maintenance and packaging, write code, or provide valuable bug reports.</source>
+        <translation>Unterstütze die Verwaltung, das Packaging, beim Programmieren oder schreibe Fehlerberichte.</translation>
+    </message>
+    <message>
+        <source>Why should you care?</source>
+        <translation>Warum betrifft dich das?</translation>
+    </message>
+    <message>
+        <source>This project is built with love and passion by a single developer in their spare time, and is provided to you free of charge.</source>
+        <translation>Dieses Projekt wird mit viel Liebe und Einsatz von einer Einzelperson in ihrer Freizeit entwickelt und dir gratis zur Verfügung gestellt.</translation>
+    </message>
+    <message>
+        <source>I develop Free Software because I am convinced that it is the ethical thing to do - and it is a fun hobby. However, developing software takes a lot of time and effort. As Sailfish and living in general costs money, I need your support to be able to spend time on non-paying projects like this.</source>
+        <translation>Ich entwickle Freie Software aus ethischer Überzeugung - und Freude an diesem Hobby. Trotzdem braucht Softwareentwicklung viel Zeit und Einsatz. Da Sailfish und das Leben allgemein viel Geld kosten, bin ich auf deine Unterstützung angewiesen, um Zeit für unbezahlte Projekte wie dieses aufwenden zu können.</translation>
+    </message>
+    <message>
+        <source>Why donate?</source>
+        <translation>Warum spenden?</translation>
+    </message>
+    <message>
+        <source>Jolla raised prices and is trying to force developers (who work for free) to pay rent for Sailfish.</source>
+        <translation>Jolla plant Preiserhöhungen und versucht Entwickler (die gratis arbeiten) auch noch zu zwingen, Sailfish zu mieten.</translation>
+    </message>
+    <message>
+        <source>If you can afford it, donating is the easiest way to ensure that I can continue working on apps for Sailfish. Any amount is appreciated, be it a cup of coffee, a slice of pizza, or more.</source>
+        <translation>Wenn du es dir leisten kannst, ist eine Spende der einfachste Weg, um dazu beizutragen, dass ich auch in Zukunft an Apps für Sailfish arbeiten kann. Jeder Betrag ist ein Beitrag - sei es eine Tasse Kaffee, ein Stück Pizza oder mehr.</translation>
+    </message>
+</context>
+<context>
+    <name>Opal.About</name>
     <message>
         <source>About</source>
+        <translation>Über</translation>
+    </message>
+    <message>
+        <source>Version %1</source>
+        <translation>Version %1</translation>
+    </message>
+    <message>
+        <source>Development</source>
+        <translation>Entwicklung</translation>
+    </message>
+    <message>
+        <source>show contributors</source>
+        <translation>Mitwirkende zeigen</translation>
+    </message>
+    <message>
+        <source>Homepage</source>
+        <translation>Webseite</translation>
+    </message>
+    <message>
+        <source>Changelog</source>
+        <translation>Änderungsverlauf</translation>
+    </message>
+    <message>
+        <source>Translations</source>
+        <translation>Übersetzungen</translation>
+    </message>
+    <message>
+        <source>Source Code</source>
+        <translation>Quellcode</translation>
+    </message>
+    <message>
+        <source>Donations</source>
+        <translation>Spenden</translation>
+    </message>
+    <message>
+        <source>License</source>
+        <translation>Lizenz</translation>
+    </message>
+    <message numerus="yes">
+        <source>show license(s)</source>
+        <translation>
+            <numerusform>Lizenz zeigen</numerusform>
+            <numerusform>Lizenzen zeigen</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>News</source>
+        <translation>Neuigkeiten</translation>
+    </message>
+    <message>
+        <source>Changes since version %1</source>
+        <translation>Änderungen seit Version %1</translation>
+    </message>
+    <message>
+        <source>show details</source>
+        <translation>Details zeigen</translation>
+    </message>
+    <message>
+        <source>Contributors</source>
+        <translation>Mitwirkende</translation>
+    </message>
+    <message>
+        <source>Acknowledgements</source>
+        <translation>Danksagungen</translation>
+    </message>
+    <message>
+        <source>Thank you!</source>
+        <translation>Vielen Dank!</translation>
+    </message>
+    <message>
+        <source>Details</source>
+        <translation>Details</translation>
+    </message>
+    <message>
+        <source>External Link</source>
+        <translation type="unfinished">Externer Link</translation>
+    </message>
+    <message>
+        <source>Open in browser</source>
+        <translation type="unfinished">Im Browser öffnen</translation>
+    </message>
+    <message>
+        <source>Copied to clipboard: %1</source>
+        <translation type="unfinished">In die Zwischenablage kopiert: %1</translation>
+    </message>
+    <message>
+        <source>Copy to clipboard</source>
+        <translation type="unfinished">In die Zwischenablage kopieren</translation>
+    </message>
+    <message>
+        <source>Please refer to &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;</source>
+        <translation>Bitte beachten Sie &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;</translation>
+    </message>
+    <message>
+        <source>Download license texts</source>
+        <translation>Lizenztexte herunterladen</translation>
+    </message>
+    <message numerus="yes">
+        <source>License(s)</source>
+        <translation>
+            <numerusform>Lizenz</numerusform>
+            <numerusform>Lizenzen</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Note: please check the source code for most accurate information.</source>
+        <translation>Hinweis: Bitte prüfen Sie den Quellcode für alle Einzelheiten.</translation>
+    </message>
+</context>
+<context>
+    <name>Opal.About.Common</name>
+    <message>
+        <source>If you want to support my work, you can buy me a cup of coffee.</source>
+        <translation>Sie können mir gerne einen Kaffee spendieren, wenn Sie meine Arbeit unterstützen möchten.</translation>
+    </message>
+    <message>
+        <source>You can support this project by contributing, or by donating using any of these services.</source>
+        <translation>Sie können dieses Projekt durch Ihre Mitarbeit oder durch eine Spende über einen dieser Dienste unterstützen.</translation>
+    </message>
+    <message>
+        <source>Your contributions to translations or code would be most welcome.</source>
+        <translation>Ihre Mitarbeit bei Übersetzungen oder der Programmierung wäre eine große Hilfe.</translation>
+    </message>
+</context>
+<context>
+    <name>Opal.LinkHandler</name>
+    <message>
+        <source>External Link</source>
+        <translation>Externer Link</translation>
+    </message>
+    <message>
+        <source>Open in browser</source>
+        <translation>Im Browser öffnen</translation>
+    </message>
+    <message>
+        <source>Open externally</source>
+        <translation>Extern öffnen</translation>
+    </message>
+    <message>
+        <source>Copied to clipboard: %1</source>
+        <translation>In die Zwischenablage kopiert: %1</translation>
+    </message>
+    <message>
+        <source>Copy to clipboard</source>
+        <translation>In die Zwischenablage kopieren</translation>
+    </message>
+</context>
+<context>
+    <name>ProjectData</name>
+    <message>
+        <source>User</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PythonBackend</name>
+    <message>
+        <source>An error occurred in the Python backend.
+Please restart the app and check the logs.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -319,131 +536,166 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Sorting</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>descending</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ascending</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Exchange rate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Delete stored exchange rates?</source>
+        <source>New project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Delete stored projects?</source>
+        <source>Export to</source>
+        <comment>Page title for the backup output folder picker</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Delete stored settings?</source>
+        <source>Exported expenses to “%1”</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>per currency (constant)</source>
+        <source>Import expenses</source>
+        <comment>Page title for the file import picker</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>per transaction (dates)</source>
+        <source>Imported %1 expenses into “%2”.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Restore backup file</source>
+        <source>Failed to import “%1”.</source>
+        <comment>%1 is a filename</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Backup to</source>
+        <source>New project ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Scrollbar</source>
+        <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>interactive (beta)</source>
+        <source>Currency</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>normal</source>
+        <source>The settlement suggestion is calculated in this currency. Select the most used currency in your group for this.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Backup successful</source>
+        <source>fixed per currency</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Replace</source>
+        <source>per transaction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Merge</source>
+        <source>Always show fees</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>File saved to:</source>
+        <source>If this option is enabled, the field for entering fees is always shown when adding a new transaction.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Validity check failed.</source>
+        <source>Project members</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>This backup file does not seem to be created by Expenditure:</source>
+        <source>Base exchange rates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Backup successfully restored.</source>
+        <source>Backup options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Project expenses have been overwritten by backup-file expenses.</source>
+        <source>Import</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Project expenses have been merged with backup-file expenses.</source>
+        <source>Export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Restore backup - choose action</source>
+        <source>You can import and export expenses of the current project to CSV. Project metadata is not included.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Replace deletes all former project-expenses and uses those from backup-file instead.</source>
+        <source>When importing, imported entries will be added to the current project and old entries will be kept.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SupportDialog</name>
+    <message>
+        <source>Hi there!</source>
+        <translation>Hallöchen!</translation>
+    </message>
+    <message>
+        <source>Thank you for using my little app! Maybe you can contribute back?</source>
+        <translation>Danke, dass du meine kleine App verwendest! Vielleicht kannst du auch dazu beitragen?</translation>
+    </message>
+    <message>
+        <source>Thank you for your support!</source>
+        <translation>Vielen Dank für deine Unterstützung!</translation>
+    </message>
+    <message>
+        <source>Remind me later</source>
+        <translation>Erinnere mich später</translation>
+    </message>
+    <message>
+        <source>Don&apos;t ask me again</source>
+        <translation>Nicht wieder fragen</translation>
+    </message>
+</context>
+<context>
+    <name>dates</name>
+    <message>
+        <source>hh&apos;:&apos;mm</source>
+        <comment>time only format, as in “10:00 o&apos;clock”</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Merge keeps former project-expenses and adds those from backup-file which are not yet on the list.</source>
+        <source>d MMM yyyy, hh&apos;:&apos;mm</source>
+        <comment>date and time format, as in “Dec. 1st 2023, 10:00 o&apos;clock”</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>File info: This backup was created by a different project.</source>
+        <source>ddd d MMM yyyy, hh&apos;:&apos;mm</source>
+        <comment>full date and time format, as in “Fri., Dec. 1st 2023, 10:00 o&apos;clock”</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>File info: This backup was created by the original project.</source>
+        <source>ddd d MMM yyyy</source>
+        <comment>full date format, as in “Fri., Dec. 1st 2023”</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>settings</source>
+        <source>d MMM yyyy</source>
+        <comment>date format, as in “Dec. 1st 2023”</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>exchange rates</source>
+        <source>d MMM</source>
+        <comment>date format without year, as in “Dec. 1st”</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>projects</source>
+        <source>%1 (%2)</source>
+        <comment>1: date, 2: time zone info</comment>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>storage</name>
+    <message>
+        <source>everyone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Database cleanup - requires restart:</source>
+        <source>User</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
