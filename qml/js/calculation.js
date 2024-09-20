@@ -14,6 +14,7 @@ var _project = null
 var _expenses = null
 var _exchangeRates = {}
 var _baseCurrency = ''
+var _settlementPrecision = 2
 
 var _payments = {}
 var _benefits = {}
@@ -31,7 +32,9 @@ function calculate(projectData) {
     _collectSumsAndPeople()
     _splitDues()
 
-    if (!_validate()) {
+    if (_validate()) {
+        _applyPrecision()
+    } else {
         _settlement = null
         console.log("failed to calculate a valid settlement suggestion")
     }
@@ -41,6 +44,7 @@ function calculate(projectData) {
     console.log("- paid:", JSON.stringify(_payments))
     console.log("- received:", JSON.stringify(_benefits))
     console.log("- members:", JSON.stringify(_peopleArr))
+    console.log("- settlement:", JSON.stringify(_settlement))
 
     return {
         expenses: _expenses,
@@ -63,6 +67,7 @@ function _reset(projectData) {
     _expenses = Storage.getProjectEntries(_project.rowid)
     _exchangeRates = _project.exchangeRates
     _baseCurrency = _project.baseCurrency
+    _settlementPrecision = _project.precision
 
     _payments = {}
     _benefits = {}
@@ -242,4 +247,26 @@ function _validate() {
     }
 
     return success
+}
+
+function _applyPrecision() {
+    var filtered = []
+    var zero = Number(0.00).toFixed(_settlementPrecision)
+
+    for (var i in _settlement) {
+        var set = _settlement[i]
+        var fixed = Number(set.value).toFixed(_settlementPrecision)
+
+        if (fixed == zero) {
+            continue
+        } else {
+            filtered.push({
+                from: set.from,
+                to: set.to,
+                value: Number(fixed),
+            })
+        }
+    }
+
+    _settlement = filtered
 }

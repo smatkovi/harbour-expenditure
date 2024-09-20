@@ -36,6 +36,7 @@ QtObject {
     property var lastBeneficiaries: ([])
     property int ratesMode: RatesMode.fixed
     property int feesMode: FeesMode.hiddenByDefault
+    property int precision: 2
 
     property var currencies: ([])
     property var exchangeRates: ({})
@@ -114,6 +115,7 @@ QtObject {
         lastBeneficiaries = metadata.lastBeneficiaries
         ratesMode = metadata.ratesMode
         feesMode = metadata.feesMode
+        precision = metadata.precision
     }
 
     function reloadContents() {
@@ -170,6 +172,7 @@ QtObject {
             lastPayer = ''
             ratesMode = RatesMode.fixed
             feesMode = FeesMode.hiddenByDefault
+            precision = 2
             exchangeRates = {}
             currencies = []
             expenses.clear()
