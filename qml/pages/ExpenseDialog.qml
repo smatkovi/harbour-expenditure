@@ -516,10 +516,25 @@ Dialog {
 
                     onClicked: {
                         if (mouse.x < item.width / 2) {
-                            root.payer = modelData
+                            setPayer()
                         } else {
-                            root.beneficiaries[modelData] = !(!!root.beneficiaries[modelData])
-                            root.beneficiaries = root.beneficiaries
+                            setBeneficiary()
+                        }
+                    }
+
+                    function setPayer() {
+                        root.payer = modelData
+                    }
+
+                    function setBeneficiary() {
+                        root.beneficiaries[modelData] = !(!!root.beneficiaries[modelData])
+                        root.beneficiaries = root.beneficiaries
+                    }
+
+                    Component.onCompleted: {
+                        if (root._mergedMembers.length === 1) {
+                            setPayer()
+                            setBeneficiary()
                         }
                     }
                 }
