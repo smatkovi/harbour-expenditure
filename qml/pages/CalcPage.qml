@@ -41,6 +41,18 @@ Page {
         people = results.people
     }
 
+    function editTransactions() {
+        var dialog = pageStack.push(Qt.resolvedUrl("FeesRatesPage.qml"),
+                                    {projectRowid: appWindow.activeProject.rowid})
+        dialog.accepted.connect(function(){
+            if (dialog.dataHasChanged) {
+                console.log("recalculating...")
+                appWindow.activeProject.reloadContents()
+                calculate()
+            }
+        })
+    }
+
     Component.onCompleted: {
         appWindow.maybeLoadDebugData()
         calculate()
@@ -52,6 +64,13 @@ Page {
         contentHeight: content.height + Theme.paddingLarge
 
         VerticalScrollDecorator { flickable: flick }
+
+        PullDownMenu {
+            MenuItem {
+                text: qsTr("Review transactions")
+                onClicked: editTransactions()
+            }
+        }
 
         Column {
             id: content
@@ -228,18 +247,8 @@ Page {
                 preferredWidth: Theme.buttonWidthLarge
 
                 Button {
-                    text: qsTr("Edit transactions")
-                    onClicked: {
-                        var dialog = pageStack.push(Qt.resolvedUrl("FeesRatesPage.qml"),
-                                                    {projectRowid: appWindow.activeProject.rowid})
-                        dialog.accepted.connect(function(){
-                            if (dialog.dataHasChanged) {
-                                console.log("recalculating...")
-                                appWindow.activeProject.reloadContents()
-                                calculate()
-                            }
-                        })
-                    }
+                    text: qsTr("Review transactions")
+                    onClicked: editTransactions()
                 }
             }
 
