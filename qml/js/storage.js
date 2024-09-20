@@ -530,9 +530,11 @@ function saveProjects(projectDataArray) {
 
         for (var imported in projectDataArray[k].importedExpenses) {
             var e = projectDataArray[k].importedExpenses[imported]
+
             _addExpenseDirectly(newIdent,
                                 e.utc_time, e.local_time, e.local_tz,
                                 e.name, e.info, e.sum, e.currency,
+                                e.rate, e.percentageFees, e.fixedFees,
                                 e.payer, splitMembersList(e.beneficiaries))
         }
 
