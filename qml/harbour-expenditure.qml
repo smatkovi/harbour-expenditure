@@ -18,6 +18,9 @@ import "components"
 ApplicationWindow {
     id: appWindow
     initialPage: Component { FirstPage {} }
+//    initialPage: Component { SettingsPage {} }
+//    initialPage: Component { CalcPage {} }
+//    initialPage: Component { FeesRatesPage {} }
     cover: Qt.resolvedUrl("cover/CoverPage.qml")
 
     property bool loading: true  // only true during startup
