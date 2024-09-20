@@ -19,21 +19,25 @@ Page {
     id: root
     allowedOrientations: Orientation.All
 
-    property string baseCurrency: ''
     property var expenses: ({})
-
-    property var people: ([])
+    property string baseCurrency: ''
     property var payments: ({})
     property var benefits: ({})
+    property var balances: ({})
     property real totalPayments: 0.00
+    property var settlement: ([])
+    property var people: ([])
 
     function calculate() {
         var results = Calculation.calculate(appWindow.activeProject)
+
         expenses = results.expenses
         baseCurrency = results.baseCurrency
         payments = results.payments
         benefits = results.benefits
+        balances = results.balances
         totalPayments = results.totalPayments
+        settlement = results.settlement
         people = results.people
     }
 
@@ -123,8 +127,7 @@ Page {
                                     if (i == 0) 0
                                     else if (i == 1) payments[innerRepeater.person]
                                     else if (i == 2) benefits[innerRepeater.person]
-                                    else if (i == 3) payments[innerRepeater.person]
-                                                     - benefits[innerRepeater.person]
+                                    else if (i == 3) balances[innerRepeater.person]
                                 }
                             }
                         }
