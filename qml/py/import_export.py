@@ -67,7 +67,7 @@ def doExport(entries, outputFolder, name, currency) -> str:
         for entry in entries:
             writer.writerow([entry[x] for x in EXPENSES_COLUMNS])
 
-    return outputPath
+    return str(outputPath)
 
 
 def doImport(inputPath: str) -> None:
