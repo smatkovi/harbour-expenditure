@@ -16,7 +16,7 @@ import "../js/storage.js" as Storage
 Page {
     id: root
     allowedOrientations: Orientation.All
-    forwardNavigation: true
+    forwardNavigation: !noProjectPlaceholder.enabled
 
     onStatusChanged: {
         if (status == PageStatus.Active) {
@@ -92,6 +92,7 @@ Page {
         }
 
         ViewPlaceholder {
+            id: noProjectPlaceholder
             enabled: !appWindow.loading &&
                      !appWindow.activeProject.active
             text: qsTr("Add a project")
