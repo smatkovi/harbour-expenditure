@@ -52,8 +52,8 @@ Dialog {
     property alias sum: sumField.value
     property alias currency: currencyField.text
     property alias rate: rateField.value
-    property alias percentageFees: percentageFeeField.value
-    property alias fixedFees: fixedFeeField.value
+    property alias percentageFees: feesItem.percentageFees
+    property alias fixedFees: feesItem.fixedFees
 
     property string payer: appWindow.activeProject.lastPayer
     property string initialBeneficiaries: Storage.joinMembersList(appWindow.activeProject.lastBeneficiaries)
@@ -281,9 +281,9 @@ Dialog {
                     }
                     EnterKey.onClicked: {
                         if (_customExchangeRate) {
-                            rateField.forceActiveFocus()
+                            rateField.inputField.forceActiveFocus()
                         } else if (_customFees) {
-                            percentageFeeField.forceActiveFocus()
+                            feesItem.percentageFeesField.forceActiveFocus()
                         } else {
                             focus = false
                         }
@@ -308,9 +308,9 @@ Dialog {
                     }
                     EnterKey.onClicked: {
                         if (_customExchangeRate) {
-                            rateField.forceActiveFocus()
+                            rateField.inputField.forceActiveFocus()
                         } else if (_customFees) {
-                            percentageFeeField.forceActiveFocus()
+                            feesItem.percentageFeesField.forceActiveFocus()
                         } else {
                             focus = false
                         }
@@ -352,7 +352,7 @@ Dialog {
                 }
                 EnterKey.onClicked: {
                     if (_customFees) {
-                        percentageFeeField.forceActiveFocus()
+                        feesItem.percentageFeesField.forceActiveFocus()
                     } else {
                         focus = false
                     }
@@ -364,43 +364,10 @@ Dialog {
                 visible: _customExchangeRate && !_customFees
             }
 
-            Row {
-                width: parent.width
-                spacing: Theme.paddingMedium
-                visible: _customFees
-
+            FeesItem {
+                id: feesItem
                 // TODO load last used values for the current payer
-
-                CurrencyInputField {
-                    id: percentageFeeField
-                    label: qsTr("Fees")
-                    emptyValue: NaN
-                    precision: 4
-                    width: parent.width / 6 * 2
-                    textRightMargin: 0
-                    EnterKey.iconSource: "image://theme/icon-m-enter-next"
-                    EnterKey.onClicked: fixedFeeField.forceActiveFocus()
-                }
-
-                CurrencyInputLabel {
-                    width: parent.width / 6 * 1 - 3*parent.spacing
-                    text: "% +"
-                }
-
-                CurrencyInputField {
-                    id: fixedFeeField
-                    label: qsTr("Fees")
-                    emptyValue: NaN
-                    width: parent.width / 6 * 2
-                    textRightMargin: 0
-                    EnterKey.iconSource: "image://theme/icon-m-enter-close"
-                    EnterKey.onClicked: focus = false
-                }
-
-                CurrencyInputLabel {
-                    width: parent.width / 6 * 1
-                    text: appWindow.activeProject.baseCurrency
-                }
+                visible: _customFees
             }
 
             Row {
