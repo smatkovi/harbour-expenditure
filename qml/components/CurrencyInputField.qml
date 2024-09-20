@@ -30,7 +30,9 @@ TextField {
     }
 
     function _updateDisplayText() {
-        if (precision == 2) {
+        if (isNaN(value)) {
+            text = ''
+        } else if (precision == 2) {
             text = value.toLocaleCurrencyString(Qt.locale('de-CH'), ' ').trim()
         } else {
             text = value.toPrecision(precision)
