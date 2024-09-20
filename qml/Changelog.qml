@@ -9,6 +9,15 @@ import "modules/Opal/About"
 
 ChangelogList {
     ChangelogItem {
+        version: "1.0.1-1"
+        date: "2024-09-20"
+        paragraphs: [
+            "- Hotfix to fix importing CSV<br>" +
+            "- Note that the CSV format has changed and files exported using app versions before the rewrite (< 1.0.0) can not be imported<br>" +
+            "- Please reach out if you would need that kind of backwards compatibility!"
+        ]
+    }
+    ChangelogItem {
         version: "1.0.0-1"
         date: "2024-09-20"
         author: "Mirian Margiani (ichthyosaurus)"

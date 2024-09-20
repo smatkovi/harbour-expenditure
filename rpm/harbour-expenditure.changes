@@ -6,6 +6,11 @@
 # * date Author's Name <author's email> version-release
 # - Summary of changes
 
+* Fri Sep 20 2024 Mirian Margiani <mixosaurus+ichthyo@pm.me> 1.0.1-1
+- Hotfix to fix importing CSV
+- Note that the CSV format has changed and files exported using app versions before the rewrite (< 1.0.0) can not be imported
+- Please reach out if you would need that kind of backwards compatibility!
+
 * Fri Sep 20 2024 Mirian Margiani <mixosaurus+ichthyo@pm.me> 1.0.0-1
 - Complete rewrite of the app with a brand new user interface, improved stability, and many new features
 - Added support for fees and exchange rates per transaction
