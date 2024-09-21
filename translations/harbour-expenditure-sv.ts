@@ -6,12 +6,12 @@
     <message>
         <location filename="../qml/pages/AboutPage.qml" line="53"/>
         <source>A simple app for tracking expenses in groups.</source>
-        <translation type="unfinished"></translation>
+        <translation>En enkel app för att hålla reda på grupputgifter.</translation>
     </message>
     <message>
         <location filename="../qml/pages/AboutPage.qml" line="74"/>
         <source>Development</source>
-        <translation type="unfinished">Utveckling</translation>
+        <translation>Utveckling</translation>
     </message>
     <message>
         <location filename="../qml/pages/AboutPage.qml" line="77"/>
@@ -26,7 +26,7 @@
     <message>
         <location filename="../qml/pages/AboutPage.qml" line="87"/>
         <source>Translations</source>
-        <translation type="unfinished">Översättningar</translation>
+        <translation>Översättningar</translation>
     </message>
     <message>
         <location filename="../qml/pages/AboutPage.qml" line="90"/>
@@ -52,103 +52,103 @@
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="135"/>
         <source>Calculations</source>
-        <translation type="unfinished"></translation>
+        <translation>Beräkningar</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="143"/>
         <source>Spending overview</source>
-        <translation type="unfinished"></translation>
+        <translation>Utgiftsöversikt</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="213"/>
         <source>Settlement suggestion</source>
-        <translation type="unfinished"></translation>
+        <translation>Kvittningsförslag</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="277"/>
         <source>Base exchange rates</source>
-        <translation type="unfinished"></translation>
+        <translation>Grundläggande växelkurser</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="297"/>
         <source>Transactions and fees</source>
-        <translation type="unfinished"></translation>
+        <translation>Transaktioner och avgifter</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="310"/>
         <source>Click here to review and edit fees and exchange rates individually for all transactions. Transactions that do not declare a custom exchange rate are converted using the base exchange rates defined above.</source>
-        <translation type="unfinished"></translation>
+        <translation>Klicka här för att granska och redigera avgifter och växelkurser individuellt för alla transaktioner. Transaktioner som inte deklarerar en anpassad växelkurs konverteras med hjälp av de basväxelkurser som definieras ovan.</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="154"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namn</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="157"/>
         <source>Payments</source>
-        <translation type="unfinished"></translation>
+        <translation>Betalningar</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="158"/>
         <source>Benefits</source>
-        <translation type="unfinished"></translation>
+        <translation>Förmåner</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="175"/>
         <source>total</source>
-        <translation type="unfinished"></translation>
+        <translation>totalt</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="159"/>
         <source>Balance</source>
-        <translation type="unfinished"></translation>
+        <translation>Balans</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="226"/>
         <source>Payer</source>
-        <translation type="unfinished"></translation>
+        <translation>Betalare</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="236"/>
         <source>Recipient</source>
-        <translation type="unfinished"></translation>
+        <translation>Mottagare</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="241"/>
         <source>Sum [%1]</source>
-        <translation type="unfinished"></translation>
+        <translation>Summa [%1]</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="116"/>
         <location filename="../qml/pages/CalcPage.qml" line="304"/>
         <source>Review transactions</source>
-        <translation type="unfinished"></translation>
+        <translation>Granska transaktioner</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="120"/>
         <source>Share detailed report</source>
-        <translation type="unfinished"></translation>
+        <translation>Dela detaljerad rapport</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="124"/>
         <source>Share compact report</source>
-        <translation type="unfinished"></translation>
+        <translation>Dela förenklad rapport</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="77"/>
         <source>A detailed report has been copied to the clipboard.</source>
-        <translation type="unfinished"></translation>
+        <translation>En detaljerad rapport har kopierats till urklipp.</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="78"/>
         <source>A compact report has been copied to the clipboard.</source>
-        <translation type="unfinished"></translation>
+        <translation>En förenklad rapport har kopierats till urklipp.</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="99"/>
         <source>Spendings report</source>
-        <translation type="unfinished"></translation>
+        <translation>Utgiftsrapport</translation>
     </message>
 </context>
 <context>
@@ -156,7 +156,7 @@
     <message>
         <location filename="../qml/components/DateTimePickerCombo.qml" line="20"/>
         <source>never</source>
-        <translation type="unfinished"></translation>
+        <translation>aldrig</translation>
     </message>
 </context>
 <context>
@@ -177,12 +177,12 @@
     <message>
         <location filename="../qml/components/EditableRatesListDelegate.qml" line="61"/>
         <source>%1 paid</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 betald</translation>
     </message>
     <message>
         <location filename="../qml/components/EditableRatesListDelegate.qml" line="92"/>
         <source>Exchange rate</source>
-        <translation type="unfinished">Valutakurs</translation>
+        <translation>Växelkurs</translation>
     </message>
 </context>
 <context>
@@ -190,82 +190,82 @@
     <message>
         <location filename="../qml/pages/ExpenseDialog.qml" line="185"/>
         <source>Discarded all changes</source>
-        <translation type="unfinished"></translation>
+        <translation>Ignorerade alla ändringar</translation>
     </message>
     <message>
         <location filename="../qml/pages/ExpenseDialog.qml" line="187"/>
         <source>Discarded the entry</source>
-        <translation type="unfinished"></translation>
+        <translation>Ignorerade posten</translation>
     </message>
     <message>
         <location filename="../qml/pages/ExpenseDialog.qml" line="200"/>
         <source>Add fees</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till avgifter</translation>
     </message>
     <message>
         <location filename="../qml/pages/ExpenseDialog.qml" line="213"/>
         <source>Custom exchange rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Anpassad växelkurs</translation>
     </message>
     <message>
         <location filename="../qml/pages/ExpenseDialog.qml" line="232"/>
         <source>Edit expense</source>
-        <translation type="unfinished"></translation>
+        <translation>Redigera utgift</translation>
     </message>
     <message>
         <location filename="../qml/pages/ExpenseDialog.qml" line="232"/>
         <source>New expense</source>
-        <translation type="unfinished"></translation>
+        <translation>Ny utgift</translation>
     </message>
     <message>
         <location filename="../qml/pages/ExpenseDialog.qml" line="233"/>
         <source>Save</source>
-        <translation type="unfinished">Spara</translation>
+        <translation>Spara</translation>
     </message>
     <message>
         <location filename="../qml/pages/ExpenseDialog.qml" line="234"/>
         <source>Discard</source>
-        <translation type="unfinished"></translation>
+        <translation>Kassera</translation>
     </message>
     <message>
         <location filename="../qml/pages/ExpenseDialog.qml" line="238"/>
         <source>Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Datum</translation>
     </message>
     <message>
         <location filename="../qml/pages/ExpenseDialog.qml" line="258"/>
         <source>Expense</source>
-        <translation type="unfinished"></translation>
+        <translation>Utgift</translation>
     </message>
     <message>
         <location filename="../qml/pages/ExpenseDialog.qml" line="269"/>
         <source>Price</source>
-        <translation type="unfinished"></translation>
+        <translation>Pris</translation>
     </message>
     <message>
         <location filename="../qml/pages/ExpenseDialog.qml" line="298"/>
         <source>Currency</source>
-        <translation type="unfinished"></translation>
+        <translation>Valuta</translation>
     </message>
     <message>
         <location filename="../qml/pages/ExpenseDialog.qml" line="325"/>
         <source>Additional notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Anteckningar</translation>
     </message>
     <message>
         <location filename="../qml/pages/ExpenseDialog.qml" line="382"/>
         <source>Payer</source>
-        <translation type="unfinished"></translation>
+        <translation>Betalare</translation>
     </message>
     <message>
         <location filename="../qml/pages/ExpenseDialog.qml" line="390"/>
         <source>Beneficiaries</source>
-        <translation type="unfinished"></translation>
+        <translation>Förmånstagare</translation>
     </message>
     <message>
         <location filename="../qml/pages/ExpenseDialog.qml" line="419"/>
         <source>everyone</source>
-        <translation type="unfinished"></translation>
+        <translation>alla</translation>
     </message>
 </context>
 <context>
@@ -274,7 +274,7 @@
         <location filename="../qml/components/FeesItem.qml" line="28"/>
         <location filename="../qml/components/FeesItem.qml" line="46"/>
         <source>Fees</source>
-        <translation type="unfinished"></translation>
+        <translation>Avgifter</translation>
     </message>
 </context>
 <context>
@@ -282,17 +282,17 @@
     <message>
         <location filename="../qml/pages/FeesRatesPage.qml" line="72"/>
         <source>Transactions</source>
-        <translation type="unfinished"></translation>
+        <translation>Transaktioner</translation>
     </message>
     <message>
         <location filename="../qml/pages/FeesRatesPage.qml" line="73"/>
         <source>Save</source>
-        <translation type="unfinished">Spara</translation>
+        <translation>Spara</translation>
     </message>
     <message>
         <location filename="../qml/pages/FeesRatesPage.qml" line="74"/>
         <source>Discard</source>
-        <translation type="unfinished"></translation>
+        <translation>Kassera</translation>
     </message>
 </context>
 <context>
@@ -330,27 +330,27 @@
     <message>
         <location filename="../qml/pages/FirstPage.qml" line="91"/>
         <source>No entries yet</source>
-        <translation type="unfinished"></translation>
+        <translation>Inga poster ännu</translation>
     </message>
     <message>
         <location filename="../qml/pages/FirstPage.qml" line="99"/>
         <source>Add a project</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till ett projekt</translation>
     </message>
     <message>
         <location filename="../qml/pages/FirstPage.qml" line="100"/>
         <source>Pull down to open the settings page.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dra neråt för att öppna inställningssidan.</translation>
     </message>
     <message>
         <location filename="../qml/pages/FirstPage.qml" line="154"/>
         <source>set %1 → %2 exchange rate in project settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Ange växelkursen för %1 → %2 i projektinställningarna</translation>
     </message>
     <message>
         <location filename="../qml/pages/FirstPage.qml" line="92"/>
         <source>Swipe to the left to add an entry.</source>
-        <translation type="unfinished"></translation>
+        <translation>Svep åt vänster för att lägga till en post.</translation>
     </message>
 </context>
 <context>
@@ -366,7 +366,7 @@
     <message>
         <location filename="../qml/components/LimitedDatePickerDialog.qml" line="19"/>
         <source>The date cannot be in the future.</source>
-        <translation type="unfinished"></translation>
+        <translation>Datumet kan inte vara i framtiden.</translation>
     </message>
 </context>
 <context>
@@ -374,7 +374,7 @@
     <message>
         <location filename="../qml/components/LimitedTimePickerDialog.qml" line="22"/>
         <source>The time has been reset. It cannot be in the future.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tiden har återställts. Den kan inte vara i framtiden.</translation>
     </message>
 </context>
 <context>
@@ -548,22 +548,22 @@
     <message>
         <location filename="../qml/modules/Opal/About/private/ExternalUrlPage.qml" line="15"/>
         <source>External Link</source>
-        <translation type="unfinished">Extern länk</translation>
+        <translation>Extern länk</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/About/private/ExternalUrlPage.qml" line="32"/>
         <source>Open in browser</source>
-        <translation type="unfinished">Öppna i webbläsare</translation>
+        <translation>Öppna i webbläsare</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/About/private/ExternalUrlPage.qml" line="36"/>
         <source>Copied to clipboard: %1</source>
-        <translation type="unfinished">Kopierat till urklipp: %1</translation>
+        <translation>Kopierat till urklipp: %1</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/About/private/ExternalUrlPage.qml" line="41"/>
         <source>Copy to clipboard</source>
-        <translation type="unfinished">Kopiera till urklipp</translation>
+        <translation>Kopiera till urklipp</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/About/private/LicenseListPart.qml" line="120"/>
@@ -641,7 +641,7 @@
         <location filename="../qml/components/ProjectData.qml" line="112"/>
         <location filename="../qml/components/ProjectData.qml" line="171"/>
         <source>User</source>
-        <translation type="unfinished"></translation>
+        <translation>Användare</translation>
     </message>
 </context>
 <context>
@@ -650,7 +650,8 @@
         <location filename="../qml/py/PythonBackend.qml" line="32"/>
         <source>An error occurred in the Python backend.
 Please restart the app and check the logs.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ett fel uppstod i Python-serverdelen.
+Starta om appen och kontrollera loggarna.</translation>
     </message>
 </context>
 <context>
@@ -673,111 +674,111 @@ Please restart the app and check the logs.</source>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="26"/>
         <source>New project</source>
-        <translation type="unfinished"></translation>
+        <translation>Nytt projekt</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="51"/>
         <source>Export to</source>
         <comment>Page title for the backup output folder picker</comment>
-        <translation type="unfinished"></translation>
+        <translation>Exportera till</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="60"/>
         <source>Exported expenses to “%1”</source>
-        <translation type="unfinished"></translation>
+        <translation>Exporterade utgifter till &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="69"/>
         <source>Import expenses</source>
         <comment>Page title for the file import picker</comment>
-        <translation type="unfinished"></translation>
+        <translation>Importera utgifter</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="81"/>
         <source>Imported %1 expenses into “%2”.</source>
-        <translation type="unfinished"></translation>
+        <translation>Importerade %1 utgifter till &quot;%2&quot;.</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="85"/>
         <source>Failed to import “%1”.</source>
         <comment>%1 is a filename</comment>
-        <translation type="unfinished"></translation>
+        <translation>Kunde inte importera &quot;%1&quot;.</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="144"/>
         <location filename="../qml/pages/SettingsPage.qml" line="185"/>
         <source>New project ...</source>
-        <translation type="unfinished"></translation>
+        <translation>Nytt projekt ...</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="231"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Namn</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="267"/>
         <source>Currency</source>
-        <translation type="unfinished"></translation>
+        <translation>Valuta</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="281"/>
         <source>The settlement suggestion is calculated in this currency. Select the most used currency in your group for this.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kvittningsförslaget beräknas i den här valutan. Välj den mest använda valutan i din grupp för detta.</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="298"/>
         <source>fixed per currency</source>
-        <translation type="unfinished"></translation>
+        <translation>fastställs per valuta</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="302"/>
         <source>per transaction</source>
-        <translation type="unfinished"></translation>
+        <translation>per transaktion</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="308"/>
         <source>Always show fees</source>
-        <translation type="unfinished"></translation>
+        <translation>Visa alltid avgifter</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="309"/>
         <source>If this option is enabled, the field for entering fees is always shown when adding a new transaction.</source>
-        <translation type="unfinished"></translation>
+        <translation>Om det här alternativet är aktiverat visas alltid fältet för avgifter när du lägger till en ny transaktion.</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="322"/>
         <source>Project members</source>
-        <translation type="unfinished"></translation>
+        <translation>Projektmedlemmar</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="336"/>
         <source>Base exchange rates</source>
-        <translation type="unfinished"></translation>
+        <translation>Basväxelkurser</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="349"/>
         <source>Backup options</source>
-        <translation type="unfinished"></translation>
+        <translation>Säkerhetskopieringsalternativ</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="356"/>
         <source>Import</source>
-        <translation type="unfinished"></translation>
+        <translation>Import</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="360"/>
         <source>Export</source>
-        <translation type="unfinished"></translation>
+        <translation>Export</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="366"/>
         <source>You can import and export expenses of the current project to CSV. Project metadata is not included.</source>
-        <translation type="unfinished"></translation>
+        <translation>Du kan importera och exportera utgifter för det aktuella projektet till CSV. Projektmetadata ingår inte.</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="368"/>
         <source>When importing, imported entries will be added to the current project and old entries will be kept.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vid import kommer importerade poster att läggas till i det aktuella projektet och gamla poster kommer att behållas.</translation>
     </message>
 </context>
 <context>
@@ -814,43 +815,43 @@ Please restart the app and check the logs.</source>
         <location filename="../qml/js/dates.js" line="11"/>
         <source>hh&apos;:&apos;mm</source>
         <comment>time only format, as in “10:00 o&apos;clock”</comment>
-        <translation type="unfinished"></translation>
+        <translation>hh&apos;:&apos;mm</translation>
     </message>
     <message>
         <location filename="../qml/js/dates.js" line="13"/>
         <source>d MMM yyyy, hh&apos;:&apos;mm</source>
         <comment>date and time format, as in “Dec. 1st 2023, 10:00 o&apos;clock”</comment>
-        <translation type="unfinished"></translation>
+        <translation>d MMM yyyy, hh&apos;:&apos;mm</translation>
     </message>
     <message>
         <location filename="../qml/js/dates.js" line="15"/>
         <source>ddd d MMM yyyy, hh&apos;:&apos;mm</source>
         <comment>full date and time format, as in “Fri., Dec. 1st 2023, 10:00 o&apos;clock”</comment>
-        <translation type="unfinished"></translation>
+        <translation>ddd d MMM yyyy, hh&apos;:&apos;mm</translation>
     </message>
     <message>
         <location filename="../qml/js/dates.js" line="17"/>
         <source>ddd d MMM yyyy</source>
         <comment>full date format, as in “Fri., Dec. 1st 2023”</comment>
-        <translation type="unfinished"></translation>
+        <translation>ddd d MMM yyyy</translation>
     </message>
     <message>
         <location filename="../qml/js/dates.js" line="19"/>
         <source>d MMM yyyy</source>
         <comment>date format, as in “Dec. 1st 2023”</comment>
-        <translation type="unfinished"></translation>
+        <translation>d MMM yyyy</translation>
     </message>
     <message>
         <location filename="../qml/js/dates.js" line="21"/>
         <source>d MMM</source>
         <comment>date format without year, as in “Dec. 1st”</comment>
-        <translation type="unfinished"></translation>
+        <translation>d MMM</translation>
     </message>
     <message>
         <location filename="../qml/js/dates.js" line="64"/>
         <source>%1 (%2)</source>
         <comment>1: date, 2: time zone info</comment>
-        <translation type="unfinished"></translation>
+        <translation>%1 (%2)</translation>
     </message>
 </context>
 <context>
@@ -858,13 +859,13 @@ Please restart the app and check the logs.</source>
     <message>
         <location filename="../qml/js/storage.js" line="765"/>
         <source>everyone</source>
-        <translation type="unfinished"></translation>
+        <translation>alla</translation>
     </message>
     <message>
         <location filename="../qml/js/storage.js" line="558"/>
         <location filename="../qml/js/storage.js" line="624"/>
         <source>User</source>
-        <translation type="unfinished"></translation>
+        <translation>Användare</translation>
     </message>
 </context>
 </TS>
