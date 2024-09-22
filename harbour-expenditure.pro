@@ -27,15 +27,14 @@ SOURCES += \
 
 DISTFILES += \
     qml/*.qml \
-    qml/js/*.js \
-    qml/cover/*.qml \
-    qml/pages/*.qml \
-    qml/components/*.qml \
-    rpm/harbour-expenditure.changes \
-    rpm/harbour-expenditure.spec \
-    rpm/harbour-expenditure.yaml \
+    qml/*/*.qml \
+    qml/*/*.js \
+    qml/*/*.py \
+    rpm/harbour-*.changes \
+    rpm/harbour-*.spec \
+    rpm/harbour-*.yaml \
     translations/*.ts \
-    harbour-expenditure.desktop
+    harbour-*.desktop
 
 SAILFISHAPP_ICONS = 86x86 108x108 128x128 172x172
 
