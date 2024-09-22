@@ -177,7 +177,7 @@
     <message>
         <location filename="../qml/components/EditableRatesListDelegate.qml" line="61"/>
         <source>%1 paid</source>
-        <translation>%1 betald</translation>
+        <translation>%1 betalat</translation>
     </message>
     <message>
         <location filename="../qml/components/EditableRatesListDelegate.qml" line="92"/>
