@@ -30,7 +30,8 @@ TextField {
     }
 
     function _textToValue(text) {
-        return Number(text.trim().replace(Qt.locale().decimalPoint, '.'))
+        return Number(text.trim().replace(Qt.locale().decimalPoint, '.')
+                                 .replace(',', '.'))
     }
 
     function isAcceptable() {

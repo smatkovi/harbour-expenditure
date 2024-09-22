@@ -8,11 +8,13 @@ Name: harbour-expenditure
 Summary: Expenditure
 Version: 1.0.1
 Release: 1
+
 # The contents of the Group field should be one of the groups listed here:
 # https://github.com/mer-tools/spectacle/blob/master/data/GROUPS
 Group: Applications/Productivity
 URL: https://github.com/ichthyosaurus/harbour-expenditure
 License: GPL-3.0-or-later
+
 # This must be generated before uploading a package to a remote build service.
 # Usually this line does not need to be modified.
 Sources:
