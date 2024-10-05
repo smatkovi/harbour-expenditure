@@ -223,6 +223,150 @@ function createSettingsTable(tx) {
     })
 }
 
+function makeTableSortable(tx, tableName, orderColumn) {
+    // This function sets up a table to automatically update
+    // an ordering column. It does so by creating a view on the
+    // table with triggers that handle updating the ordering column.
+    //
+    // Usage:
+    //   Manually create a table that has at least one
+    //   content column (any type) and one order column (integer).
+    //   Then call this function.
+    //
+    //   After calling this function, the table must not be used
+    //   directly anymore, only ever the view that is created by
+    //   this function. Example: tableName is "_mytable", view is "mytable".
+    //
+    //   Note: this function must be called again after modifying
+    //   the table schema in migrations.
+    //
+    // Arguments:
+    //   tx: database transaction
+    //   tableName: name of the already existing table that should
+    //     be managed. It must be a string starting with an underscore ('_').
+    //   orderColumn: name of the column that stores the order of
+    //     entries. It must be a string. The column must be of type INTEGER.
+    //   columns: complete list of table columns, excluding the order column.
+    //     It must be an array of strings.
+    //
+    // Warnings:
+    //   1. The parameters are not thoroughly verified before they are
+    //      used to build SQL queries. Mistakes can destroy your database.
+    //   2. Order values start at 1.
+    //   3. Invalid order values (0, <0, >count) will raise an error.
+    //      Use NULL as order to insert a row at the end.
+
+    // The implementation is based on
+    // https://stackoverflow.com/a/19976918 (LS_dev, CC-BY-SA-3.0).
+
+    if (!(!!tableName) || typeof tableName != "string" || false) {
+        throw new Error("Table name must be a string starting with " +
+                        "an underscore ('_'), got '%1'".arg(tableName))
+    }
+
+    var viewName = tableName.toString().slice(1)
+
+    if (!(!!orderColumn) || typeof orderColumn != "string") {
+        throw new Error("Order column must be a string, got '%1'".arg(orderColumn))
+    }
+
+    var columns = []
+    var rs = tx.executeSql('SELECT name FROM pragma_table_info("%1") as info;'.arg(tableName))
+
+    for (var i = 0; i < rs.rows.length; ++i) {
+        var name = rs.rows.item(i).name.toString()
+
+        if (name !== orderColumn) {
+            columns.push(name)
+        }
+    }
+
+    if (columns.length === 0) {
+        throw new Error("Table '%1' must have at least one column " +
+                        "other than the order column".arg(tableName))
+    }
+
+    var columnsString = columns.join(', ')
+    var newColumnsString = 'NEW.' + columns.join(', NEW.')
+
+    // Table view, which will handle all inserts, updates and deletes
+    tx.executeSql('\
+        CREATE VIEW %1 AS SELECT * FROM %2;
+    '.arg(viewName).arg(tableName))
+
+    // Triggers:
+    // Raise error when inserting invalid index (out of bounds or non integer)
+    tx.executeSql('\
+        CREATE TRIGGER %1_ins_err INSTEAD OF INSERT ON %1
+        WHEN NEW.%3 < 1 OR NEW.%3 > (SELECT COUNT()+1 FROM %2) OR CAST(NEW.%3 AS INT) <> NEW.%3
+        BEGIN
+            SELECT RAISE(ABORT, "Invalid index!");
+        END;
+    '.arg(viewName).arg(tableName).arg(orderColumn))
+
+    // Increments all indexes when new row inserted in middle of table
+    //
+    // not possible:   INSERT INTO %2 SELECT * FROM NEW;
+    // https://sqlite.org/forum/info/320a27de1cfb0dfb
+    tx.executeSql('\
+        CREATE TRIGGER %1_ins INSTEAD OF INSERT ON %1
+        WHEN NEW.%3 BETWEEN 1 AND (SELECT COUNT() FROM %2)+1
+        BEGIN
+            UPDATE %2 SET %3 = %3 + 1 WHERE %3 >= NEW.%3;
+            INSERT INTO %2(%4, %3) VALUES(%5, NEW.%3);
+        END;
+    '.arg(viewName).arg(tableName).arg(orderColumn).arg(columnsString).arg(newColumnsString))
+
+    // Insert row in last when supplied index is NULL
+    tx.executeSql('\
+        CREATE TRIGGER %1_ins_last INSTEAD OF INSERT ON %1
+        WHEN NEW.%3 IS NULL
+        BEGIN
+            INSERT INTO %2(%4, %3) VALUES(%5, (SELECT COUNT()+1 FROM %2));
+        END;
+    '.arg(viewName).arg(tableName).arg(orderColumn).arg(columnsString).arg(newColumnsString))
+
+    // Decrements indexes when item is removed
+    tx.executeSql('\
+        CREATE TRIGGER %1_del INSTEAD OF DELETE ON %1
+        BEGIN
+            DELETE FROM %2 WHERE %3 = OLD.%3;
+            UPDATE %2 SET %3 = %3 - 1 WHERE %3>OLD.%3;
+        END;
+    '.arg(viewName).arg(tableName).arg(orderColumn))
+
+    // Raise error when updating to invalid index
+    tx.executeSql('\
+        CREATE TRIGGER %1_upd_err INSTEAD OF UPDATE OF %3 ON %1
+        WHEN NEW.%3 NOT BETWEEN 1 AND (SELECT COUNT() FROM %2) OR CAST(NEW.%3 AS INT)<>NEW.%3 OR NEW.%3 IS NULL
+        BEGIN
+            SELECT RAISE(ABORT, "Invalid index!");
+        END;
+    '.arg(viewName).arg(tableName).arg(orderColumn))
+
+    // Decrements indexes when item is moved up
+    tx.executeSql('\
+        CREATE TRIGGER %1_upd_up INSTEAD OF UPDATE OF %3 ON %1
+        WHEN NEW.%3 BETWEEN OLD.%3+1 AND (SELECT COUNT() FROM %2)
+        BEGIN
+            UPDATE %2 SET %3 = NULL WHERE %3 = OLD.%3;
+            UPDATE %2 SET %3 = %3 - 1 WHERE %3 BETWEEN OLD.%3 AND NEW.%3;
+            UPDATE %2 SET %3 = NEW.%3 WHERE %3 IS NULL;
+        END;
+    '.arg(viewName).arg(tableName).arg(orderColumn))
+
+    // Increments indexes when item is moved down
+    tx.executeSql('\
+        CREATE TRIGGER %1_upd_down INSTEAD OF UPDATE OF %3 ON %1
+        WHEN NEW.%3 BETWEEN 1 AND OLD.%3-1
+        BEGIN
+            UPDATE %2 SET %3 = NULL WHERE %3 = OLD.%3;
+            UPDATE %2 SET %3 = %3 + 1  WHERE %3 BETWEEN NEW.%3 AND OLD.%3;
+            UPDATE %2 SET %3 = NEW.%3 WHERE %3 IS NULL;
+        END;
+    '.arg(viewName).arg(tableName).arg(orderColumn))
+}
+
 function __doInit(db) {
     // Due to https://bugreports.qt.io/browse/QTBUG-71838 which was fixed only
     // in Qt 5.13, it's not possible the get the actually current version number
