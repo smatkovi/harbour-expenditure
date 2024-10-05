@@ -111,6 +111,10 @@ function guardedTx(tx, callback) {
         tx.executeSql('RELEASE __guarded_tx_started__;')
     } catch (e) {
         tx.executeSql('ROLLBACK TO __guarded_tx_started__;')
+
+        console.error("guarded transaction failed:",
+                      "\n   ERROR  >", e,
+                      "\n   CALLER >", e.stack.split('\n')[0]);
         throw e
     }
 
