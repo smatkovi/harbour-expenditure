@@ -73,7 +73,7 @@ function isSameValue(x, y) {
 function getDatabase() {
     if (!dbOk) {
         console.error("database is not available, check previous logs")
-        throw "database is not available, check previous logs";
+        throw new Error("database is not available, check previous logs");
     }
 
     if (!__initialized || __db === null) {
@@ -266,8 +266,8 @@ function __doInit(db) {
                             } else if (migrationType === "function") {
                                 dbMigrations[i][1](tx)
                             } else {
-                                throw "expected migration as string or function, got " +
-                                        migrationType + " instead"
+                                throw new Error("expected migration as string or function, got " +
+                                                migrationType + " instead")
                             }
                         })
                     })
