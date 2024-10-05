@@ -114,7 +114,10 @@ Page {
             text: name
             description: {
                 // FIXME linebreak causes binding loop on "height"
-                (info + "\nfor %1".arg(beneficiaries_string)).trim()
+                (info + "\n" + qsTr(
+                     "for %1", "as in “this payment was for Jane, John, and Jim”, " +
+                     "with plural based on the number of beneficiaries",
+                     beneficiaries_list.count).arg(beneficiaries_string)).trim()
             }
 
             property double effectiveRate: {
