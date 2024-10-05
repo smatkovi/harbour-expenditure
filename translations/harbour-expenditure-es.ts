@@ -4,37 +4,52 @@
 <context>
     <name>AboutPage</name>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="87"/>
+        <location filename="../qml/pages/AboutPage.qml" line="82"/>
         <source>Translations</source>
         <translation>Traducciones</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="53"/>
+        <location filename="../qml/pages/AboutPage.qml" line="46"/>
         <source>A simple app for tracking expenses in groups.</source>
         <translation>Una sencilla aplicación para gestionar los gastos en grupo.</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="74"/>
+        <location filename="../qml/pages/AboutPage.qml" line="67"/>
         <source>Development</source>
         <translation>Desarrollo</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="77"/>
+        <location filename="../qml/pages/AboutPage.qml" line="70"/>
         <source>Programming</source>
         <translation>Programación</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="81"/>
+        <location filename="../qml/pages/AboutPage.qml" line="74"/>
         <source>Icon Design</source>
         <translation>Diseño de icono</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="90"/>
+        <location filename="../qml/pages/AboutPage.qml" line="85"/>
         <source>Swedish</source>
         <translation>Sueco</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="94"/>
+        <location filename="../qml/pages/AboutPage.qml" line="91"/>
+        <source>Spanish</source>
+        <translation>Español</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/AboutPage.qml" line="97"/>
+        <source>Norwegian Bokmål</source>
+        <translation>Noruego (Bokmål)</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/AboutPage.qml" line="103"/>
+        <source>Indonesian</source>
+        <translation>Indonesio</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/AboutPage.qml" line="109"/>
         <source>German</source>
         <translation>Alemán</translation>
     </message>
@@ -177,10 +192,11 @@
     <message>
         <location filename="../qml/components/EditableRatesListDelegate.qml" line="61"/>
         <source>%1 paid</source>
-        <translation>%1 pagado(s)</translation>
+        <comment>as in “I paid 10 USD that were converted to 7 GBP”, with %1 being a currency symbol like &apos;USD&apos;</comment>
+        <translation type="unfinished">%1 pagado(s)</translation>
     </message>
     <message>
-        <location filename="../qml/components/EditableRatesListDelegate.qml" line="92"/>
+        <location filename="../qml/components/EditableRatesListDelegate.qml" line="93"/>
         <source>Exchange rate</source>
         <translation>Tipo de cambio</translation>
     </message>
@@ -303,12 +319,12 @@
         <translation>Ajustes</translation>
     </message>
     <message>
-        <location filename="../qml/pages/FirstPage.qml" line="195"/>
+        <location filename="../qml/pages/FirstPage.qml" line="198"/>
         <source>Edit</source>
         <translation>Editar</translation>
     </message>
     <message>
-        <location filename="../qml/pages/FirstPage.qml" line="211"/>
+        <location filename="../qml/pages/FirstPage.qml" line="214"/>
         <source>Remove</source>
         <translation>Quitar</translation>
     </message>
@@ -342,8 +358,17 @@
         <source>Pull down to open the settings page.</source>
         <translation>Tire hacia abajo para abrir la página de ajustes.</translation>
     </message>
+    <message numerus="yes">
+        <location filename="../qml/pages/FirstPage.qml" line="117"/>
+        <source>for %1</source>
+        <comment>as in “this payment was for Jane, John, and Jim”, with plural based on the number of beneficiaries</comment>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
     <message>
-        <location filename="../qml/pages/FirstPage.qml" line="154"/>
+        <location filename="../qml/pages/FirstPage.qml" line="157"/>
         <source>set %1 → %2 exchange rate in project settings</source>
         <translation>establecer %1 → %2 tipo de cambio en los ajustes del proyecto</translation>
     </message>
@@ -751,32 +776,32 @@ Reinicia la aplicación y comprueba los registros.</translation>
         <translation>Miembros del proyecto</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="336"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="338"/>
         <source>Base exchange rates</source>
         <translation>Tipos de cambio de base</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="349"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="351"/>
         <source>Backup options</source>
         <translation>Opciones de copia de seguridad</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="356"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="358"/>
         <source>Import</source>
         <translation>Importar</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="360"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="362"/>
         <source>Export</source>
         <translation>Exportar</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="366"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="368"/>
         <source>You can import and export expenses of the current project to CSV. Project metadata is not included.</source>
         <translation>Puede importar y exportar gastos del proyecto actual a CSV. No se incluyen los metadatos del proyecto.</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="368"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="370"/>
         <source>When importing, imported entries will be added to the current project and old entries will be kept.</source>
         <translation>Al importar, las entradas importadas se añadirán al proyecto actual y las antiguas se conservarán.</translation>
     </message>
