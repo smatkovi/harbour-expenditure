@@ -137,5 +137,5 @@ Behavior on height{SmoothedAnimation{duration:80
 }}}Item{id:bottomVerticalSpacing
 width:parent.width
 height:Theme.paddingMedium
-}}}Component.onCompleted:{if(__silica_applicationwindow_instance&&__silica_applicationwindow_instance._defaultPageOrientations){__silica_applicationwindow_instance._defaultPageOrientations=Orientation.All
+}}}Component.onCompleted:{if(__silica_applicationwindow_instance&&__silica_applicationwindow_instance.hasOwnProperty("_defaultPageOrientations")){__silica_applicationwindow_instance._defaultPageOrientations=Orientation.All
 }}}
