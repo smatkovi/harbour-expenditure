@@ -49,6 +49,13 @@ DB.dbMigrations = [
             );')
     }],
     [0.2, function(tx){
+        // Make sure legacy tables exist that were created on-demand in app
+        // versions up to 0.4. Migrations would fail without the tables.
+        tx.executeSql('\
+            CREATE TABLE IF NOT EXISTS settings_table(
+                setting TEXT UNIQUE, value TEXT
+            );')
+
         tx.executeSql('DROP TABLE IF EXISTS %1;'.arg(DB.settingsTable));
         DB.createSettingsTable(tx);
         tx.executeSql('INSERT INTO %1(key, value) \
@@ -73,6 +80,18 @@ DB.dbMigrations = [
                 beneficiaries TEXT NOT NULL
             );
         ')
+
+        // Make sure legacy tables exist that were created on-demand in app
+        // versions up to 0.4. Migrations would fail without the tables.
+        tx.executeSql('\
+            CREATE TABLE IF NOT EXISTS projects_table(
+                project_id_timestamp TEXT,
+                project_name TEXT,
+                project_members TEXT,
+                project_recent_payer_boolarray TEXT,
+                project_recent_beneficiaries_boolarray TEXT,
+                project_base_currency TEXT
+            );')
 
         var projects = tx.executeSql('SELECT rowid, project_id_timestamp FROM projects_table;')
         var timezone = Dates.getTimezone()
@@ -173,6 +192,18 @@ DB.dbMigrations = [
         }
     }],
     [0.4, function(tx){
+        // Make sure legacy tables exist that were created on-demand in app
+        // versions up to 0.4. Migrations would fail without the tables.
+        tx.executeSql('\
+            CREATE TABLE IF NOT EXISTS projects_table(
+                project_id_timestamp TEXT,
+                project_name TEXT,
+                project_members TEXT,
+                project_recent_payer_boolarray TEXT,
+                project_recent_beneficiaries_boolarray TEXT,
+                project_base_currency TEXT
+            );')
+
         // The rowid column is created explicitly here because
         // it is used as foreign key in other tables. Autoincrement
         // is not necessary because all data referencing a project
@@ -351,6 +382,14 @@ DB.dbMigrations = [
         ;'.arg(DB.settingsTable))
     }],
     [0.7, function(tx){
+        // Make sure legacy tables exist that were created on-demand in app
+        // versions up to 0.4. Migrations would fail without the tables.
+        tx.executeSql('\
+            CREATE TABLE IF NOT EXISTS exchange_rates_table(
+                exchange_rate_currency TEXT,
+                exchange_rate_value TEXT
+            );')
+
         tx.executeSql('\
             CREATE TABLE exchange_rates(
                 project INTEGER NOT NULL,
