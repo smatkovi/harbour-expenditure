@@ -108,7 +108,7 @@ Page {
 
         delegate: D.ThreeLineDelegate {
             id: item
-            minContentHeight: Theme.itemSizeExtraLarge
+            showOddEven: false
 
             title: Dates.formatDate(local_time, Dates.timeFormat, local_tz)
             text: name
