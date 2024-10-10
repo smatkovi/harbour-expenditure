@@ -72,7 +72,7 @@
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="143"/>
         <source>Spending overview</source>
-        <translation type="unfinished"></translation>
+        <translation>Utgiftsoversikt</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="213"/>
@@ -171,7 +171,7 @@
     <message>
         <location filename="../qml/components/DateTimePickerCombo.qml" line="20"/>
         <source>never</source>
-        <translation type="unfinished"></translation>
+        <translation>aldri</translation>
     </message>
 </context>
 <context>

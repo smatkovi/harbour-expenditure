@@ -193,7 +193,7 @@
         <location filename="../qml/components/EditableRatesListDelegate.qml" line="61"/>
         <source>%1 paid</source>
         <comment>as in “I paid 10 USD that were converted to 7 GBP”, with %1 being a currency symbol like &apos;USD&apos;</comment>
-        <translation type="unfinished">%1 betald</translation>
+        <translation>%1 betald</translation>
     </message>
     <message>
         <location filename="../qml/components/EditableRatesListDelegate.qml" line="93"/>
