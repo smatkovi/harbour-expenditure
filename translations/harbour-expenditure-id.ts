@@ -11,7 +11,7 @@
     <message>
         <location filename="../qml/pages/AboutPage.qml" line="46"/>
         <source>A simple app for tracking expenses in groups.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aplikasi sederhana untuk melacak pengeluaran dalam kelompok.</translation>
     </message>
     <message>
         <location filename="../qml/pages/AboutPage.qml" line="67"/>
@@ -59,7 +59,7 @@
     <message>
         <location filename="../qml/modules/Opal/SupportMe/AskForSupport.qml" line="11"/>
         <source>Please take a moment to consider if you can contribute to this project in one way or another.</source>
-        <translation>Mohon luangkan waktu sejenak untuk mempertimbangkan apakah Anda ingin berkontribusi dalam proyek ini dengan satu atau lain cara.</translation>
+        <translation>Mohon luangkan waktu sejenak untuk mempertimbangkan apakah Anda dapat berkontribusi dalam proyek ini dengan berbagai cara.</translation>
     </message>
 </context>
 <context>
@@ -67,37 +67,37 @@
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="135"/>
         <source>Calculations</source>
-        <translation type="unfinished"></translation>
+        <translation>Kalkulasi</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="143"/>
         <source>Spending overview</source>
-        <translation type="unfinished"></translation>
+        <translation>Ikhtisar pengeluaran</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="213"/>
         <source>Settlement suggestion</source>
-        <translation type="unfinished"></translation>
+        <translation>Saran penyelesaian</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="277"/>
         <source>Base exchange rates</source>
-        <translation type="unfinished"></translation>
+        <translation>Nilai tukar dasar</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="297"/>
         <source>Transactions and fees</source>
-        <translation type="unfinished"></translation>
+        <translation>Transaksi dan biaya</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="310"/>
         <source>Click here to review and edit fees and exchange rates individually for all transactions. Transactions that do not declare a custom exchange rate are converted using the base exchange rates defined above.</source>
-        <translation type="unfinished"></translation>
+        <translation>Klik di sini untuk meninjau dan mengedit biaya dan nilai tukar satu per satu untuk semua transaksi. Transaksi yang tidak menyatakan nilai tukar khusus akan dikonversikan menggunakan nilai tukar dasar yang ditentukan di atas.</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="154"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nama</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="157"/>
@@ -734,7 +734,7 @@ Please restart the app and check the logs.</source>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="231"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nama</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="267"/>
@@ -774,7 +774,7 @@ Please restart the app and check the logs.</source>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="338"/>
         <source>Base exchange rates</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nilai tukar dasar</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="351"/>
