@@ -49,7 +49,7 @@ ChangelogList {
         ]
     }
     ChangelogItem {
-        version: '0.2.'
+        version: '0.2-1'
         date: "2022-01-01"
         author: "Tobias Planitzer"
         paragraphs: [
