@@ -58,7 +58,8 @@ PaddedDelegate {
         }
         MenuItem {
             visible: !Storage.isSameValue(foreignSum, NaN)
-            text: qsTr("%1 paid").arg(project.baseCurrency)
+            text: qsTr("%1 paid", "as in “I paid 10 USD that were converted to 7 GBP”, " +
+                       "with %1 being a currency symbol like 'USD'").arg(project.baseCurrency)
             onClicked: {
                 root._displayType = 'paid'
                 _inputField.value = value > 0 ? foreignSum*value : emptyValue

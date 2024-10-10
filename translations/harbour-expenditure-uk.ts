@@ -4,37 +4,52 @@
 <context>
     <name>AboutPage</name>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="87"/>
+        <location filename="../qml/pages/AboutPage.qml" line="82"/>
         <source>Translations</source>
-        <translation type="unfinished">Переклади</translation>
+        <translation>Переклади</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="53"/>
+        <location filename="../qml/pages/AboutPage.qml" line="46"/>
         <source>A simple app for tracking expenses in groups.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="74"/>
+        <location filename="../qml/pages/AboutPage.qml" line="67"/>
         <source>Development</source>
-        <translation type="unfinished">Розробка</translation>
+        <translation>Розробка</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="77"/>
+        <location filename="../qml/pages/AboutPage.qml" line="70"/>
         <source>Programming</source>
         <translation>Програмування</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="81"/>
+        <location filename="../qml/pages/AboutPage.qml" line="74"/>
         <source>Icon Design</source>
         <translation>Дизайн іконок</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="90"/>
+        <location filename="../qml/pages/AboutPage.qml" line="85"/>
         <source>Swedish</source>
         <translation>Шведська</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="94"/>
+        <location filename="../qml/pages/AboutPage.qml" line="91"/>
+        <source>Spanish</source>
+        <translation>Іспанська</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/AboutPage.qml" line="97"/>
+        <source>Norwegian Bokmål</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/AboutPage.qml" line="103"/>
+        <source>Indonesian</source>
+        <translation>Індонезійська</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/AboutPage.qml" line="109"/>
         <source>German</source>
         <translation>Німецька</translation>
     </message>
@@ -177,10 +192,11 @@
     <message>
         <location filename="../qml/components/EditableRatesListDelegate.qml" line="61"/>
         <source>%1 paid</source>
+        <comment>as in “I paid 10 USD that were converted to 7 GBP”, with %1 being a currency symbol like &apos;USD&apos;</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/EditableRatesListDelegate.qml" line="92"/>
+        <location filename="../qml/components/EditableRatesListDelegate.qml" line="93"/>
         <source>Exchange rate</source>
         <translation type="unfinished"></translation>
     </message>
@@ -303,12 +319,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/FirstPage.qml" line="195"/>
+        <location filename="../qml/pages/FirstPage.qml" line="198"/>
         <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/FirstPage.qml" line="211"/>
+        <location filename="../qml/pages/FirstPage.qml" line="214"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
@@ -325,7 +341,7 @@
     <message>
         <location filename="../qml/pages/FirstPage.qml" line="59"/>
         <source>About</source>
-        <translation type="unfinished">Про застосунок</translation>
+        <translation>Про застосунок</translation>
     </message>
     <message>
         <location filename="../qml/pages/FirstPage.qml" line="91"/>
@@ -342,8 +358,18 @@
         <source>Pull down to open the settings page.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message numerus="yes">
+        <location filename="../qml/pages/FirstPage.qml" line="117"/>
+        <source>for %1</source>
+        <comment>as in “this payment was for Jane, John, and Jim”, with plural based on the number of beneficiaries</comment>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
     <message>
-        <location filename="../qml/pages/FirstPage.qml" line="154"/>
+        <location filename="../qml/pages/FirstPage.qml" line="157"/>
         <source>set %1 → %2 exchange rate in project settings</source>
         <translation type="unfinished"></translation>
     </message>
@@ -549,22 +575,22 @@
     <message>
         <location filename="../qml/modules/Opal/About/private/ExternalUrlPage.qml" line="15"/>
         <source>External Link</source>
-        <translation type="unfinished">Зовнішнє посилання</translation>
+        <translation>Зовнішнє посилання</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/About/private/ExternalUrlPage.qml" line="32"/>
         <source>Open in browser</source>
-        <translation type="unfinished">Відкрити в браузері</translation>
+        <translation>Відкрити в браузері</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/About/private/ExternalUrlPage.qml" line="36"/>
         <source>Copied to clipboard: %1</source>
-        <translation type="unfinished">Скопійовано до буфера обміну: %1</translation>
+        <translation>Скопійовано до буфера обміну: %1</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/About/private/ExternalUrlPage.qml" line="41"/>
         <source>Copy to clipboard</source>
-        <translation type="unfinished">Копіювати в буфер обміну</translation>
+        <translation>Копіювати в буфер обміну</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/About/private/LicenseListPart.qml" line="120"/>
@@ -752,32 +778,32 @@ Please restart the app and check the logs.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="336"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="338"/>
         <source>Base exchange rates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="349"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="351"/>
         <source>Backup options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="356"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="358"/>
         <source>Import</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="360"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="362"/>
         <source>Export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="366"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="368"/>
         <source>You can import and export expenses of the current project to CSV. Project metadata is not included.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="368"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="370"/>
         <source>When importing, imported entries will be added to the current project and old entries will be kept.</source>
         <translation type="unfinished"></translation>
     </message>

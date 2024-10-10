@@ -329,7 +329,9 @@ Dialog {
             EditableMembersListAdder {
                 id: newMemberAdder
                 selectedProject: root.selectedProject
-                onApplied: flick.scrollToBottom() // TODO scroll to input field
+                onApplied: {
+                    flick.contentY = newMemberAdder.y - 2*newMemberAdder.height
+                }
             }
 
             SectionHeader {

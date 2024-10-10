@@ -6,19 +6,12 @@
 
 /*
  * Translators:
- * Please add yourself to the list of contributors below. If your language is already
- * in the list, add your name to the 'entries' field. If you added a new translation,
- * create a new section at the top of the list.
+ * Please add yourself to the list of translators in TRANSLATORS.json.
+ * If your language is already in the list, add your name to the 'entries'
+ * field. If you added a new translation, create a new section in the 'extra' list.
  *
  * Other contributors:
- * Please add yourself to the relevant list of contributors.
- *
- * <...>
- *  ContributionGroup {
- *      title: qsTr("Your language")
- *      entries: ["Existing contributor", "YOUR NAME HERE"]
- *  },
- * <...>
+ * Please add yourself to the relevant list of contributors below.
  *
  */
 
@@ -83,18 +76,44 @@ A.AboutPageBase {
                 }
             ]
         },
+
+        //>>> GENERATED LIST OF TRANSLATION CREDITS
         A.ContributionSection {
             title: qsTr("Translations")
             groups: [
                 A.ContributionGroup {
                     title: qsTr("Swedish")
-                    entries: ["Åke Engelbrektson"]
+                    entries: [
+                        "Åke Engelbrektson"
+                    ]
+                },
+                A.ContributionGroup {
+                    title: qsTr("Spanish")
+                    entries: [
+                        "gallegonovato"
+                    ]
+                },
+                A.ContributionGroup {
+                    title: qsTr("Norwegian Bokmål")
+                    entries: [
+                        "Allan Nordhøy"
+                    ]
+                },
+                A.ContributionGroup {
+                    title: qsTr("Indonesian")
+                    entries: [
+                        "Reza Almanda"
+                    ]
                 },
                 A.ContributionGroup {
                     title: qsTr("German")
-                    entries: ["Tobias Planitzer", "Mirian Margiani"]
+                    entries: [
+                        "Mirian Margiani",
+                        "Tobias Planitzer"
+                    ]
                 }
             ]
         }
+        //<<< GENERATED LIST OF TRANSLATION CREDITS
     ]
 }

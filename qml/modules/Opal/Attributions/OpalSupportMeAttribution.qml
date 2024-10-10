@@ -4,7 +4,7 @@
 //@ SPDX-License-Identifier: GPL-3.0-or-later
 import"../../Opal/About"as A
 A.Attribution{name:"Opal.SupportMe (v1.1.1)"
-entries:"2024 Mirian Margiani"
+entries:["2024 Mirian Margiani"]
 licenses:A.License{spdxId:"GPL-3.0-or-later"
 }sources:"https://github.com/Pretty-SFOS/opal-supportme"
 homepage:"https://github.com/Pretty-SFOS/opal"

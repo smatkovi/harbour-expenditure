@@ -4,37 +4,52 @@
 <context>
     <name>AboutPage</name>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="87"/>
+        <location filename="../qml/pages/AboutPage.qml" line="82"/>
         <source>Translations</source>
-        <translation type="unfinished">Tłumaczenia</translation>
+        <translation>Tłumaczenia</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="53"/>
+        <location filename="../qml/pages/AboutPage.qml" line="46"/>
         <source>A simple app for tracking expenses in groups.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="74"/>
+        <location filename="../qml/pages/AboutPage.qml" line="67"/>
         <source>Development</source>
-        <translation type="unfinished">Rozwój</translation>
+        <translation>Rozwój</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="77"/>
+        <location filename="../qml/pages/AboutPage.qml" line="70"/>
         <source>Programming</source>
         <translation>Programowanie</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="81"/>
+        <location filename="../qml/pages/AboutPage.qml" line="74"/>
         <source>Icon Design</source>
         <translation>Projekt ikon</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="90"/>
+        <location filename="../qml/pages/AboutPage.qml" line="85"/>
         <source>Swedish</source>
         <translation>szwedzki</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="94"/>
+        <location filename="../qml/pages/AboutPage.qml" line="91"/>
+        <source>Spanish</source>
+        <translation>hiszpański</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/AboutPage.qml" line="97"/>
+        <source>Norwegian Bokmål</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/AboutPage.qml" line="103"/>
+        <source>Indonesian</source>
+        <translation>indonezyjski</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/AboutPage.qml" line="109"/>
         <source>German</source>
         <translation>niemiecki</translation>
     </message>
@@ -177,10 +192,11 @@
     <message>
         <location filename="../qml/components/EditableRatesListDelegate.qml" line="61"/>
         <source>%1 paid</source>
+        <comment>as in “I paid 10 USD that were converted to 7 GBP”, with %1 being a currency symbol like &apos;USD&apos;</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/EditableRatesListDelegate.qml" line="92"/>
+        <location filename="../qml/components/EditableRatesListDelegate.qml" line="93"/>
         <source>Exchange rate</source>
         <translation type="unfinished"></translation>
     </message>
@@ -303,12 +319,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/FirstPage.qml" line="195"/>
+        <location filename="../qml/pages/FirstPage.qml" line="198"/>
         <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/FirstPage.qml" line="211"/>
+        <location filename="../qml/pages/FirstPage.qml" line="214"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
@@ -325,7 +341,7 @@
     <message>
         <location filename="../qml/pages/FirstPage.qml" line="59"/>
         <source>About</source>
-        <translation type="unfinished">O tej aplikacji</translation>
+        <translation>O tej aplikacji</translation>
     </message>
     <message>
         <location filename="../qml/pages/FirstPage.qml" line="91"/>
@@ -342,8 +358,18 @@
         <source>Pull down to open the settings page.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message numerus="yes">
+        <location filename="../qml/pages/FirstPage.qml" line="117"/>
+        <source>for %1</source>
+        <comment>as in “this payment was for Jane, John, and Jim”, with plural based on the number of beneficiaries</comment>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
     <message>
-        <location filename="../qml/pages/FirstPage.qml" line="154"/>
+        <location filename="../qml/pages/FirstPage.qml" line="157"/>
         <source>set %1 → %2 exchange rate in project settings</source>
         <translation type="unfinished"></translation>
     </message>
@@ -392,12 +418,12 @@
     <message>
         <location filename="../qml/MySupportDialog.qml" line="22"/>
         <source>Translate on Weblate</source>
-        <translation type="unfinished"></translation>
+        <translation>Tłumacz na Weblate</translation>
     </message>
     <message>
         <location filename="../qml/MySupportDialog.qml" line="23"/>
         <source>Help with translating this app in as many languages as possible.</source>
-        <translation type="unfinished"></translation>
+        <translation>Pomóż z tłumaczeniem tej aplikacji do jak największej ilości języków.</translation>
     </message>
     <message>
         <location filename="../qml/MySupportDialog.qml" line="30"/>
@@ -417,7 +443,7 @@
     <message>
         <location filename="../qml/MySupportDialog.qml" line="40"/>
         <source>This project is built with love and passion by a single developer in their spare time, and is provided to you free of charge.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ten projekt został zbudowany z miłości i pasji przez jednego programistę w wolnym czasie i jest dostępny dla ciebie za darmo.</translation>
     </message>
     <message>
         <location filename="../qml/MySupportDialog.qml" line="46"/>
@@ -549,22 +575,22 @@
     <message>
         <location filename="../qml/modules/Opal/About/private/ExternalUrlPage.qml" line="15"/>
         <source>External Link</source>
-        <translation type="unfinished">Link Zewnętrzny</translation>
+        <translation>Link Zewnętrzny</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/About/private/ExternalUrlPage.qml" line="32"/>
         <source>Open in browser</source>
-        <translation type="unfinished">Otwórz w przeglądarce</translation>
+        <translation>Otwórz w przeglądarce</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/About/private/ExternalUrlPage.qml" line="36"/>
         <source>Copied to clipboard: %1</source>
-        <translation type="unfinished">Skopiowano do schowka: %1</translation>
+        <translation>Skopiowano do schowka: %1</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/About/private/ExternalUrlPage.qml" line="41"/>
         <source>Copy to clipboard</source>
-        <translation type="unfinished">Kopiuj do schowka</translation>
+        <translation>Kopiuj do schowka</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/About/private/LicenseListPart.qml" line="120"/>
@@ -752,32 +778,32 @@ Please restart the app and check the logs.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="336"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="338"/>
         <source>Base exchange rates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="349"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="351"/>
         <source>Backup options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="356"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="358"/>
         <source>Import</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="360"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="362"/>
         <source>Export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="366"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="368"/>
         <source>You can import and export expenses of the current project to CSV. Project metadata is not included.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="368"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="370"/>
         <source>When importing, imported entries will be added to the current project and old entries will be kept.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -797,12 +823,12 @@ Please restart the app and check the logs.</source>
     <message>
         <location filename="../qml/modules/Opal/SupportMe/SupportDialog.qml" line="11"/>
         <source>Thank you for your support!</source>
-        <translation type="unfinished"></translation>
+        <translation>Dziękujemy za twoje wsparcie!</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/SupportMe/SupportDialog.qml" line="55"/>
         <source>Remind me later</source>
-        <translation type="unfinished"></translation>
+        <translation>Przypomnij mi później</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/SupportMe/SupportDialog.qml" line="57"/>

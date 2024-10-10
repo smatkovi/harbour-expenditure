@@ -10,7 +10,7 @@ ListItem{id:root
 property bool showOddEven:false
 property color oddColor:"transparent"
 property color evenColor:Theme.highlightBackgroundColor
-property bool _isOddRow:(index%2!=0)
+property bool _isOddRow:typeof index!=="undefined"&&(index%2!=0)
 property bool interactive:true
 property Component leftItem:null
 readonly property alias centerItem:contentItem

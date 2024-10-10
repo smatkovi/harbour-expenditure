@@ -787,6 +787,8 @@ function getProjectEntries(ident, sortOrder) {
 }
 
 function getProjectExchangeRates(ident) {
+    _updateExchangeRates(ident)
+
     var res = DB.simpleQuery('\
         SELECT currency, rate
         FROM exchange_rates
