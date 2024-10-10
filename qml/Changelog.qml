@@ -9,6 +9,23 @@ import "modules/Opal/About"
 
 ChangelogList {
     ChangelogItem {
+        version: "1.1.0-1"
+        date: "2024-10-10"
+        paragraphs: [
+            "- Updated translations: Swedish, Spanish, Norwegian Bokmål, and more<br>" +
+            "- Fixed corner cases in migrating from legacy databases to the current schema<br>" +
+            "- Fixed scrolling when adding new project members<br>" +
+            "- Fixed stuttering when scrolling the main expenses list<br>" +
+            "- Fixed currency input when running under a different locale than the system locale<br>" +
+            "- Fixed some untranslatable strings<br>" +
+            "- Fixed some typos<br>" +
+            "- Improved database error reporting and stability<br>" +
+            "- Improved translation instructions for some ambiguous strings<br>" +
+            "- Updated Opal modules<br>" +
+            "- Updated list of translation contributors (now automatically added from Weblate)"
+        ]
+    }
+    ChangelogItem {
         version: "1.0.1-1"
         date: "2024-09-20"
         paragraphs: [

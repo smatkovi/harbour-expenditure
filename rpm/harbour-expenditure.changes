@@ -6,6 +6,19 @@
 # * date Author's Name <author's email> version-release
 # - Summary of changes
 
+* Thu Oct 10 2024 Mirian Margiani <mixosaurus+ichthyo@pm.me> 1.1.0-1
+- Updated translations: Swedish, Spanish, Norwegian Bokmål, and more
+- Fixed corner cases in migrating from legacy databases to the current schema
+- Fixed scrolling when adding new project members
+- Fixed stuttering when scrolling the main expenses list
+- Fixed currency input when running under a different locale than the system locale
+- Fixed some untranslatable strings
+- Fixed some typos
+- Improved database error reporting and stability
+- Improved translation instructions for some ambiguous strings
+- Updated Opal modules
+- Updated list of translation contributors (now automatically added from Weblate)
+
 * Fri Sep 20 2024 Mirian Margiani <mixosaurus+ichthyo@pm.me> 1.0.1-1
 - Hotfix to fix importing CSV
 - Note that the CSV format has changed and files exported using app versions before the rewrite (< 1.0.0) can not be imported
