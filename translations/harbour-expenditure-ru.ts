@@ -537,12 +537,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../qml/modules/Opal/About/ChangelogNews.qml" line="60"/>
+        <location filename="../qml/modules/Opal/About/ChangelogNews.qml" line="61"/>
         <source>News</source>
         <translation>Новости</translation>
     </message>
     <message>
-        <location filename="../qml/modules/Opal/About/ChangelogNews.qml" line="61"/>
+        <location filename="../qml/modules/Opal/About/ChangelogNews.qml" line="62"/>
         <source>Changes since version %1</source>
         <translation>Изменения начиная с версии %1</translation>
     </message>
@@ -884,13 +884,13 @@ Please restart the app and check the logs.</source>
 <context>
     <name>storage</name>
     <message>
-        <location filename="../qml/js/storage.js" line="765"/>
+        <location filename="../qml/js/storage.js" line="804"/>
         <source>everyone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/js/storage.js" line="558"/>
-        <location filename="../qml/js/storage.js" line="624"/>
+        <location filename="../qml/js/storage.js" line="597"/>
+        <location filename="../qml/js/storage.js" line="663"/>
         <source>User</source>
         <translation type="unfinished"></translation>
     </message>
