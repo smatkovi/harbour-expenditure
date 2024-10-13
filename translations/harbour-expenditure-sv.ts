@@ -41,7 +41,7 @@
     <message>
         <location filename="../qml/pages/AboutPage.qml" line="92"/>
         <source>Norwegian Bokmål</source>
-        <translation type="unfinished"></translation>
+        <translation>Norska bokmål</translation>
     </message>
     <message>
         <location filename="../qml/pages/AboutPage.qml" line="98"/>
@@ -367,9 +367,9 @@
         <location filename="../qml/pages/FirstPage.qml" line="117"/>
         <source>for %1</source>
         <comment>as in “this payment was for Jane, John, and Jim”, with plural based on the number of beneficiaries</comment>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>för %1</numerusform>
+            <numerusform>för flera %1</numerusform>
         </translation>
     </message>
     <message>
