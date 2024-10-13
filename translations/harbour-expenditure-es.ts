@@ -198,7 +198,7 @@
         <location filename="../qml/components/EditableRatesListDelegate.qml" line="61"/>
         <source>%1 paid</source>
         <comment>as in “I paid 10 USD that were converted to 7 GBP”, with %1 being a currency symbol like &apos;USD&apos;</comment>
-        <translation type="unfinished">%1 pagado(s)</translation>
+        <translation>%1 pagado(s)</translation>
     </message>
     <message>
         <location filename="../qml/components/EditableRatesListDelegate.qml" line="93"/>
@@ -367,9 +367,9 @@
         <location filename="../qml/pages/FirstPage.qml" line="117"/>
         <source>for %1</source>
         <comment>as in “this payment was for Jane, John, and Jim”, with plural based on the number of beneficiaries</comment>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Para %1</numerusform>
+            <numerusform>Para %1</numerusform>
         </translation>
     </message>
     <message>
