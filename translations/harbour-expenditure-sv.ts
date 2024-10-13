@@ -369,7 +369,7 @@
         <comment>as in “this payment was for Jane, John, and Jim”, with plural based on the number of beneficiaries</comment>
         <translation>
             <numerusform>för %1</numerusform>
-            <numerusform>för flera %1</numerusform>
+            <numerusform>för %1</numerusform>
         </translation>
     </message>
     <message>
