@@ -41,7 +41,7 @@
     <message>
         <location filename="../qml/pages/AboutPage.qml" line="92"/>
         <source>Norwegian Bokmål</source>
-        <translation type="unfinished"></translation>
+        <translation>Bokmål Norwegia</translation>
     </message>
     <message>
         <location filename="../qml/pages/AboutPage.qml" line="98"/>
@@ -107,48 +107,48 @@
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="157"/>
         <source>Payments</source>
-        <translation type="unfinished"></translation>
+        <translation>Pembayaran</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="158"/>
         <source>Benefits</source>
-        <translation type="unfinished"></translation>
+        <translation>Manfaat</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="175"/>
         <source>total</source>
-        <translation type="unfinished"></translation>
+        <translation>jumlah</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="159"/>
         <source>Balance</source>
-        <translation type="unfinished"></translation>
+        <translation>Saldo</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="226"/>
         <source>Payer</source>
-        <translation type="unfinished"></translation>
+        <translation>Pembayar</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="236"/>
         <source>Recipient</source>
-        <translation type="unfinished"></translation>
+        <translation>Penerima</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="241"/>
         <source>Sum [%1]</source>
-        <translation type="unfinished"></translation>
+        <translation>Jumlah [%1]</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="116"/>
         <location filename="../qml/pages/CalcPage.qml" line="304"/>
         <source>Review transactions</source>
-        <translation type="unfinished"></translation>
+        <translation>Tinjau transaksi</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="120"/>
         <source>Share detailed report</source>
-        <translation type="unfinished"></translation>
+        <translation>Bagikan laporan terperinci</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="124"/>
