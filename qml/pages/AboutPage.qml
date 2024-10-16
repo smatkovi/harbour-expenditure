@@ -18,7 +18,6 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0 as S
 import Opal.About 1.0 as A
-import "../modules/Opal/Attributions"
 
 A.AboutPageBase {
     id: page
@@ -45,6 +44,7 @@ A.AboutPageBase {
 
     description: qsTr("A simple app for tracking expenses in groups.")
     mainAttributions: ["2023-%1 Mirian Margiani".arg((new Date()).getFullYear()), "2022 Tobias Planitzer"]
+    autoAddOpalAttributions: true
 
     attributions: [
         A.Attribution {
@@ -53,13 +53,7 @@ A.AboutPageBase {
             licenses: A.License { spdxId: "ISC" }
             sources: "https://github.com/thp/pyotherside"
             homepage: "https://thp.io/2011/pyotherside/"
-        },
-        OpalAboutAttribution {},
-        OpalDelegatesAttribution {},
-        OpalSupportMeAttribution {},
-        OpalSmartScrollbarAttribution {},
-        OpalMenuSwitchAttribution {},
-        OpalComboDataAttribution {}
+        }
     ]
 
     contributionSections: [
