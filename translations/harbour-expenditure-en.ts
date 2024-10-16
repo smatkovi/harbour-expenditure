@@ -4,54 +4,59 @@
 <context>
     <name>AboutPage</name>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="82"/>
+        <location filename="../qml/pages/AboutPage.qml" line="76"/>
         <source>Translations</source>
         <translation>Translations</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="46"/>
+        <location filename="../qml/pages/AboutPage.qml" line="45"/>
         <source>A simple app for tracking expenses in groups.</source>
         <translation>A simple app for tracking expenses in groups.</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="67"/>
+        <location filename="../qml/pages/AboutPage.qml" line="61"/>
         <source>Development</source>
         <translation>Development</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="70"/>
+        <location filename="../qml/pages/AboutPage.qml" line="64"/>
         <source>Programming</source>
         <translation>Programming</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="74"/>
+        <location filename="../qml/pages/AboutPage.qml" line="68"/>
         <source>Icon Design</source>
         <translation>Icon Design</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="85"/>
+        <location filename="../qml/pages/AboutPage.qml" line="79"/>
         <source>Swedish</source>
         <translation>Swedish</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="91"/>
+        <location filename="../qml/pages/AboutPage.qml" line="86"/>
         <source>Spanish</source>
         <translation>Spanish</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="97"/>
+        <location filename="../qml/pages/AboutPage.qml" line="92"/>
         <source>Norwegian Bokmål</source>
         <translation>Norwegian (Bokmål)</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="103"/>
+        <location filename="../qml/pages/AboutPage.qml" line="98"/>
         <source>Indonesian</source>
         <translation>Indonesian</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="109"/>
+        <location filename="../qml/pages/AboutPage.qml" line="104"/>
         <source>German</source>
         <translation>German</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/AboutPage.qml" line="111"/>
+        <source>Estonian</source>
+        <translation>Estonian</translation>
     </message>
 </context>
 <context>
