@@ -78,8 +78,6 @@ function getDatabase() {
 
     if (!__initialized || __db === null) {
         console.log("initializing database...")
-
-        // 5 MB estimated size
         __db = LS.LocalStorage.openDatabaseSync(
             dbName, "", dbDescription, dbSize);
 
