@@ -35,6 +35,18 @@ var dbMigrations = [
 var settingsTable = "__local_settings"
 
 
+// The database helper will run database maintenance in
+// regular intervals if enableAutoMaintenance is set to true.
+// By default, this includes only running VACUUM on the
+// database. You can assign a custom function here that
+// will be executed too.
+//
+// The function takes no arguments and can use regular
+// database functions (simpleQuery, guardedTx, etc.) to
+// access the database.
+var maintenanceCallback = function() {}
+
+
 //
 // BEGIN Database handling boilerplate
 // It is usually not necessary to change this part.
@@ -470,6 +482,17 @@ function __doDatabaseMaintenance() {
     }
 
     console.log("running regular database maintenance...")
+
+    if (maintenanceCallback instanceof Function) {
+        try {
+            maintenanceCallback()
+        } catch(e) {
+            console.error("database maintenance failed:",
+                          "\n   ERROR  >", e,
+                          "\n   STACK  >\n", e.stack);
+        }
+    }
+
     __vacuumDatabase();
     console.log("maintenance finished")
     setSetting("last_maintenance", new Date().toISOString());
