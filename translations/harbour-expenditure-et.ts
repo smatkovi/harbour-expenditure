@@ -11,7 +11,7 @@
     <message>
         <location filename="../qml/pages/AboutPage.qml" line="45"/>
         <source>A simple app for tracking expenses in groups.</source>
-        <translation type="unfinished"></translation>
+        <translation>Lihtne rakendus seltskonna kulude arvestamiseks ja jagamiseks,</translation>
     </message>
     <message>
         <location filename="../qml/pages/AboutPage.qml" line="61"/>
