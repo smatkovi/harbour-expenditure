@@ -50,3 +50,7 @@ Comment: https://unsplash.com/de/fotos/7zRTDfnRcrg
 Files: _service
 Copyright: yajo10
 License: GPL-3.0-or-later
+
+Files: TRANSLATORS.json
+Copyright: translations contributors
+License: GPL-3.0-or-later
