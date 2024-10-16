@@ -78,6 +78,7 @@ A.AboutPageBase {
                 A.ContributionGroup {
                     title: qsTr("Swedish")
                     entries: [
+                        "bittin1ddc447d824349b2",
                         "Åke Engelbrektson"
                     ]
                 },
@@ -104,6 +105,12 @@ A.AboutPageBase {
                     entries: [
                         "Mirian Margiani",
                         "Tobias Planitzer"
+                    ]
+                },
+                A.ContributionGroup {
+                    title: qsTr("Estonian")
+                    entries: [
+                        "Priit Jõerüüt"
                     ]
                 }
             ]

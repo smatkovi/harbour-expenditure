@@ -1,6 +1,12 @@
 {
   "weblate": [
     {
+      "language": "Estonian",
+      "entries": [
+        "Priit Jõerüüt"
+      ]
+    },
+    {
       "language": "Indonesian",
       "entries": [
         "Reza Almanda"
@@ -21,7 +27,8 @@
     {
       "language": "Swedish",
       "entries": [
-        "Åke Engelbrektson"
+        "Åke Engelbrektson",
+        "bittin1ddc447d824349b2"
       ]
     }
   ],
