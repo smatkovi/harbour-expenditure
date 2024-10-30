@@ -153,22 +153,22 @@
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="124"/>
         <source>Share compact report</source>
-        <translation type="unfinished"></translation>
+        <translation>Bagikan laporan ringkas</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="77"/>
         <source>A detailed report has been copied to the clipboard.</source>
-        <translation type="unfinished"></translation>
+        <translation>Laporan terperinci telah disalin ke clipboard.</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="78"/>
         <source>A compact report has been copied to the clipboard.</source>
-        <translation type="unfinished"></translation>
+        <translation>Laporan ringkas telah disalin ke clipboard.</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="99"/>
         <source>Spendings report</source>
-        <translation type="unfinished"></translation>
+        <translation>Laporan pengeluaran</translation>
     </message>
 </context>
 <context>
@@ -176,7 +176,7 @@
     <message>
         <location filename="../qml/components/DateTimePickerCombo.qml" line="20"/>
         <source>never</source>
-        <translation type="unfinished"></translation>
+        <translation>tidak pernah</translation>
     </message>
 </context>
 <context>
@@ -184,12 +184,12 @@
     <message>
         <location filename="../qml/modules/Opal/SupportMe/DetailsDrawer.qml" line="53"/>
         <source>show less</source>
-        <translation type="unfinished"></translation>
+        <translation>tampilkan sedikit</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/SupportMe/DetailsDrawer.qml" line="53"/>
         <source>show more</source>
-        <translation type="unfinished"></translation>
+        <translation>tampilkan lebih banyak</translation>
     </message>
 </context>
 <context>
@@ -198,12 +198,12 @@
         <location filename="../qml/components/EditableRatesListDelegate.qml" line="61"/>
         <source>%1 paid</source>
         <comment>as in “I paid 10 USD that were converted to 7 GBP”, with %1 being a currency symbol like &apos;USD&apos;</comment>
-        <translation type="unfinished"></translation>
+        <translation>%1 dibayar</translation>
     </message>
     <message>
         <location filename="../qml/components/EditableRatesListDelegate.qml" line="93"/>
         <source>Exchange rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Nilai tukar</translation>
     </message>
 </context>
 <context>
@@ -211,7 +211,7 @@
     <message>
         <location filename="../qml/pages/ExpenseDialog.qml" line="185"/>
         <source>Discarded all changes</source>
-        <translation type="unfinished"></translation>
+        <translation>Membuang semua perubahan</translation>
     </message>
     <message>
         <location filename="../qml/pages/ExpenseDialog.qml" line="187"/>
