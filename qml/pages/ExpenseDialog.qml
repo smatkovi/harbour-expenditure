@@ -1,7 +1,7 @@
 /*
  * This file is part of harbour-expenditure.
  * SPDX-License-Identifier: GPL-3.0-or-later
- * SPDX-FileCopyrightText: 2024 Mirian Margiani
+ * SPDX-FileCopyrightText: 2024-2025 Mirian Margiani
  */
 
 import QtQuick 2.6
@@ -537,6 +537,44 @@ Dialog {
                             setBeneficiary(true)
                         }
                     }
+                }
+            }
+
+            EditableMembersListDelegate {
+                id: addMemberItem
+                _isOddRow: false
+
+                readonly property bool canApply: !!text.trim()
+
+                onTextFieldFocusChanged: {
+                    if (!focus && canApply) {
+                        apply()
+                    }
+                }
+                onEnterKeyClicked: {
+                    if (canApply) apply()
+                    else textField.focus = false
+                }
+                enterKeyIcon: canApply ?
+                                  "image://theme/icon-m-add" :
+                                  "image://theme/icon-m-enter-close"
+
+                actionEnabled: !!text
+                actionIcon: "image://theme/icon-splus-add"
+                onActionTriggered: apply()
+
+                function apply() {
+                    if (!canApply) return
+
+                    var name = text.trim()
+
+                    if (_mergedMembers.indexOf(name) < 0) {
+                        _mergedMembers.push(name)
+                        _mergedMembers = _mergedMembers
+                    }
+
+                    text = ''
+                    textField.forceActiveFocus()
                 }
             }
         }
