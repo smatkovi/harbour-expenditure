@@ -16,6 +16,8 @@ PaddedDelegate {
     property alias acceptableInput: _textField.acceptableInput
     signal textFieldFocusChanged(var focus)
 
+    property alias placeholderText: _textField.placeholderText
+
     signal enterKeyClicked
     property url enterKeyIcon: "image://theme/icon-m-enter"
 

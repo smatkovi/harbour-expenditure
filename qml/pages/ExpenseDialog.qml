@@ -546,6 +546,8 @@ Dialog {
 
                 readonly property bool canApply: !!text.trim()
 
+                placeholderText: qsTr("Additional name")
+
                 onTextFieldFocusChanged: {
                     if (!focus && canApply) {
                         apply()

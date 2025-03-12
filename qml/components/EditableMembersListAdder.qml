@@ -16,6 +16,8 @@ EditableMembersListDelegate {
     _isOddRow: false
     readonly property bool canApply: !!text.trim()
 
+    placeholderText: qsTr("New member name")
+
     onTextFieldFocusChanged: {
         if (!focus && canApply) {
             apply()
