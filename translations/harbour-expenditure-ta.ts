@@ -198,6 +198,14 @@
     </message>
 </context>
 <context>
+    <name>EditableMembersListAdder</name>
+    <message>
+        <location filename="../qml/components/EditableMembersListAdder.qml" line="19"/>
+        <source>New member name</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>EditableRatesListDelegate</name>
     <message>
         <location filename="../qml/components/EditableRatesListDelegate.qml" line="61"/>
@@ -292,6 +300,11 @@
         <location filename="../qml/pages/ExpenseDialog.qml" line="419"/>
         <source>everyone</source>
         <translation>எல்லோரும்</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ExpenseDialog.qml" line="549"/>
+        <source>Additional name</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
