@@ -9,6 +9,19 @@ import "modules/Opal/About"
 
 ChangelogList {
     ChangelogItem {
+        version: "1.2.0-1"
+        date: "2025-03-12"
+        paragraphs: [
+            "- Added translations: Portuguese (Brazil), Romanian, Tamil<br>" +
+            "- Updated translations: Estonian, German, Indonesian, Portuguese (Brazil), Spanish, Swedish, Tamil, Ukrainian<br>" +
+            "- Added support for quickly adding new members while entering an expense<br>" +
+            "- Added support for calculating direct debts instead of an optimized settlement suggestion<br>" +
+            "- Fixed some input fields missing placeholder texts<br>" +
+            "- Fixed 0.00 sometimes showing up in settlement suggestions<br>" +
+            "- Updated Opal modules"
+        ]
+    }
+    ChangelogItem {
         version: "1.1.0-1"
         date: "2024-10-10"
         paragraphs: [

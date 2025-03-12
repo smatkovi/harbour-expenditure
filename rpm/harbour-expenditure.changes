@@ -6,6 +6,15 @@
 # * date Author's Name <author's email> version-release
 # - Summary of changes
 
+* Wed Mar 12 2025 Mirian Margiani <mixosaurus+ichthyo@pm.me> 1.2.0-1
+- Added translations: Portuguese (Brazil), Romanian, Tamil
+- Updated translations: Estonian, German, Indonesian, Portuguese (Brazil), Spanish, Swedish, Tamil, Ukrainian
+- Added support for quickly adding new members while entering an expense
+- Added support for calculating direct debts instead of an optimized settlement suggestion
+- Fixed some input fields missing placeholder texts
+- Fixed 0.00 sometimes showing up in settlement suggestions
+- Updated Opal modules
+
 * Thu Oct 10 2024 Mirian Margiani <mixosaurus+ichthyo@pm.me> 1.1.0-1
 - Updated translations: Swedish, Spanish, Norwegian Bokmål, and more
 - Fixed corner cases in migrating from legacy databases to the current schema
