@@ -280,7 +280,7 @@ Page {
             EditableRatesList {
                 id: exchangeRatesList
                 selectedProject: ProjectData {
-                    // cannot assing appWindow.activeProject, but why?
+                    // cannot assign appWindow.activeProject, but why?
                     rowid: appWindow.activeProject.rowid
                     loadExpenses: false
                     loadRates: true
