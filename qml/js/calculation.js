@@ -1,7 +1,7 @@
 /*
  * This file is part of harbour-expenditure.
  * SPDX-License-Identifier: GPL-3.0-or-later
- * SPDX-FileCopyrightText: 2024 Mirian Margiani
+ * SPDX-FileCopyrightText: 2024-2025 Mirian Margiani
  */
 
 // note: this script is not a library
@@ -27,11 +27,11 @@ var _peopleMap = {}
 var _peopleArr = []
 
 
-function calculate(projectData) {
+function calculate(projectData, directDebts) {
     console.log("calculating...")
     _reset(projectData)
     _collectSumsAndPeople()
-    _splitDues()
+    _splitDues(directDebts)
 
     if (_validate()) {
         _applyPrecision()
@@ -172,7 +172,76 @@ function _sortMap(map, ascending) {
     return sorted
 }
 
-function _splitDues() {
+function _splitDues(directDebts) {
+    if (!!directDebts) {
+        _settlement = _splitDuesDirectly()
+    } else {
+        _settlement = _splitDuesOptimized()
+    }
+}
+
+function _splitDuesDirectly() {
+    var settlement = []
+    var debts = {}  // debts[from][to] = value
+
+    for (var i in _expenses) {
+        var x = _expenses[i]
+        var convertedSum = _convertToBase(x)
+        var individualDebt = convertedSum / x.beneficiaries_list.length
+
+        for (var b in x.beneficiaries_list) {
+            var bb = x.beneficiaries_list[b]
+
+            if (bb === x.payer) {
+                continue
+            }
+
+            if (!debts.hasOwnProperty(bb)) {
+                debts[bb] = {}
+            }
+
+            if (!debts[bb].hasOwnProperty(x.payer)) {
+                debts[bb][x.payer] = 0.00
+            }
+
+            debts[bb][x.payer] += individualDebt
+        }
+    }
+
+    for (var from in debts) {
+        for (var to in debts[from]) {
+            var value = Number(debts[from][to])
+
+            if (debts.hasOwnProperty(to) && debts[to].hasOwnProperty(from)) {
+                var reverseValue = Number(debts[to][from])
+
+                if (value == reverseValue) {
+                    debts[from][to] = 0.00
+                    debts[to][from] = 0.00
+                    value = 0.00
+                } else if (value > reverseValue) {
+                    debts[from][to] = value - reverseValue
+                    debts[to][from] = 0.00
+                    value = debts[from][to]
+                } else if (reverseValue > value) {
+                    continue
+                }
+            }
+
+            if (value != Number(0.00)) {
+                settlement.push({
+                    from: from,
+                    to: to,
+                    value: value
+                })
+            }
+        }
+    }
+
+    return settlement
+}
+
+function _splitDuesOptimized() {
     // apply a (n-1) algorithm  to settle expenses (how much each person ows to whom)
 
     var meanValue = 0
@@ -227,7 +296,7 @@ function _splitDues() {
     prepareArrays()
     calculateSettlement()
 
-    _settlement = settlement
+    return settlement
 }
 
 function _validate() {

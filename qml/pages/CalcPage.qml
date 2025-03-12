@@ -1,7 +1,7 @@
 /*
  * This file is part of harbour-expenditure.
  * SPDX-License-Identifier: GPL-3.0-or-later
- * SPDX-FileCopyrightText: 2024 Mirian Margiani
+ * SPDX-FileCopyrightText: 2024-2025 Mirian Margiani
  */
 
 import QtQuick 2.6
@@ -28,8 +28,8 @@ Page {
     property var settlement: ([])
     property var people: ([])
 
-    function calculate() {
-        var results = Calculation.calculate(appWindow.activeProject)
+    function calculate(directDebts) {
+        var results = Calculation.calculate(appWindow.activeProject, directDebts)
 
         expenses = results.expenses
         baseCurrency = results.baseCurrency
@@ -210,12 +210,22 @@ Page {
             }
 
             SectionHeader {
+                id: settlementHeader
                 text: qsTr("Settlement suggestion")
                 visible: !!settlement && settlement.length > 0
             }
 
+            TextSwitch {
+                text: qsTr("Calculate direct debts")
+                visible: settlementHeader.visible
+                checked: false
+                onCheckedChanged: {
+                    calculate(checked)
+                }
+            }
+
             GridLayout {
-                visible: !!settlement && settlement.length > 0
+                visible: settlementHeader.visible
                 width: parent.width - 2*x
                 x: Theme.horizontalPageMargin
                 columnSpacing: Theme.paddingSmall
