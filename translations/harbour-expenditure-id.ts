@@ -80,22 +80,27 @@
         <translation>Ikhtisar pengeluaran</translation>
     </message>
     <message>
-        <location filename="../qml/pages/CalcPage.qml" line="213"/>
+        <location filename="../qml/pages/CalcPage.qml" line="214"/>
         <source>Settlement suggestion</source>
         <translation>Saran penyelesaian</translation>
     </message>
     <message>
-        <location filename="../qml/pages/CalcPage.qml" line="277"/>
+        <location filename="../qml/pages/CalcPage.qml" line="219"/>
+        <source>Calculate direct debts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/CalcPage.qml" line="287"/>
         <source>Base exchange rates</source>
         <translation>Nilai tukar dasar</translation>
     </message>
     <message>
-        <location filename="../qml/pages/CalcPage.qml" line="297"/>
+        <location filename="../qml/pages/CalcPage.qml" line="307"/>
         <source>Transactions and fees</source>
         <translation>Transaksi dan biaya</translation>
     </message>
     <message>
-        <location filename="../qml/pages/CalcPage.qml" line="310"/>
+        <location filename="../qml/pages/CalcPage.qml" line="320"/>
         <source>Click here to review and edit fees and exchange rates individually for all transactions. Transactions that do not declare a custom exchange rate are converted using the base exchange rates defined above.</source>
         <translation>Klik di sini untuk meninjau dan mengedit biaya dan nilai tukar satu per satu untuk semua transaksi. Transaksi yang tidak menyatakan nilai tukar khusus akan dikonversikan menggunakan nilai tukar dasar yang ditentukan di atas.</translation>
     </message>
@@ -125,23 +130,23 @@
         <translation>Saldo</translation>
     </message>
     <message>
-        <location filename="../qml/pages/CalcPage.qml" line="226"/>
+        <location filename="../qml/pages/CalcPage.qml" line="236"/>
         <source>Payer</source>
         <translation>Pembayar</translation>
     </message>
     <message>
-        <location filename="../qml/pages/CalcPage.qml" line="236"/>
+        <location filename="../qml/pages/CalcPage.qml" line="246"/>
         <source>Recipient</source>
         <translation>Penerima</translation>
     </message>
     <message>
-        <location filename="../qml/pages/CalcPage.qml" line="241"/>
+        <location filename="../qml/pages/CalcPage.qml" line="251"/>
         <source>Sum [%1]</source>
         <translation>Jumlah [%1]</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="116"/>
-        <location filename="../qml/pages/CalcPage.qml" line="304"/>
+        <location filename="../qml/pages/CalcPage.qml" line="314"/>
         <source>Review transactions</source>
         <translation>Tinjau transaksi</translation>
     </message>
@@ -276,7 +281,7 @@
     <message>
         <location filename="../qml/pages/ExpenseDialog.qml" line="382"/>
         <source>Payer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pembayar</translation>
     </message>
     <message>
         <location filename="../qml/pages/ExpenseDialog.qml" line="390"/>
@@ -695,7 +700,7 @@ Please restart the app and check the logs.</source>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="291"/>
         <source>Exchange rate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nilai tukar</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="26"/>

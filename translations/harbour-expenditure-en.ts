@@ -80,22 +80,27 @@
         <translation>Spending overview</translation>
     </message>
     <message>
-        <location filename="../qml/pages/CalcPage.qml" line="213"/>
+        <location filename="../qml/pages/CalcPage.qml" line="214"/>
         <source>Settlement suggestion</source>
         <translation>Settlement suggestion</translation>
     </message>
     <message>
-        <location filename="../qml/pages/CalcPage.qml" line="277"/>
+        <location filename="../qml/pages/CalcPage.qml" line="219"/>
+        <source>Calculate direct debts</source>
+        <translation>Calculate direct debts</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/CalcPage.qml" line="287"/>
         <source>Base exchange rates</source>
         <translation>Base exchange rates</translation>
     </message>
     <message>
-        <location filename="../qml/pages/CalcPage.qml" line="297"/>
+        <location filename="../qml/pages/CalcPage.qml" line="307"/>
         <source>Transactions and fees</source>
         <translation>Transactions and fees</translation>
     </message>
     <message>
-        <location filename="../qml/pages/CalcPage.qml" line="310"/>
+        <location filename="../qml/pages/CalcPage.qml" line="320"/>
         <source>Click here to review and edit fees and exchange rates individually for all transactions. Transactions that do not declare a custom exchange rate are converted using the base exchange rates defined above.</source>
         <translation>Click here to review and edit fees and exchange rates individually for all transactions. Transactions that do not declare a custom exchange rate are converted using the base exchange rates defined above.</translation>
     </message>
@@ -125,23 +130,23 @@
         <translation>Balance</translation>
     </message>
     <message>
-        <location filename="../qml/pages/CalcPage.qml" line="226"/>
+        <location filename="../qml/pages/CalcPage.qml" line="236"/>
         <source>Payer</source>
         <translation>Payer</translation>
     </message>
     <message>
-        <location filename="../qml/pages/CalcPage.qml" line="236"/>
+        <location filename="../qml/pages/CalcPage.qml" line="246"/>
         <source>Recipient</source>
         <translation>Recipient</translation>
     </message>
     <message>
-        <location filename="../qml/pages/CalcPage.qml" line="241"/>
+        <location filename="../qml/pages/CalcPage.qml" line="251"/>
         <source>Sum [%1]</source>
         <translation>Sum [%1]</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="116"/>
-        <location filename="../qml/pages/CalcPage.qml" line="304"/>
+        <location filename="../qml/pages/CalcPage.qml" line="314"/>
         <source>Review transactions</source>
         <translation>Review transactions</translation>
     </message>

@@ -80,22 +80,27 @@
         <translation>Kulutuste ülevaade</translation>
     </message>
     <message>
-        <location filename="../qml/pages/CalcPage.qml" line="213"/>
+        <location filename="../qml/pages/CalcPage.qml" line="214"/>
         <source>Settlement suggestion</source>
         <translation>Tasaarvelduse ettepanek</translation>
     </message>
     <message>
-        <location filename="../qml/pages/CalcPage.qml" line="277"/>
+        <location filename="../qml/pages/CalcPage.qml" line="219"/>
+        <source>Calculate direct debts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/CalcPage.qml" line="287"/>
         <source>Base exchange rates</source>
         <translation>Vaikimisi vahetuskurss</translation>
     </message>
     <message>
-        <location filename="../qml/pages/CalcPage.qml" line="297"/>
+        <location filename="../qml/pages/CalcPage.qml" line="307"/>
         <source>Transactions and fees</source>
         <translation>Tehingud ja tasud</translation>
     </message>
     <message>
-        <location filename="../qml/pages/CalcPage.qml" line="310"/>
+        <location filename="../qml/pages/CalcPage.qml" line="320"/>
         <source>Click here to review and edit fees and exchange rates individually for all transactions. Transactions that do not declare a custom exchange rate are converted using the base exchange rates defined above.</source>
         <translation>Kui soovid üle vaadata ja muuta tehingukohaseid vahetuskursse ja teenustasusid, siis klõpsi siin. Kui tehingukohast valuutakurssi pole kirjas, siis kasutame eelpoolmainitud vaikimisi kurssi.</translation>
     </message>
@@ -125,23 +130,23 @@
         <translation>Vahe</translation>
     </message>
     <message>
-        <location filename="../qml/pages/CalcPage.qml" line="226"/>
+        <location filename="../qml/pages/CalcPage.qml" line="236"/>
         <source>Payer</source>
         <translation>Maksja</translation>
     </message>
     <message>
-        <location filename="../qml/pages/CalcPage.qml" line="236"/>
+        <location filename="../qml/pages/CalcPage.qml" line="246"/>
         <source>Recipient</source>
         <translation>Saaja</translation>
     </message>
     <message>
-        <location filename="../qml/pages/CalcPage.qml" line="241"/>
+        <location filename="../qml/pages/CalcPage.qml" line="251"/>
         <source>Sum [%1]</source>
         <translation>Summa [%1]</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="116"/>
-        <location filename="../qml/pages/CalcPage.qml" line="304"/>
+        <location filename="../qml/pages/CalcPage.qml" line="314"/>
         <source>Review transactions</source>
         <translation>Vaata tehinguid</translation>
     </message>

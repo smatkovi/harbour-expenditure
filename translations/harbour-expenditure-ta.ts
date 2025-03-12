@@ -80,22 +80,27 @@
         <translation>கண்ணோட்டத்தை செலவிடுகிறது</translation>
     </message>
     <message>
-        <location filename="../qml/pages/CalcPage.qml" line="213"/>
+        <location filename="../qml/pages/CalcPage.qml" line="214"/>
         <source>Settlement suggestion</source>
         <translation>தீர்வு பரிந்துரை</translation>
     </message>
     <message>
-        <location filename="../qml/pages/CalcPage.qml" line="277"/>
+        <location filename="../qml/pages/CalcPage.qml" line="219"/>
+        <source>Calculate direct debts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/CalcPage.qml" line="287"/>
         <source>Base exchange rates</source>
         <translation>அடிப்படை பரிமாற்ற விகிதங்கள்</translation>
     </message>
     <message>
-        <location filename="../qml/pages/CalcPage.qml" line="297"/>
+        <location filename="../qml/pages/CalcPage.qml" line="307"/>
         <source>Transactions and fees</source>
         <translation>பரிவர்த்தனைகள் மற்றும் கட்டணம்</translation>
     </message>
     <message>
-        <location filename="../qml/pages/CalcPage.qml" line="310"/>
+        <location filename="../qml/pages/CalcPage.qml" line="320"/>
         <source>Click here to review and edit fees and exchange rates individually for all transactions. Transactions that do not declare a custom exchange rate are converted using the base exchange rates defined above.</source>
         <translation>அனைத்து பரிவர்த்தனைகளுக்கும் கட்டணங்களை மதிப்பாய்வு செய்து திருத்தவும் விகிதங்களைப் பரிமாறிக்கொள்ள இங்கே சொடுக்கு செய்க. தனிப்பயன் பரிமாற்ற வீதத்தை அறிவிக்காத பரிவர்த்தனைகள் மேலே வரையறுக்கப்பட்ட அடிப்படை பரிமாற்ற விகிதங்களைப் பயன்படுத்தி மாற்றப்படுகின்றன.</translation>
     </message>
@@ -125,23 +130,23 @@
         <translation>இருப்பு</translation>
     </message>
     <message>
-        <location filename="../qml/pages/CalcPage.qml" line="226"/>
+        <location filename="../qml/pages/CalcPage.qml" line="236"/>
         <source>Payer</source>
         <translation>பணம் செலுத்துபவர்</translation>
     </message>
     <message>
-        <location filename="../qml/pages/CalcPage.qml" line="236"/>
+        <location filename="../qml/pages/CalcPage.qml" line="246"/>
         <source>Recipient</source>
         <translation>பெறுநர்</translation>
     </message>
     <message>
-        <location filename="../qml/pages/CalcPage.qml" line="241"/>
+        <location filename="../qml/pages/CalcPage.qml" line="251"/>
         <source>Sum [%1]</source>
         <translation>தொகை [%1]</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="116"/>
-        <location filename="../qml/pages/CalcPage.qml" line="304"/>
+        <location filename="../qml/pages/CalcPage.qml" line="314"/>
         <source>Review transactions</source>
         <translation>பரிவர்த்தனைகளை மதிப்பாய்வு செய்யவும்</translation>
     </message>
