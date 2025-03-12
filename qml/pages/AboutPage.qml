@@ -76,6 +76,12 @@ A.AboutPageBase {
             title: qsTr("Translations")
             groups: [
                 A.ContributionGroup {
+                    title: qsTr("Tamil")
+                    entries: [
+                        "தமிழ்நேரம்"
+                    ]
+                },
+                A.ContributionGroup {
                     title: qsTr("Swedish")
                     entries: [
                         "bittin1ddc447d824349b2",
@@ -83,9 +89,9 @@ A.AboutPageBase {
                     ]
                 },
                 A.ContributionGroup {
-                    title: qsTr("Spanish")
+                    title: qsTr("Portuguese (Brazil)")
                     entries: [
-                        "gallegonovato"
+                        "Thiago Carmona"
                     ]
                 },
                 A.ContributionGroup {
@@ -104,6 +110,7 @@ A.AboutPageBase {
                     title: qsTr("German")
                     entries: [
                         "Mirian Margiani",
+                        "Thiago Carmona",
                         "Tobias Planitzer"
                     ]
                 },
