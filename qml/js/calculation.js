@@ -276,7 +276,7 @@ function _applyPrecision() {
         var set = _settlement[i]
         var fixed = Number(set.value).toFixed(_settlementPrecision)
 
-        if (fixed == zero) {
+        if (fixed == zero || -fixed == zero) {
             continue
         } else {
             filtered.push({
