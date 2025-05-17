@@ -326,12 +326,12 @@
     <message>
         <location filename="../qml/pages/FeesRatesPage.qml" line="72"/>
         <source>Transactions</source>
-        <translation>транзакції</translation>
+        <translation>Транзакції</translation>
     </message>
     <message>
         <location filename="../qml/pages/FeesRatesPage.qml" line="73"/>
         <source>Save</source>
-        <translation>зберегти</translation>
+        <translation>Зберегти</translation>
     </message>
     <message>
         <location filename="../qml/pages/FeesRatesPage.qml" line="74"/>
@@ -354,7 +354,7 @@
     <message>
         <location filename="../qml/pages/FirstPage.qml" line="214"/>
         <source>Remove</source>
-        <translation>видалити</translation>
+        <translation>Вилучити</translation>
     </message>
     <message>
         <location filename="../qml/pages/FirstPage.qml" line="67"/>
