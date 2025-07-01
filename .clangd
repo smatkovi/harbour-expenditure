@@ -2,7 +2,7 @@
 # kate: syntax YAML
 #
 # This file is part of harbour-expenditure.
-# SPDX-FileCopyrightText: 2022  Mirian Margiani
+# SPDX-FileCopyrightText: 2022-2025  Mirian Margiani
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 CompileFlags:
@@ -12,7 +12,7 @@ CompileFlags:
         - -isystem/usr/include/qt5/QtCore
         - -isystem/usr/include/qt5/QtNetwork
         - -isystem/usr/include/qt5/QtQuick
-        - -isystem/opt/sfos/mersdk/targets/SailfishOS-4.5.0.18-armv7hl.default/usr/include/sailfishapp/
+        - -isystem/opt/sfos/mersdk/targets/SailfishOS-4.6.0.13-armv7hl.default/usr/include/sailfishapp/
 
 # Diagnostics:
 #     ClangTidy:
