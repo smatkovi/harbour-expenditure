@@ -6,6 +6,10 @@
 # * date Author's Name <author's email> version-release
 # - Summary of changes
 
+* Tue Jul 01 2025 Mirian Margiani <mixosaurus+ichthyo@pm.me> 1.2.1-1
+- Updated translations: Estonian, Swedish, Ukrainian
+- Minor packaging changes
+
 * Wed Mar 12 2025 Mirian Margiani <mixosaurus+ichthyo@pm.me> 1.2.0-1
 - Added translations: Portuguese (Brazil), Romanian, Tamil
 - Updated translations: Estonian, German, Indonesian, Portuguese (Brazil), Spanish, Swedish, Tamil, Ukrainian
