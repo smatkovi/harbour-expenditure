@@ -76,6 +76,12 @@ A.AboutPageBase {
             title: qsTr("Translations")
             groups: [
                 A.ContributionGroup {
+                    title: qsTr("Ukrainian")
+                    entries: [
+                        "Максим Горпиніч"
+                    ]
+                },
+                A.ContributionGroup {
                     title: qsTr("Tamil")
                     entries: [
                         "தமிழ்நேரம்"
