@@ -315,6 +315,17 @@ Page {
                 }
             }
 
+            Item {
+                visible: settlementHeader.visible
+                width: parent.width
+                height: Theme.paddingLarge
+            }
+
+            PrecisionSelector {
+                width: parent.width
+                onValueChanged: calculate()
+            }
+
             SectionHeader {
                 text: qsTr("Base exchange rates")
             }
