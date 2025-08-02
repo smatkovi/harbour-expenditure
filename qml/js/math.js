@@ -24,16 +24,18 @@ BigNumber.config({
         // decimal separator
         decimalSeparator: Qt.locale().decimalPoint,
         // grouping separator of the integer part
-        groupSeparator: Qt.locale().groupSeparator,
-
+        groupSeparator: Qt.locale().groupSeparator === '.' &&
+                        Qt.locale().decimalPoint === ',' ? "'" :
+                        Qt.locale().groupSeparator,
 
         // Qt provides no info about these settings so
         // we keep the defaults:
 
         // primary grouping size of the integer part
-        // groupSize: 3,
+        groupSize: 3,
         // secondary grouping size of the integer part
-        // secondaryGroupSize: 0,
+        secondaryGroupSize: 0,
+
         // grouping separator of the fraction part
         // fractionGroupSeparator: ' ',
         // grouping size of the fraction part
