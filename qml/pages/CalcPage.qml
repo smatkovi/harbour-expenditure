@@ -29,7 +29,8 @@ Page {
     property var missingRates: ([])
     property var people: ([])
 
-    function calculate(directDebts) {
+    function calculate() {
+        var directDebts = calcDirectSwitch.checked
         var results = Calculation.calculate(appWindow.activeProject, directDebts)
 
         expenses = results.expenses
@@ -230,11 +231,12 @@ Page {
             }
 
             TextSwitch {
+                id: calcDirectSwitch
                 text: qsTr("Calculate direct debts")
                 visible: settlementHeader.visible
                 checked: false
                 onCheckedChanged: {
-                    calculate(checked)
+                    calculate()
                 }
             }
 
