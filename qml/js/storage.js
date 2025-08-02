@@ -5,7 +5,7 @@
  */
 
 .pragma library
-.import "storage_helper.js" as DB
+.import "../modules/Opal/LocalStorage/StorageHelper.js" as DB
 .import "dates.js" as Dates
 
 //

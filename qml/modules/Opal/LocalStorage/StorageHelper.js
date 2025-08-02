@@ -1,8 +1,7 @@
-/*
- * This file is part of harbour-expenditure.
- * SPDX-License-Identifier: GPL-3.0-or-later
- * SPDX-FileCopyrightText: 2018-2024 Mirian Margiani
- */
+//@ This file is part of opal-localstorage.
+//@ https://github.com/Pretty-SFOS/opal-localstorage
+//@ SPDX-License-Identifier: GPL-3.0-or-later
+//@ SPDX-FileCopyrightText: 2018-2025 Mirian Margiani
 
 .pragma library
 .import QtQuick.LocalStorage 2.0 as LS
@@ -17,8 +16,8 @@ var dbSize = 2000000  // 2 MB
 var enableAutoMaintenance = true
 
 var dbMigrations = [
-    // [0.1, 'CREATE TABLE IF NOT EXISTS ...;'],
-    // [0.2, function(tx){ tx.executeSql(...); }],
+    // [1, 'CREATE TABLE IF NOT EXISTS ...;'],
+    // [2, function(tx){ tx.executeSql(...); }],
 
     // add new versions here...
     //
@@ -45,6 +44,11 @@ var settingsTable = "__local_settings"
 // database functions (simpleQuery, guardedTx, etc.) to
 // access the database.
 var maintenanceCallback = function() {}
+
+// These functions will be called before and after any maintenance is run.
+// Both functions take no arguments and must not modify the database.
+var maintenanceStartSignal = null
+var maintenanceEndSignal = null
 
 
 //
@@ -124,7 +128,7 @@ function guardedTx(tx, callback) {
 
         console.error("guarded transaction failed:",
                       "\n   ERROR  >", e,
-                      "\n   CALLER >", e.stack.split('\n')[0]);
+                      "\n   CALLER >", e.stack);
         throw e
     }
 
@@ -371,7 +375,7 @@ function makeTableSortable(tx, tableName, orderColumn) {
         WHEN NEW.%3 BETWEEN 1 AND OLD.%3-1
         BEGIN
             UPDATE %2 SET %3 = NULL WHERE %3 = OLD.%3;
-            UPDATE %2 SET %3 = %3 + 1  WHERE %3 BETWEEN NEW.%3 AND OLD.%3;
+            UPDATE %2 SET %3 = %3 + 1 WHERE %3 BETWEEN NEW.%3 AND OLD.%3;
             UPDATE %2 SET %3 = NEW.%3 WHERE %3 IS NULL;
         END;
     '.arg(viewName).arg(tableName).arg(orderColumn))
@@ -462,8 +466,8 @@ function __vacuumDatabase() {
             // VACUUM cannot be executed inside a transaction, but the LocalStorage
             // module cannot execute queries without one. Thus we have to manually
             // end the transaction from inside the transaction...
-            var rs = tx.executeSql("END TRANSACTION;");
-            var rs2 = tx.executeSql("VACUUM;");
+            tx.executeSql("END TRANSACTION;");
+            tx.executeSql("VACUUM;");
         });
     } catch(e) {
         console.error("database vacuuming failed:\n", e);
@@ -483,17 +487,40 @@ function __doDatabaseMaintenance() {
 
     console.log("running regular database maintenance...")
 
+    if (maintenanceStartSignal instanceof Function) {
+        try {
+            console.log("- calling start signal")
+            maintenanceStartSignal()
+        } catch(e) {
+            console.error("sending the maintenance start signal failed:",
+                          "\n   ERROR  >", e,
+                          "\n   STACK  >\n", e.stack);
+        }
+    }
+
     if (maintenanceCallback instanceof Function) {
         try {
             maintenanceCallback()
         } catch(e) {
-            console.error("database maintenance failed:",
+            console.error("custom database maintenance failed:",
                           "\n   ERROR  >", e,
                           "\n   STACK  >\n", e.stack);
         }
     }
 
     __vacuumDatabase();
+
     console.log("maintenance finished")
     setSetting("last_maintenance", new Date().toISOString());
+
+    if (maintenanceEndSignal instanceof Function) {
+        try {
+            console.log("- calling end signal")
+            maintenanceEndSignal()
+        } catch(e) {
+            console.error("sending the maintenance end signal failed:",
+                          "\n   ERROR  >", e,
+                          "\n   STACK  >\n", e.stack);
+        }
+    }
 }
