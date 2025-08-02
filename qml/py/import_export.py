@@ -124,9 +124,7 @@ total expenses: {totalPayments} {cur}
         report += '## Settlement suggestion\n\n'
 
         for group in settlement:
-            report += f'''
-- {group['from']} pays {group['to']} the sum of {group['value']} {cur}
-            '''.strip()
+            report += f'''- {group['from']} pays {group['to']} the sum of {group['value']} {cur}'''.strip() + '\n'
 
     if missingRates and len(missingRates) > 0:
         report += '\n\n\n'
