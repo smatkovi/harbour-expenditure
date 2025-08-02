@@ -98,7 +98,7 @@ def doImport(inputPath: str) -> None:
 def doCreateReport(metadata, entries, rates,
                    payments, benefits, balances,
                    totalPayments, settlement,
-                   detailed: bool) -> str:
+                   missingRates, detailed: bool) -> str:
     cur = metadata['baseCurrency']
 
     report = f'''
@@ -127,6 +127,13 @@ total expenses: {totalPayments} {cur}
             report += f'''
 - {group['from']} pays {group['to']} the sum of {group['value']} {cur}
             '''.strip()
+
+    if missingRates and len(missingRates) > 0:
+        report += '\n\n\n'
+        report += '## Missing exchange rates\n\n'
+        report += 'The following exchange rates are undefined. A rate ' +
+                  'of 1.00 has been used in calculations.\n\n'
+        report += 'Missing: ' + ', '.join(missingRates)
 
     if detailed:
         report += '\n\n\n'

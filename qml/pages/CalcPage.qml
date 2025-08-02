@@ -26,6 +26,7 @@ Page {
     property var balances: ({})
     property real totalPayments: 0.00
     property var settlement: ([])
+    property var missingRates: ([])
     property var people: ([])
 
     function calculate(directDebts) {
@@ -38,6 +39,7 @@ Page {
         balances = results.balances
         totalPayments = results.totalPayments
         settlement = results.settlement
+        missingRates = results.missingRates
         people = results.people
     }
 
@@ -65,13 +67,14 @@ Page {
             var benefits = root.benefits
             var balances = root.balances
             var settlement = root.settlement
+            var missingRates = root.missingRates
             var totalPayments = root.totalPayments
 
             py.call('import_export.doCreateReport',
                     [metadata, entries, rates,
                      payments, benefits, balances,
                      totalPayments, settlement,
-                     detailed],
+                     missingRates, detailed],
             function(report){
                 var msg = detailed ?
                     qsTr("A detailed report has been copied to the clipboard.") :
@@ -207,6 +210,17 @@ Page {
 
                     }
                 }
+            }
+
+            InfoLabel {
+                visible: missingRates.length > 0
+                font.pixelSize: Theme.fontSizeSmall
+                topPadding: Theme.paddingLarge
+                text: qsTr("The following exchange rates are undefined. " +
+                           "A one-to-one exchange rate has been used in calculations.") +
+                      " " +
+                      qsTr("Define missing base exchange rates below: %1").
+                      arg("<font color='%1'>%2</font>".arg(Theme.errorColor).arg(missingRates.join(", ")))
             }
 
             SectionHeader {

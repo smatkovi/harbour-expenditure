@@ -22,6 +22,7 @@ var _benefits = {}
 var _balances = {}
 var _totalPayments = 0
 var _settlement = []
+var _missingRates = {}
 
 var _peopleMap = {}
 var _peopleArr = []
@@ -47,6 +48,12 @@ function calculate(projectData, directDebts) {
     console.log("- members:", JSON.stringify(_peopleArr))
     console.log("- settlement:", JSON.stringify(_settlement))
 
+    var missingRatesArr = keys(_missingRates)
+
+    if (missingRatesArr.length > 0) {
+        console.log("- missing exchange rates:", JSON.stringify(missingRatesArr))
+    }
+
     return {
         expenses: _expenses,
         baseCurrency: _baseCurrency,
@@ -55,12 +62,25 @@ function calculate(projectData, directDebts) {
         balances: _balances,
         totalPayments: _totalPayments,
         settlement: _settlement,
+        missingRates: missingRatesArr,
         people: _peopleArr,
     }
 }
 
 function defaultFor(arg, val) {
     return typeof arg !== 'undefined' ? arg : val
+}
+
+function keys(object) {
+    var ret = []
+
+    for(var key in object) {
+        if(object.hasOwnProperty(key)) {
+            ret.push(key)
+        }
+    }
+
+    return ret
 }
 
 function _reset(projectData) {
@@ -77,6 +97,7 @@ function _reset(projectData) {
     _balances = {}
     _totalPayments = 0
     _settlement = []
+    _missingRates = {}
     _peopleMap = {}
     _peopleArr = []
 }
@@ -142,6 +163,7 @@ function _convertToBase(expense) {
     } else {
         console.warn("no exchange rate set for", expense.currency, "- using 1.00")
         effectiveRate = 1.00
+        _missingRates[expense.currency] = true
     }
 
     var price = expense.sum * effectiveRate
