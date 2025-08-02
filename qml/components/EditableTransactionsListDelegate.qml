@@ -48,27 +48,41 @@ ListItem {
         width: parent.width
         height: childrenRect.height
 
-        TwoLineDelegate {
-            text: item._date
-            description: "%1: %2".arg(item._payer).arg(item._title)
+        ThreeLineDelegate {
+            title: item._date
+            text: item._title
+            description: qsTr(
+                 "for %1", "as in “this payment was for Jane, John, and Jim”, " +
+                 "with plural based on the number of beneficiaries",
+                 item._beneficiaries_list.count).arg(item._beneficiaries_string)
+
             interactive: false
 
             onClicked: toggleWrappedText(descriptionLabel)
 
-            textLabel {
+            titleLabel {
                 font.pixelSize: Theme.fontSizeSmall
                 color: Theme.secondaryHighlightColor
             }
-            descriptionLabel {
+            textLabel {
                 font.pixelSize: Theme.fontSizeMedium
                 color: Theme.highlightColor
             }
+            descriptionLabel {
+                font.pixelSize: Theme.fontSizeSmall
+                color: Theme.secondaryHighlightColor
+            }
 
             rightItem: DelegateInfoItem {
+                title: payer
                 text: M.format(sum)
                 description: currency
                 alignment: Qt.AlignRight
 
+                titleLabel {
+                    font.pixelSize: Theme.fontSizeSmall
+                    color: Theme.secondaryHighlightColor
+                }
                 textLabel {
                     font.pixelSize: Theme.fontSizeMedium
                     color: Theme.highlightColor
