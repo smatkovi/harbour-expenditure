@@ -6,12 +6,14 @@
  */
 
 #include <QtQuick>
-#include <QDebug>
 #include <sailfishapp.h>
 #include "requires_defines.h"
+#include "quiet_logging.h"
 
 int main(int argc, char *argv[])
 {
+    setupLogging();
+
     QScopedPointer<QGuiApplication> app(SailfishApp::application(argc, argv));
     app->setOrganizationName("org.tplabs"); // needed for Sailjail
     app->setApplicationName("expenditure");
