@@ -1,6 +1,6 @@
 /*
  * This file is part of harbour-expenditure.
- * SPDX-FileCopyrightText: 2024 Mirian Margiani
+ * SPDX-FileCopyrightText: 2024-2025 Mirian Margiani
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
@@ -47,6 +47,13 @@ A.AboutPageBase {
     autoAddOpalAttributions: true
 
     attributions: [
+        A.Attribution {
+            name: "Bignumber.js"
+            entries: ["2025 Michael Mclaughlin"]
+            licenses: A.License { spdxId: "MIT" }
+            sources: "https://github.com/MikeMcl/big.js"
+            homepage: "http://mikemcl.github.io/big.js"
+        },
         A.Attribution {
             name: "PyOtherSide"
             entries: ["2011, 2013-2020 Thomas Perl"]
