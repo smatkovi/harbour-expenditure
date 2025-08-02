@@ -22,6 +22,8 @@ DelegateColumn {
 
     delegate: EditableRatesListDelegate {
         id: delegate
+        placeholder: "1.00"
+        allowEmpty: false
         project: selectedProject
         currency: modelData
         value: fallback

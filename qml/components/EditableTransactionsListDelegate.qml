@@ -86,7 +86,7 @@ ListItem {
             allowEmpty: true
             emptyValue: NaN
             value: item._rate
-            placeholder: project.exchangeRates[currency] || ''
+            placeholder: project.exchangeRates[currency] || '1.00'
             EnterKey.iconSource: "image://theme/icon-m-enter-next"
             EnterKey.onClicked: feesItem.forceActiveFocus()
 

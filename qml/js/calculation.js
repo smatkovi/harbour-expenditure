@@ -136,10 +136,12 @@ function _convertToBase(expense) {
 
     if (!!expense.rate) {
         effectiveRate = expense.rate
-    } else if (_exchangeRates.hasOwnProperty(expense.currency)) {
-        effectiveRate = _exchangeRates[expense.currency] || NaN
+    } else if (_exchangeRates.hasOwnProperty(expense.currency)
+               && !!_exchangeRates[expense.currency]) {
+        effectiveRate = _exchangeRates[expense.currency]
     } else {
-        effectiveRate = NaN
+        console.warn("no exchange rate set for", expense.currency, "- using 1.00")
+        effectiveRate = 1.00
     }
 
     var price = expense.sum * effectiveRate

@@ -341,7 +341,7 @@ Dialog {
                 allowEmpty: true
                 emptyValue: NaN
                 value: emptyValue
-                placeholder: project.exchangeRates[currency] || ''
+                placeholder: project.exchangeRates[currency] || '1.00'
 
                 EnterKey.iconSource: {
                     if (_customFees) {
