@@ -330,10 +330,6 @@ Dialog {
                 }
             }
 
-            PrecisionSelector {
-                width: parent.width
-            }
-
             SectionHeader {
                 text: qsTr("Base exchange rates")
                 topPadding: 2 * Theme.paddingLarge
