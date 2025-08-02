@@ -6,6 +6,7 @@
 
 .pragma library
 .import "../modules/Opal/LocalStorage/StorageHelper.js" as DB
+.import "math.js" as M
 .import "dates.js" as Dates
 
 //
@@ -428,6 +429,56 @@ DB.dbMigrations = [
         // This is an empty migration marking the step from 0.x to 1.
         // Future versions must increase in integer steps.
     }],
+    [2, function(tx){
+        function resetTable(table, createStatement) {
+            tx.executeSql('ALTER TABLE %1 RENAME TO %1_old;'.arg(table))
+            tx.executeSql(createStatement)
+            tx.executeSql('INSERT INTO %1 SELECT * FROM %1_old;'.arg(table))
+            tx.executeSql('DROP TABLE %1_old;'.arg(table))
+        }
+
+        // Change data type of exchange rate, sum, and fees
+        // columns from REAL to TEXT.
+
+        resetTable('exchange_rates', '\
+            CREATE TABLE "exchange_rates"(
+                project INTEGER NOT NULL,
+                currency TEXT NOT NULL,
+                rate TEXT,
+
+                PRIMARY KEY (project, currency),
+
+                FOREIGN KEY (project)
+                REFERENCES projects (rowid)
+                    ON UPDATE CASCADE
+                    ON DELETE NO ACTION
+            )
+        ;')
+
+        resetTable('expenses', '\
+            CREATE TABLE "expenses"(
+                rowid INTEGER PRIMARY KEY,
+                project INTEGER NOT NULL,
+                utc_time TEXT NOT NULL,
+                local_time TEXT NOT NULL,
+                local_tz TEXT NOT NULL,
+                name TEXT DEFAULT "",
+                info TEXT DEFAULT "",
+                sum TEXT DEFAULT "0",
+                rate TEXT DEFAULT NULL,
+                percentage_fees TEXT DEFAULT NULL,
+                fixed_fees TEXT DEFAULT NULL,
+                currency TEXT NOT NULL,
+                payer TEXT NOT NULL,
+                beneficiaries TEXT NOT NULL,
+
+                FOREIGN KEY (project)
+                REFERENCES projects (rowid)
+                    ON UPDATE CASCADE
+                    ON DELETE NO ACTION
+            )
+        ;')
+    }],
 
     // add new versions here...
     //
@@ -775,7 +826,7 @@ function _makeProjectEntry(entryRow, projectMembers) {
     var item = entryRow
     var beneficiaries = splitMembersList(item.beneficiaries)
 
-    function valueOrNan(x) { return x === null ? NaN : x }
+    function fallback(x, alt) { return x === null ? alt : x }
 
     return {
         rowid: item.rowid,
@@ -785,11 +836,11 @@ function _makeProjectEntry(entryRow, projectMembers) {
         section_string: Dates.formatDate(item.local_time, 'yyyy-MM-dd'),
         name: item.name,
         info: item.info,
-        sum: item.sum,
+        sum: fallback(item.sum, '0.00'),
         currency: item.currency,
-        rate: valueOrNan(item.rate),
-        percentage_fees: valueOrNan(item.percentage_fees),
-        fixed_fees: valueOrNan(item.fixed_fees),
+        rate: fallback(item.rate, ''),
+        percentage_fees: fallback(item.percentage_fees, ''),
+        fixed_fees: fallback(item.fixed_fees, ''),
         payer: item.payer,
 
         // Beneficiaries are not split into an array because
@@ -848,7 +899,7 @@ function getProjectExchangeRates(ident) {
         currencies: [],
     }
 
-    if (!!base) ret.rates[base] = 1.0
+    if (!!base) ret.rates[base] = '1.0'
 
     if (res.rows.length === 0) {
         if (!!base) ret.currencies = [base]
@@ -861,7 +912,7 @@ function getProjectExchangeRates(ident) {
         if (item.currency === base) {
             // It can happen that the base currency is saved
             // in the exchange rates table. It can even happen
-            // that is has a rate other than 1.0. Both cases
+            // that it has a rate other than 1.0. Both cases
             // are simply being ignored here, which should be ok.
             continue
         } else {
@@ -914,6 +965,8 @@ function _updateExchangeRates(project) {
 }
 
 function setExchangeRate(project, currency, rate) {
+    rate = M.isNotNum(rate) ? null : M.value(rate).toString()
+
     DB.simpleQuery('\
         INSERT INTO exchange_rates(project, currency, rate)
         VALUES (?, ?, ?)
@@ -931,7 +984,10 @@ function setExpenseRateAndFees(project, rowid, values) {
             UPDATE expenses
             SET %1 = ?
             WHERE project = ? AND rowid = ?
-        '.arg(key), [values[key], project, rowid])
+        '.arg(key), [
+            M.isNotNum(values[key]) ? null : M.value(values[key]).toString(),
+            project, rowid
+        ])
     }
 
     console.log('updating expense:', project, rowid, JSON.stringify(values))
@@ -950,7 +1006,9 @@ function _addExpenseDirectly(projectIdent,
                              name, info, sum, currency,
                              rate, percentageFees, fixedFees,
                              payer, beneficiaries) {
-    function numberOrNull(x) { return isNaN(x) ? null : x }
+    function numberOrFallback(x, alt) {
+        return M.isNotNum(x) ? alt : M.value(x).toString()
+    }
 
     var res = DB.simpleQuery('\
         INSERT INTO expenses(
@@ -963,13 +1021,17 @@ function _addExpenseDirectly(projectIdent,
             ?,
             ?, ?, ?,
             ?, ?, ?, ?,
-            ?, ?, ?,
+            ?,
+            ?,
+            ?,
             ?, ?
         );
     ', [projectIdent,
         utc_time, local_time, local_tz,
-        name, info, sum, currency,
-        numberOrNull(rate), numberOrNull(percentageFees), numberOrNull(fixedFees),
+        name, info, numberOrFallback(sum, '0'), currency,
+        numberOrFallback(rate, null),
+        numberOrFallback(percentageFees, null),
+        numberOrFallback(fixedFees, null),
         payer, joinMembersList(beneficiaries)])
 
     return res
@@ -1004,20 +1066,26 @@ function updateExpense(projectIdent, rowid,
                        name, info, sum, currency,
                        rate, percentageFees, fixedFees,
                        payer, beneficiaries) {
-    function numberOrNull(x) { return isNaN(x) ? null : x }
+    function numberOrFallback(x, alt) {
+        return M.isNotNum(x) ? alt : M.value(x).toString()
+    }
 
     var res = DB.simpleQuery('\
         UPDATE expenses SET
             project = ?,
             utc_time = ?, local_time = ?, local_tz = ?,
             name = ?, info = ?, sum = ?, currency = ?,
-            rate = ?, percentage_fees = ?, fixed_fees = ?,
+            rate = ?,
+            percentage_fees = ?,
+            fixed_fees = ?,
             payer = ?, beneficiaries = ?
         WHERE project = ? AND rowid = ?;
     ', [projectIdent,
         utc_time, local_time, local_tz,
-        name, info, sum, currency,
-        numberOrNull(rate), numberOrNull(percentageFees), numberOrNull(fixedFees),
+        name, info, numberOrFallback(sum, '0'), currency,
+        numberOrFallback(rate, null),
+        numberOrFallback(percentageFees, null),
+        numberOrFallback(fixedFees, null),
         payer, joinMembersList(beneficiaries),
         projectIdent, rowid])
     _updateExchangeRates(projectIdent)
