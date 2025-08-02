@@ -213,16 +213,32 @@ Page {
                 }
             }
 
-            InfoLabel {
+            Row {
                 visible: missingRates.length > 0
-                font.pixelSize: Theme.fontSizeSmall
+                x: Theme.horizontalPageMargin
+                width: parent.width - 2*x
+                spacing: Theme.paddingMedium
                 topPadding: Theme.paddingLarge
-                text: qsTr("The following exchange rates are undefined. " +
-                           "A one-to-one exchange rate has been used in calculations.") +
-                      " " +
-                      qsTr("Define missing base exchange rates below: %1").
-                      arg("<font color='%1'>%2</font>".arg(Theme.errorColor).arg(missingRates.join(", ")))
+
+                HighlightImage {
+                    width: Theme.iconSizeMedium
+                    height: width
+                    source: "image://theme/icon-m-warning"
+                    color: Theme.errorColor
+                }
+
+                Label {
+                    width: parent.width - parent.spacing - Theme.iconSizeMedium
+                    wrapMode: Text.Wrap
+                    color: Theme.secondaryHighlightColor
+                    font.pixelSize: Theme.fontSizeExtraSmall
+
+                    text: qsTr("Define base exchange rates below for the following currencies: %1. " +
+                               "A one-to-one rate has been used in calculations").
+                          arg("<font color='%1'>%2</font>".arg(Theme.errorColor).arg(missingRates.join(", ")))
+                }
             }
+
 
             SectionHeader {
                 id: settlementHeader
