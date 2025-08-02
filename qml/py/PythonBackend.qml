@@ -16,7 +16,7 @@ Python {
     }
 
     Component.onCompleted: {
-        addImportPath(Qt.resolvedUrl('../py'))
+        addImportPath(Qt.resolvedUrl('.'))
         setHandler('log', _log)
     }
 

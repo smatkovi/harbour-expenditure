@@ -131,7 +131,7 @@ total expenses: {totalPayments} {cur}
     if missingRates and len(missingRates) > 0:
         report += '\n\n\n'
         report += '## Missing exchange rates\n\n'
-        report += 'The following exchange rates are undefined. A rate ' +
+        report += 'The following exchange rates are undefined. A rate ' + \
                   'of 1.00 has been used in calculations.\n\n'
         report += 'Missing: ' + ', '.join(missingRates)
 
