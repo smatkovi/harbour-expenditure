@@ -9,35 +9,19 @@
 // TODO either convert this to WorkerScript or rewrite it in Python
 
 .import "storage.js" as Storage
-
-// For some reason, the maximum precision allowed by Number.toFixed()
-// is 20. Anything above gives "RangeError: XX.XXXX... out of range".
-// According to the docs, 100 should be the maximum.
-// Docs: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed
-var MAX_PRECISION = 20
-
-// This precision is used internally when verifying the
-// settlement suggestion. The effective check precision
-// must be larger than the final precision. This is handled
-// in _reset().
-var DEFAULT_CHECK_PRECISION = 12
-var CHECK_PRECISION = DEFAULT_CHECK_PRECISION
-
-// This precision is used by default in the settlement
-// output. The default value can be overridden by the user.
-var DEFAULT_FINAL_PRECISION = 2
+.import "math.js" as M
 
 var _project = null
 var _expenses = null
 var _members = []
 var _exchangeRates = {}
 var _baseCurrency = ''
-var _settlementPrecision = DEFAULT_FINAL_PRECISION
+var _settlementPrecision = 2
 
 var _payments = {}
 var _benefits = {}
 var _balances = {}
-var _totalPayments = 0
+var _totalPayments = M.value('0.00')
 var _settlement = []
 var _missingRates = {}
 
@@ -51,9 +35,7 @@ function calculate(projectData, directDebts) {
     _collectSumsAndPeople()
     _splitDues(directDebts)
 
-    if (_validate()) {
-        _applyPrecision()
-    } else {
+    if (!_validate()) {
         _settlement = null
         console.log("failed to calculate a valid settlement suggestion")
     }
@@ -70,6 +52,8 @@ function calculate(projectData, directDebts) {
     if (missingRatesArr.length > 0) {
         console.log("- missing exchange rates:", JSON.stringify(missingRatesArr))
     }
+
+    _formatResults()
 
     return {
         expenses: _expenses,
@@ -101,27 +85,19 @@ function keys(object) {
 }
 
 function _reset(projectData) {
+    console.log("[calc] resetting...")
     _project = projectData
     var metadata = Storage.getProjectMetadata(_project.rowid)
     _expenses = Storage.getProjectEntries(_project.rowid)
     _members = metadata.members
     _exchangeRates = _project.exchangeRates
     _baseCurrency = metadata.baseCurrency
-    _settlementPrecision = Math.min(metadata.precision, MAX_PRECISION)
-
-    CHECK_PRECISION = DEFAULT_CHECK_PRECISION
-
-    if (_settlementPrecision * 4 > CHECK_PRECISION) {
-        CHECK_PRECISION = Math.min(_settlementPrecision * 4, MAX_PRECISION)
-        console.warn("extended internal precision from", DEFAULT_CHECK_PRECISION,
-                     "to", CHECK_PRECISION)
-        console.warn("output precision is", _settlementPrecision)
-    }
+    _settlementPrecision = _project.precision
 
     _payments = {}
     _benefits = {}
     _balances = {}
-    _totalPayments = 0
+    _totalPayments = M.value('0.00')
     _settlement = []
     _missingRates = {}
     _peopleMap = {}
@@ -129,26 +105,28 @@ function _reset(projectData) {
 }
 
 function _collectSumsAndPeople() {
+    console.log("[calc] collecting data...")
+
     for (var i in _expenses) {
         var x = _expenses[i]
 
         if (!_payments.hasOwnProperty(x.payer)) {
-            _payments[x.payer] = 0
+            _payments[x.payer] = M.value('0.00')
         }
 
         var convertedSum = _convertToBase(x)
-        _totalPayments += convertedSum
-        _payments[x.payer] += convertedSum
-        var individualBenefit = convertedSum / x.beneficiaries_list.length
+        _totalPayments = _totalPayments.plus(convertedSum)
+        _payments[x.payer] = _payments[x.payer].plus(convertedSum)
+        var individualBenefit = convertedSum.div(x.beneficiaries_list.length)
 
         for (var b in x.beneficiaries_list) {
             var bb = x.beneficiaries_list[b]
 
             if (!_benefits.hasOwnProperty(bb)) {
-                _benefits[bb] = 0
+                _benefits[bb] = M.value('0.00')
             }
 
-            _benefits[bb] += individualBenefit
+            _benefits[bb] = _benefits[bb].plus(individualBenefit)
             _peopleMap[bb] = true
         }
 
@@ -169,37 +147,38 @@ function _collectSumsAndPeople() {
         if (!_peopleMap.hasOwnProperty(p)) continue
         _peopleArr.push(p)
 
-        // set missing fields to zero
-        var tmp = _benefits[p] || (_benefits[p] = 0)
-        tmp = _payments[p] || (_payments[p] = 0)
+        if (!_benefits.hasOwnProperty(p)) _benefits[p] = M.value('0.00')
+        if (!_payments.hasOwnProperty(p)) _payments[p] = M.value('0.00')
 
         // collect balances: paid minus received
-        _balances[p] = _payments[p] - _benefits[p]
+        _balances[p] = _payments[p].minus(_benefits[p])
     }
 }
 
 function _convertToBase(expense) {
-    var effectiveRate = 1.00
+    var effectiveRate = NaN
 
     if (!!expense.rate) {
-        effectiveRate = expense.rate
+        effectiveRate = M.value(expense.rate)
     } else if (_exchangeRates.hasOwnProperty(expense.currency)
                && !!_exchangeRates[expense.currency]) {
-        effectiveRate = _exchangeRates[expense.currency]
-    } else {
-        console.warn("no exchange rate set for", expense.currency, "- using 1.00")
-        effectiveRate = 1.00
+        effectiveRate = M.value(_exchangeRates[expense.currency])
+    }
+
+    if (M.isNotNum(effectiveRate)) {
+        console.warn("no exchange rate set for", expense.currency, "- using 1.00 instead of", effectiveRate)
+        effectiveRate = M.value('1.00')
         _missingRates[expense.currency] = true
     }
 
-    var price = expense.sum * effectiveRate
+    var price = M.value(expense.sum).times(effectiveRate)
 
     if (!!expense.percentage_fees) {
-        price += price / 100 * expense.percentage_fees
+        price = price.plus(price.div(100).times(expense.percentage_fees))
     }
 
     if (!!expense.fixed_fees) {
-        price += expense.fixed_fees
+        price = price.plus(expense.fixed_fees)
     }
 
     return price
@@ -215,7 +194,7 @@ function _sortMap(map, ascending) {
     }
 
     function sortKeyValue(a, b) {
-        return ascending ? a.value - b.value : b.value - a.value;
+        return ascending ? a.value.minus(b.value) : b.value.minus(a.value);
     }
 
     var sorted = kv.sort(sortKeyValue)
@@ -223,6 +202,8 @@ function _sortMap(map, ascending) {
 }
 
 function _splitDues(directDebts) {
+    console.log("[calc] splitting...")
+
     if (!!directDebts) {
         _settlement = _splitDuesDirectly()
     } else {
@@ -231,13 +212,15 @@ function _splitDues(directDebts) {
 }
 
 function _splitDuesDirectly() {
+    console.log("[calc] splitting dues (directly)...")
+
     var settlement = []
     var debts = {}  // debts[from][to] = value
 
     for (var i in _expenses) {
         var x = _expenses[i]
         var convertedSum = _convertToBase(x)
-        var individualDebt = convertedSum / x.beneficiaries_list.length
+        var individualDebt = convertedSum.div(x.beneficiaries_list.length)
 
         for (var b in x.beneficiaries_list) {
             var bb = x.beneficiaries_list[b]
@@ -251,34 +234,34 @@ function _splitDuesDirectly() {
             }
 
             if (!debts[bb].hasOwnProperty(x.payer)) {
-                debts[bb][x.payer] = 0.00
+                debts[bb][x.payer] = M.value('0.00')
             }
 
-            debts[bb][x.payer] += individualDebt
+            debts[bb][x.payer] = debts[bb][x.payer].plus(individualDebt)
         }
     }
 
     for (var from in debts) {
         for (var to in debts[from]) {
-            var value = Number(debts[from][to])
+            var value = debts[from][to]
 
             if (debts.hasOwnProperty(to) && debts[to].hasOwnProperty(from)) {
-                var reverseValue = Number(debts[to][from])
+                var reverseValue = debts[to][from]
 
-                if (value == reverseValue) {
-                    debts[from][to] = 0.00
-                    debts[to][from] = 0.00
-                    value = 0.00
-                } else if (value > reverseValue) {
-                    debts[from][to] = value - reverseValue
-                    debts[to][from] = 0.00
+                if (value.eq(reverseValue)) {
+                    debts[from][to] = M.value('0.00')
+                    debts[to][from] = M.value('0.00')
+                    value = M.value('0.00')
+                } else if (value.gt(reverseValue)) {
+                    debts[from][to] = value.minus(reverseValue)
+                    debts[to][from] = M.value('0.00')
                     value = debts[from][to]
-                } else if (reverseValue > value) {
+                } else if (reverseValue.gt(value)) {
                     continue
                 }
             }
 
-            if (value != Number(0.00)) {
+            if (!value.isZero() && !value.isNaN()) {
                 settlement.push({
                     from: from,
                     to: to,
@@ -292,20 +275,22 @@ function _splitDuesDirectly() {
 }
 
 function _splitDuesOptimized() {
+    console.log("[calc] splitting dues (optimized)...")
+
     // apply a (n-1) algorithm  to settle expenses (how much each person ows to whom)
 
-    var meanValue = 0
+    var meanValue = M.value('0.00')
     var sortedNames = []
     var sortedValues = []
     var settlement = []
 
     function prepareArrays() {
         var pendingBalances = {}
-        var totalPending = 0
+        var totalPending = M.value('0.00')
 
         for (var person in _peopleMap) {
-            pendingBalances[person] = (_payments[person] || 0.00) - (_benefits[person] || 0.00)
-            totalPending += pendingBalances[person]
+            pendingBalances[person] = (_payments[person] || M.value('0.00')).minus(_benefits[person] || M.value('0.00'))
+            totalPending = totalPending.plus(pendingBalances[person])
         }
 
         var sortedBalances = _sortMap(pendingBalances, true)
@@ -317,10 +302,22 @@ function _splitDuesOptimized() {
     }
 
     function calculateSettlement() {
+        var dataIsSane = true
         var sortedValuesPaid = []
 
         for (var i in sortedValues) {
-            sortedValuesPaid.push(sortedValues[i] - meanValue)
+            if (M.isNotNum(sortedValues[i])) {
+                dataIsSane = false
+                break
+            }
+
+            sortedValuesPaid.push(sortedValues[i].minus(meanValue))
+        }
+
+        if (!dataIsSane) {
+            // prevent an endless loop below
+            console.error("[calc] encountered invalid value in sorted values, aborting")
+            return
         }
 
         var x = 0
@@ -328,28 +325,33 @@ function _splitDuesOptimized() {
         var debt
 
         while (x < y) {
-            debt = Math.min(-(sortedValuesPaid[x]), sortedValuesPaid[y])
-            sortedValuesPaid[x] += debt
-            sortedValuesPaid[y] -= debt
+            debt = M.BigNumber.minimum(sortedValuesPaid[x].negated(), sortedValuesPaid[y])
+            sortedValuesPaid[x] = sortedValuesPaid[x].plus(debt)
+            sortedValuesPaid[y] = sortedValuesPaid[y].minus(debt)
 
             settlement.push({
                 from: sortedNames[x],
                 to: sortedNames[y],
-                value: Number(debt)
+                value: debt
             })
 
-            if (sortedValuesPaid[x] === 0) { x++ }
-            if (sortedValuesPaid[y] === 0) { y-- }
+            if (sortedValuesPaid[x].eq(0)) { x++ }
+            if (sortedValuesPaid[y].eq(0)) { y-- }
         }
     }
 
+    console.log("[calc] optimized: preparing...")
     prepareArrays()
+    console.log("[calc] optimized: calculating...")
     calculateSettlement()
 
+    console.log("[calc] optimized: done")
     return settlement
 }
 
 function _validate() {
+    console.log("[calc] validating...")
+
     var checkBalances = {}
     var success = true
 
@@ -357,38 +359,43 @@ function _validate() {
         var set = _settlement[i]
 
         if (!checkBalances.hasOwnProperty(set.from))
-            checkBalances[set.from] = 0
+            checkBalances[set.from] = M.value('0.00')
         if (!checkBalances.hasOwnProperty(set.to))
-            checkBalances[set.to] = 0
+            checkBalances[set.to] = M.value('0.00')
 
-        checkBalances[set.from] -= set.value
-        checkBalances[set.to] += set.value
+        checkBalances[set.from] = checkBalances[set.from].minus(set.value)
+        checkBalances[set.to] = checkBalances[set.to].plus(set.value)
     }
 
-    console.log("verifying the settlement...")
+    console.log("[calc] verification results:")
 
     for (var j in _balances) {
         if (!_balances.hasOwnProperty(j)) continue
 
-        if (Number(_balances[j]).toFixed(CHECK_PRECISION) ===
-                Number(checkBalances[j]).toFixed(CHECK_PRECISION)) {
+        if (_balances[j].eq(checkBalances[j])) {
             console.log("[   OK]", j, ":", _balances[j])
         } else {
-            if (_balances[j] === 0.00 && !checkBalances.hasOwnProperty(j)) {
+            if (_balances[j].isZero() && !checkBalances.hasOwnProperty(j)) {
                 // this person has an even balance and does not appear
                 // in the settlement - that's ok
                 console.log("[   OK]", j, ":", _balances[j], "| not in settlement")
                 continue
-            } else if (Number(_balances[j] - checkBalances[j]).toFixed(CHECK_PRECISION) == Number(0.00).toFixed(CHECK_PRECISION)) {
-                // this person's settlement has tiny rounding errors that
-                // should be fine
-                console.log("[   OK]", j, ":", _balances[j], "| ignored rounding error:", Number(checkBalances[j] - _balances[j]).toFixed(MAX_PRECISION))
+            } else if (_balances[j]
+                       .minus(checkBalances[j])
+                       .abs()
+                       .decimalPlaces(_settlementPrecision + 2)
+                       .isZero()) {
+                // the difference in this settlement is negligible
+                console.log("[   OK]", j, ":", _balances[j], "| difference is smaller than settlement precision")
                 console.log("        expected", _balances[j], "but got", checkBalances[j])
+                console.log("        difference:", _balances[j].minus(checkBalances[j]).toString())
+                console.log("        precision:", _settlementPrecision)
+                console.log("        rounded to precision:", _balances[j].toFixed(_settlementPrecision))
                 continue
             } else {
                 console.error("[ERROR]", j, ": settlement failed")
                 console.error("        expected", _balances[j], "but got", checkBalances[j])
-                console.error("        difference: ", Number(_balances[j] - checkBalances[j]).toFixed(CHECK_PRECISION))
+                console.error("        difference: ", _balances[j].minus(checkBalances[j]).toString())
                 success = false
             }
         }
@@ -397,24 +404,46 @@ function _validate() {
     return success
 }
 
-function _applyPrecision() {
-    var filtered = []
-    var zero = Number(0.00).toFixed(_settlementPrecision)
+function _formatResults() {
+    console.log("[calc] formatting results...")
 
-    for (var i in _settlement) {
-        var set = _settlement[i]
-        var fixed = Number(set.value).toFixed(_settlementPrecision)
+    // Convert final results to string with fixed precision.
+    var rm = M.BigNumber.ROUND_HALF_UP
 
-        if (fixed == zero || -fixed == zero) {
-            continue
-        } else {
-            filtered.push({
-                from: set.from,
-                to: set.to,
-                value: Number(fixed),
-            })
+    // SETTLEMENT
+    if (_settlement != null) {
+        var filtered = []
+
+        for (var i in _settlement) {
+            var set = _settlement[i]
+
+            if (set.value.isZero()) {
+                continue
+            } else {
+                filtered.push({
+                    from: set.from,
+                    to: set.to,
+                    value: set.value.toFixed(_settlementPrecision, rm),
+                })
+            }
         }
+
+        _settlement = filtered
     }
 
-    _settlement = filtered
+    // REMAINING DICTS
+    function formatDict(dict) {
+        for (var i in dict) {
+            dict[i] = dict[i].toFixed(_settlementPrecision, rm)
+        }
+
+        return dict
+    }
+
+    _payments = formatDict(_payments)
+    _benefits = formatDict(_benefits)
+    _balances = formatDict(_balances)
+
+    // REMAINING SINGLE VALUES
+    _totalPayments = _totalPayments.toFixed(_settlementPrecision, rm)
 }

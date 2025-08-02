@@ -13,6 +13,7 @@ import Opal.Delegates 1.0
 import "../py"
 import "../components"
 import "../js/storage.js" as Storage
+import "../js/math.js" as M
 import "../js/calculation.js" as Calculation
 
 Page {
@@ -24,7 +25,7 @@ Page {
     property var payments: ({})
     property var benefits: ({})
     property var balances: ({})
-    property real totalPayments: 0.00
+    property string totalPayments: '0.00'
     property var settlement: ([])
     property var missingRates: ([])
     property var people: ([])
@@ -172,6 +173,7 @@ Page {
 
                         CurrencyLabel {
                             property int i: index
+                            precision: appWindow.activeProject.precision
                             text: {
                                 if (innerRepeater.person === null) {
                                     " "
@@ -295,19 +297,22 @@ Page {
                             modelData.from,
                             '→',
                             modelData.to,
-                            Number(modelData.value).toLocaleString(Qt.locale('de_CH'))
+                            M.format(modelData.value, appWindow.activeProject.precision)
                         ]
 
                         Label {
                             Layout.preferredWidth: parent.width / 7
                             Layout.maximumWidth: parent.width / 3
                             Layout.minimumWidth: 0
+                            // @disable-check M325
                             Layout.fillWidth: index !== 1
 
                             wrapMode: Text.Wrap
+                            // @disable-check M325
                             color: index == 3 ? Theme.primaryColor : Theme.highlightColor
                             font.pixelSize: Theme.fontSizeSmall
                             text: innerRepeater2.set[index]
+                            // @disable-check M325
                             horizontalAlignment: index == 3 ?
                                 Text.AlignRight : Text.AlignLeft
                         }
