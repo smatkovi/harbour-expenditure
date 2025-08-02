@@ -7,6 +7,8 @@
 import QtQuick 2.6
 import Opal.Delegates 1.0
 
+import "../js/math.js" as M
+
 DelegateColumn {
     id: root
     property ProjectData selectedProject
@@ -28,7 +30,9 @@ DelegateColumn {
         currency: modelData
         value: fallback
         onValueChanged: {
-            root.exchangeRateChanged(value, currency)
+            if (!M.isNotNum(value) && value !== emptyValue) {
+                root.exchangeRateChanged(value, currency)
+            }
         }
     }
 }

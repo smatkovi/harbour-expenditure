@@ -7,11 +7,12 @@
 import QtQuick 2.6
 import Sailfish.Silica 1.0
 import Opal.Delegates 1.0 as D
-import Opal.MenuSwitch 1.0 as M
+import Opal.MenuSwitch 1.0 as MS
 
 import "../enums"
 import "../components"
 import "../js/storage.js" as Storage
+import "../js/math.js" as M
 import "../js/dates.js" as Dates
 
 Dialog {
@@ -37,8 +38,11 @@ Dialog {
 
     property bool _editing: rowid > -1
     property bool _usingCustomTime: false
-    property bool _customExchangeRate: appWindow.activeProject.ratesMode === RatesMode.shownByDefault || !isNaN(rate)
-    property bool _customFees: appWindow.activeProject.feesMode === FeesMode.shownByDefault || !isNaN(percentageFees) || !isNaN(fixedFees)
+    property bool _customExchangeRate: appWindow.activeProject.ratesMode === RatesMode.shownByDefault
+                                       || !rateField.isEmpty()
+    property bool _customFees: appWindow.activeProject.feesMode === FeesMode.shownByDefault
+                               || !feesItem.percentageIsEmpty()
+                               || !feesItem.fixedIsEmpty()
     property var initialValuesReadOnly: ({})
 
     property int rowid: -1
@@ -142,8 +146,9 @@ Dialog {
         // Rates, fees, and beneficiaries are ignored here, and that is ok.
         var changed = false
 
-        if (name == "" && info == "" && sum === 0.00
+        if (name == "" && info == "" && sumField.isEmpty()
             && (currency == "" ||
+                // @disable-check M126: implicit conversion is ok
                 currency == appWindow.activeProject.lastCurrency)) {
             return
         } else if (!_editing) {
@@ -167,7 +172,7 @@ Dialog {
             if (initialValuesReadOnly.hasOwnProperty(prop) &&
                     !Storage.isSameValue(root[prop], initialValuesReadOnly[prop])) {
                 changed = true
-                console.log("field changed:", prop)
+                console.log("field changed:", prop, "|", initialValuesReadOnly[prop], "->", root[prop])
             }
         }
 
@@ -196,27 +201,27 @@ Dialog {
         VerticalScrollDecorator { flickable: flick }
 
         PullDownMenu {
-            M.MenuSwitch {
+            MS.MenuSwitch {
                 text: qsTr("Add fees")
                 checked: _customFees
                 automaticCheck: false
                 onClicked: {
                     if (_customFees) { // reset
                         _customFees = true // break binding
-                        percentageFees = NaN
-                        fixedFees = NaN
+                        percentageFees = ''
+                        fixedFees = ''
                     }
                     _customFees = !_customFees
                 }
             }
-            M.MenuSwitch {
+            MS.MenuSwitch {
                 text: qsTr("Custom exchange rate")
                 checked: _customExchangeRate
                 automaticCheck: false
                 onClicked: {
                     if (_customExchangeRate) { // reset
                         _customExchangeRate = true // break binding
-                        rate = NaN
+                        rate = ''
                     }
                     _customExchangeRate = !_customExchangeRate
                 }
@@ -270,7 +275,7 @@ Dialog {
                     width: parent.width / 5 * 3 - parent.spacing
                     textRightMargin: 0
                     allowNull: true
-                    emptyValue: 0.00
+                    emptyValue: ''
 
                     EnterKey.iconSource: {
                         if (_customExchangeRate || _customFees) {
@@ -339,9 +344,10 @@ Dialog {
                 currency: currencyField.text
                 foreignSum: sumField.value
                 allowEmpty: true
-                emptyValue: NaN
+                emptyValue: ''
                 value: emptyValue
-                placeholder: project.exchangeRates[currency] || '1.00'
+                placeholder: (!!project.exchangeRates[currency] ?
+                                  project.exchangeRates[currency] : '1.00')
 
                 EnterKey.iconSource: {
                     if (_customFees) {

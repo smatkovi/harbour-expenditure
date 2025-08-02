@@ -1,7 +1,7 @@
 /*
  * This file is part of harbour-expenditure.
  * SPDX-License-Identifier: GPL-3.0-or-later
- * SPDX-FileCopyrightText: 2024 Mirian Margiani
+ * SPDX-FileCopyrightText: 2024-2025 Mirian Margiani
  */
 
 import QtQuick 2.6
@@ -9,7 +9,7 @@ import Sailfish.Silica 1.0
 import Opal.Delegates 1.0
 
 import "../js/dates.js" as Dates
-import "../js/storage.js" as Storage
+import "../js/math.js" as M
 
 ListItem {
     id: item
@@ -33,13 +33,15 @@ ListItem {
     readonly property string _date: Dates.formatDate(local_time, Dates.timeFormat, local_tz)
 
     readonly property string _currency: currency
-    readonly property double _sum: sum
+    readonly property string _sum: sum
     readonly property string _payer: payer
     readonly property string _title: name
+    readonly property string _beneficiaries_string: beneficiaries_string
+    readonly property var _beneficiaries_list: beneficiaries_list
 
-    readonly property double _rate: rate
-    readonly property double _fixedFees: fixed_fees
-    readonly property double _percentageFees: percentage_fees
+    readonly property string _rate: rate
+    readonly property string _fixedFees: fixed_fees
+    readonly property string _percentageFees: percentage_fees
 
     Column {
         id: column
@@ -63,7 +65,7 @@ ListItem {
             }
 
             rightItem: DelegateInfoItem {
-                text: Number(sum).toLocaleString(Qt.locale('de_CH'))
+                text: M.format(sum)
                 description: currency
                 alignment: Qt.AlignRight
 
@@ -84,14 +86,14 @@ ListItem {
             currency: item._currency
             foreignSum: item._sum
             allowEmpty: true
-            emptyValue: NaN
+            emptyValue: ''
             value: item._rate
             placeholder: project.exchangeRates[currency] || '1.00'
             EnterKey.iconSource: "image://theme/icon-m-enter-next"
             EnterKey.onClicked: feesItem.forceActiveFocus()
 
             onValueChanged: {
-                if (!Storage.isSameValue(value, item._rate)) {
+                if (!M.value(value).eq(item._rate)) {
                     project.expenses.set(_index, {'rate': value})
                     rateUpdated(value)
                 }
@@ -109,13 +111,13 @@ ListItem {
                 fixedFees: item._fixedFees
 
                 onPercentageFeesChanged: {
-                    if (!Storage.isSameValue(percentageFees, item._percentageFees)) {
+                    if (!M.value(percentageFees).eq(item._percentageFees)) {
                         project.expenses.set(_index, {'percentage_fees': percentageFees})
                         percentageFeesUpdated(percentageFees)
                     }
                 }
                 onFixedFeesChanged: {
-                    if (!Storage.isSameValue(fixedFees, item._fixedFees)) {
+                    if (!M.value(fixedFees).eq(item._fixedFees)) {
                         project.expenses.set(_index, {'fixed_fees': fixedFees})
                         fixedFeesUpdated(fixedFees)
                     }

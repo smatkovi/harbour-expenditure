@@ -1,33 +1,42 @@
 /*
  * This file is part of harbour-expenditure.
  * SPDX-License-Identifier: GPL-3.0-or-later
- * SPDX-FileCopyrightText: 2024 Mirian Margiani
+ * SPDX-FileCopyrightText: 2024-2025 Mirian Margiani
  */
 
 import QtQuick 2.6
 import Sailfish.Silica 1.0
 import Opal.Delegates 1.0
 
-import "../js/storage.js" as Storage  // for isSameValue()
+import "../js/math.js" as M
 
 PaddedDelegate {
     id: root
     property ProjectData project
+
     property string currency
     property alias allowEmpty: _inputField.allowEmpty
     property alias emptyValue: _inputField.emptyValue
-    property double foreignSum: NaN
+    property string foreignSum: ''
     property string placeholder: ''
 
     property alias inputField: _inputField
 
     // effective value is: X base currency = 1.00 foreign currency (B2F)
-    property double fallback: project.exchangeRates[currency] || NaN
-    property double value: emptyValue
+    property string fallback: {
+        if (currency === project.baseCurrency) '1.00'
+        else project.exchangeRates[currency] || ''
+    }
+    property string value: emptyValue
 
+    property string _one: M.format('1.00', 2)
     property string _displayType: 'B2F'
-    property string _displayDescription: "%1 = 1.00 %2".
-        arg(project.baseCurrency).arg(currency)
+    property string _displayDescription: "%1 = %3 %2".
+        arg(project.baseCurrency).arg(currency).arg(_one)
+
+    function isEmpty() {
+        return _inputField.isEmpty()
+    }
 
     minContentHeight: Theme.itemSizeSmall
     centeredContainer: contentContainer
@@ -39,8 +48,9 @@ PaddedDelegate {
 
     menu: ContextMenu {
         MenuItem {
-            text: "%1 = 1.00 %2".arg(project.baseCurrency)
-                                .arg(currency)
+            text: "%1 = %3 %2".arg(project.baseCurrency)
+                              .arg(currency)
+                              .arg(_one)
             onClicked: {
                 root._displayType = 'B2F'
                 _inputField.value = value
@@ -48,22 +58,23 @@ PaddedDelegate {
             }
         }
         MenuItem {
-            text: "%1 = 1.00 %2".arg(currency)
-                                .arg(project.baseCurrency)
+            text: "%1 = %3 %2".arg(currency)
+                              .arg(project.baseCurrency)
+                              .arg(_one)
             onClicked: {
                 root._displayType = 'F2B'
-                _inputField.value = value > 0 ? 1/value : emptyValue
-                root._displayDescription = Qt.binding(function(){return text})
+                _inputField.value = M.value(value).gt(0) ? M.value(1).div(value).toString() : emptyValue
+                root._displayDescription = Qt.binding(function(){ return text })
             }
         }
         MenuItem {
-            visible: !Storage.isSameValue(foreignSum, NaN)
+            visible: !M.isNotNum(foreignSum)
             text: qsTr("%1 paid", "as in “I paid 10 USD that were converted to 7 GBP”, " +
                        "with %1 being a currency symbol like 'USD'").arg(project.baseCurrency)
             onClicked: {
                 root._displayType = 'paid'
-                _inputField.value = value > 0 ? foreignSum*value : emptyValue
-                root._displayDescription = Qt.binding(function(){return text})
+                _inputField.value = M.value(value).gt(0) ? M.value(foreignSum).times(value).toString() : emptyValue
+                root._displayDescription = Qt.binding(function(){ return text })
             }
         }
     }
@@ -92,7 +103,7 @@ PaddedDelegate {
                 width: parent.width / 2 - parent.spacing
                 label: qsTr("Exchange rate")
                 labelVisible: false
-                emptyValue: NaN
+                emptyValue: ''
                 allowEmpty: false
                 allowNull: false
                 precision: 4
@@ -101,18 +112,25 @@ PaddedDelegate {
                 textMargin: 0
                 textTopPadding: Theme.paddingMedium
 
+                Binding on errorHighlight {
+                    when: !_inputField.allowEmpty &&
+                          !_inputField.acceptableInput
+                    value: true
+                }
+
                 Component.onCompleted: value = root.value || root.emptyValue
 
                 placeholderText: {
-                    if (Storage.isSameValue(root.placeholder, NaN) ||
-                            !(root.placeholder > 0)) {
-                        ''
+                    if (M.isNotNum(root.placeholder)
+                        || M.value(root.placeholder).lte(0)) {
+                        console.log("EYYYY", root.placeholder)
+                        ""
                     } else if (_displayType === 'B2F') {
-                        Number(root.placeholder).toPrecision(precision)
+                        M.format(root.placeholder, precision)
                     } else if (_displayType === 'F2B') {
-                        Number(1/root.placeholder).toPrecision(precision)
+                        M.format(M.value(1).div(root.placeholder).toString(), precision)
                     } else if (_displayType === 'paid') {
-                        Number(foreignSum*root.placeholder).toPrecision(precision)
+                        M.format(M.value(foreignSum).times(root.placeholder).toString(), precision)
                     }
                 }
 
@@ -122,12 +140,16 @@ PaddedDelegate {
                     if (_displayType === 'B2F') {
                         newValue = _inputField.value
                     } else if (_displayType === 'F2B') {
-                        newValue = value > 0 ? 1/_inputField.value : emptyValue
+                        newValue = M.value(value).gt(0) ?
+                            M.value(1).div(_inputField.value).toString() :
+                            emptyValue
                     } else if (_displayType === 'paid') {
-                        newValue = value > 0 ? _inputField.value/foreignSum : emptyValue
+                        newValue = M.value(value).gt(0) ?
+                            M.value(_inputField.value).div(foreignSum).toString() :
+                            emptyValue
                     }
 
-                    if (!Storage.isSameValue(newValue, root.value)) {
+                    if (!M.value(newValue).eq(root.value)) {
                         root.value = newValue // avoid a binding loop
                     }
                 }

@@ -11,7 +11,7 @@ import Opal.SmartScrollbar 1.0 as S
 
 import "../components"
 import "../js/dates.js" as Dates
-import "../js/storage.js" as Storage
+import "../js/math.js" as M
 
 Page {
     id: root
@@ -120,13 +120,13 @@ Page {
                      beneficiaries_list.count).arg(beneficiaries_string)).trim()
             }
 
-            property double effectiveRate: {
+            readonly property string effectiveRate: {
                 if (!!rate) {
                     rate
                 } else if (appWindow.activeProject.exchangeRates.hasOwnProperty(currency)) {
-                    appWindow.activeProject.exchangeRates[currency] || NaN
+                    appWindow.activeProject.exchangeRates[currency] || ''
                 } else {
-                    NaN
+                    ''
                 }
             }
 
@@ -138,8 +138,7 @@ Page {
 
             rightItem: D.DelegateInfoItem {
                 title: payer
-                text: Number(sum).toLocaleCurrencyString(Qt.locale("de_CH"), ' ') + (
-                          (!!percentage_fees || !!fixed_fees) ? '*' : '')
+                text: M.format(sum, appWindow.activeProject.precision) + ((!!percentage_fees || !!fixed_fees) ? '*' : '')
                 description: currency.toString()
                 textLabel.font.pixelSize: Theme.fontSizeMedium
                 alignment: Qt.AlignRight
@@ -151,45 +150,49 @@ Page {
                 ContextMenu {
                     MenuLabel {
                         visible: currency !== appWindow.activeProject.baseCurrency ||
-                                 item.effectiveRate !== 1.00
+                                 (!M.isNotNum(item.effectiveRate) && !M.value(item.effectiveRate).eq(1))
                         text: {
-                            if (Storage.isSameValue(item.effectiveRate, NaN)) {
+                            if (M.isNotNum(item.effectiveRate)) {
                                 qsTr("set %1 → %2 exchange rate in project settings")
                                     .arg(currency).arg(appWindow.activeProject.baseCurrency)
                             } else {
                                 '%1 %2 × %3 = %4 %5'
-                                    .arg(Number(sum).toLocaleString(Qt.locale("de_CH")))
+                                    .arg(M.format(sum, appWindow.activeProject.precision))
                                     .arg(currency)
-                                    .arg(item.effectiveRate)
-                                    .arg(Number(sum * item.effectiveRate).toLocaleString(Qt.locale("de_CH")))
+                                    .arg(M.format(item.effectiveRate, 4))
+                                    .arg(M.format(M.value(sum).times(item.effectiveRate).toString(),
+                                                  appWindow.activeProject.precision))
                                     .arg(appWindow.activeProject.baseCurrency)
                             }
                         }
                     }
                     MenuLabel {
-                        visible: !isNaN(item.effectiveRate) && (!!fixed_fees || !!percentage_fees)
+                        visible: !M.isNotNum(item.effectiveRate) && (!!fixed_fees || !!percentage_fees)
                         text: {
                             if (!visible) return ''
 
+                            var precision = appWindow.activeProject.precision
                             var text = ''
-                            var total = sum * item.effectiveRate
+                            var sumConv = M.value(sum).times(item.effectiveRate)
+                            var total = M.value(sum).times(item.effectiveRate)
 
                             if (!!percentage_fees) {
-                                total += total * (percentage_fees/100)
+                                var percentCalc = sumConv.times(M.value(percentage_fees).div(100))
+                                total = total.plus(percentCalc)
                                 text += "+ %1 %2 (%3%) "
-                                    .arg(sum * item.effectiveRate * (percentage_fees/100))
+                                    .arg(M.format(percentCalc, precision))
                                     .arg(appWindow.activeProject.baseCurrency)
-                                    .arg(Number(percentage_fees).toLocaleString(Qt.locale("de_CH")))
+                                    .arg(M.format(percentage_fees, precision))
                             }
                             if (!!fixed_fees) {
-                                total += fixed_fees
+                                total = total.plus(fixed_fees)
                                 text += "+ %1 %2 "
-                                    .arg(Number(fixed_fees).toLocaleString(Qt.locale("de_CH")))
+                                    .arg(M.format(fixed_fees, precision))
                                     .arg(appWindow.activeProject.baseCurrency)
                             }
 
                             text += "= %1 %2"
-                                .arg(Number(total).toLocaleString(Qt.locale("de_CH")))
+                                .arg(M.format(total, precision))
                                 .arg(appWindow.activeProject.baseCurrency)
                             return text
                         }

@@ -1,19 +1,19 @@
 /*
  * This file is part of harbour-expenditure.
  * SPDX-License-Identifier: GPL-3.0-or-later
- * SPDX-FileCopyrightText: 2024 Mirian Margiani
+ * SPDX-FileCopyrightText: 2024-2025 Mirian Margiani
  */
 
 import QtQuick 2.6
 import Sailfish.Silica 1.0
 
-import "../js/storage.js" as Storage
+import "../js/math.js" as M
 
 TextField {
     id: root
 
-    property double value: emptyValue
-    property double emptyValue: 0.00
+    property string value: emptyValue
+    property string emptyValue: '0.00'
     property int precision: 2
     property bool allowEmpty: false
     property bool allowNull: true
@@ -29,14 +29,13 @@ TextField {
         value: isAcceptable()
     }
 
-    Binding on errorHighlight {
-        when: !root.allowEmpty && !acceptableInput
-        value: true
+    function _getCleanText() {
+        return text.trim().replace(new RegExp(Qt.locale().decimalPoint, 'g'), '.')
+                          .replace(/,/g, '.').replace(/ /g, '')
     }
 
-    function _textToValue(text) {
-        return Number(text.trim().replace(Qt.locale().decimalPoint, '.')
-                                 .replace(',', '.'))
+    function _textToValue() {
+        return M.value(M.expand(_getCleanText() || emptyValue))
     }
 
     function isAcceptable() {
@@ -44,13 +43,17 @@ TextField {
     }
 
     function isEmpty() {
-        var value = _textToValue(text)
-
-        if (!text.trim()) {
+        if (   _getCleanText() === ''
+            || _getCleanText() === emptyValue) {
             return true
-        } else if (value === 0.00) {
+        }
+
+        var value = _textToValue()
+
+        if (value.isZero()) {
             return allowNull ? false : true
-        } else if (isNaN(value) || Storage.isSameValue(value, emptyValue)) {
+        } else if (value.eq(emptyValue) ||
+                   (value.isNaN() && M.isNotNum(emptyValue))) {
             return true
         } else {
             return false
@@ -58,36 +61,32 @@ TextField {
     }
 
     function _updateDisplayText() {
-        if (isNaN(value)) {
+        if (M.isNotNum(value)) {
             text = ''
-        } else if (precision == 2) {
-            text = value.toLocaleCurrencyString(Qt.locale('de-CH'), ' ').trim()
         } else {
-            text = value.toPrecision(precision)
+            text = M.format(value, precision)
         }
     }
 
     onActiveFocusChanged: {
         if (activeFocus) {
             // set unformatted text
-            if (isNaN(value)) {
+            if (M.isNotNum(value)) {
                 text = ''
-            } else if (value == 0.00) {
-                text = '  %1  '.arg(value.toFixed(precision))
             } else {
-                text = '  %1  '.arg(value.toString())
+                text = '  %1  '.arg(M.string(value, precision))
             }
 
             selectAll()
         } else {
             // save unformatted text as value
-            // and format it to legibility
+            // and format it for legibility
             if (!acceptableInput) {
                 console.log("not saving invalid input [2]:", text)
                 _updateDisplayText()
                 focus = false
             } else if (!!text) {
-                value = _textToValue(text)
+                value = _textToValue().toString()
                 _updateDisplayText()
                 focus = false
             } else {
@@ -102,24 +101,18 @@ TextField {
             console.log("not saving invalid input:", text)
             return
         }
-        value = _textToValue(text)
+
+        value = _textToValue().toString()
     }
 
     onValueChanged: {
         if (focus) return // only update when not editing
 
         // set formatted text
-        if (isNaN(value) && isNaN(emptyValue)) {
+        if (M.isNotNum(value) && M.isNotNum(emptyValue)) {
             text = ''
         } else {
             _updateDisplayText()
         }
-    }
-
-    Component.onCompleted: {
-        // workaround for 0.00 (default value) not being
-        // displayed because it doesn't initially trigger
-        // valueChanged()
-        if (value === 0.00 && !focus) text = '0.00'
     }
 }

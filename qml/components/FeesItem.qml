@@ -16,6 +16,14 @@ Row {
     property alias percentageFeesField: percentageFeeField
     property alias fixedFeesField: fixedFeeField
 
+    function percentageIsEmpty() {
+        return percentageFeeField.isEmpty()
+    }
+
+    function fixedIsEmpty() {
+        return fixedFeeField.isEmpty()
+    }
+
     width: parent.width
     spacing: Theme.paddingMedium
 
@@ -28,7 +36,7 @@ Row {
         label: qsTr("Fees")
         allowEmpty: true
         allowNull: true
-        emptyValue: NaN
+        emptyValue: ''
         precision: 4
         width: parent.width / 6 * 2
         textRightMargin: 0
@@ -44,7 +52,7 @@ Row {
     CurrencyInputField {
         id: fixedFeeField
         label: qsTr("Fees")
-        emptyValue: NaN
+        emptyValue: ''
         allowEmpty: true
         allowNull: true
         width: parent.width / 6 * 2
