@@ -417,7 +417,7 @@ function _formatResults() {
         for (var i in _settlement) {
             var set = _settlement[i]
 
-            if (set.value.isZero()) {
+            if (set.value.decimalPlaces(_settlementPrecision).isZero()) {
                 continue
             } else {
                 filtered.push({
