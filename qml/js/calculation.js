@@ -10,12 +10,29 @@
 
 .import "storage.js" as Storage
 
+// For some reason, the maximum precision allowed by Number.toFixed()
+// is 20. Anything above gives "RangeError: XX.XXXX... out of range".
+// According to the docs, 100 should be the maximum.
+// Docs: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed
+var MAX_PRECISION = 20
+
+// This precision is used internally when verifying the
+// settlement suggestion. The effective check precision
+// must be larger than the final precision. This is handled
+// in _reset().
+var DEFAULT_CHECK_PRECISION = 12
+var CHECK_PRECISION = DEFAULT_CHECK_PRECISION
+
+// This precision is used by default in the settlement
+// output. The default value can be overridden by the user.
+var DEFAULT_FINAL_PRECISION = 2
+
 var _project = null
 var _expenses = null
 var _members = []
 var _exchangeRates = {}
 var _baseCurrency = ''
-var _settlementPrecision = 2
+var _settlementPrecision = DEFAULT_FINAL_PRECISION
 
 var _payments = {}
 var _benefits = {}
@@ -90,7 +107,16 @@ function _reset(projectData) {
     _members = metadata.members
     _exchangeRates = _project.exchangeRates
     _baseCurrency = metadata.baseCurrency
-    _settlementPrecision = metadata.precision
+    _settlementPrecision = Math.min(metadata.precision, MAX_PRECISION)
+
+    CHECK_PRECISION = DEFAULT_CHECK_PRECISION
+
+    if (_settlementPrecision * 4 > CHECK_PRECISION) {
+        CHECK_PRECISION = Math.min(_settlementPrecision * 4, MAX_PRECISION)
+        console.warn("extended internal precision from", DEFAULT_CHECK_PRECISION,
+                     "to", CHECK_PRECISION)
+        console.warn("output precision is", _settlementPrecision)
+    }
 
     _payments = {}
     _benefits = {}
@@ -339,20 +365,30 @@ function _validate() {
         checkBalances[set.to] += set.value
     }
 
+    console.log("verifying the settlement...")
+
     for (var j in _balances) {
         if (!_balances.hasOwnProperty(j)) continue
 
-        if (Number(_balances[j]).toFixed(12) ===
-                Number(checkBalances[j]).toFixed(12)) {
-            console.log("settlement ok for", j, "at", _balances[j])
+        if (Number(_balances[j]).toFixed(CHECK_PRECISION) ===
+                Number(checkBalances[j]).toFixed(CHECK_PRECISION)) {
+            console.log("[   OK]", j, ":", _balances[j])
         } else {
             if (_balances[j] === 0.00 && !checkBalances.hasOwnProperty(j)) {
                 // this person has an even balance and does not appear
                 // in the settlement - that's ok
+                console.log("[   OK]", j, ":", _balances[j], "| not in settlement")
+                continue
+            } else if (Number(_balances[j] - checkBalances[j]).toFixed(CHECK_PRECISION) == Number(0.00).toFixed(CHECK_PRECISION)) {
+                // this person's settlement has tiny rounding errors that
+                // should be fine
+                console.log("[   OK]", j, ":", _balances[j], "| ignored rounding error:", Number(checkBalances[j] - _balances[j]).toFixed(MAX_PRECISION))
+                console.log("        expected", _balances[j], "but got", checkBalances[j])
                 continue
             } else {
-                console.error("!!! settlement failed for", j, "- expected",
-                              _balances[j], "but got", checkBalances[j])
+                console.error("[ERROR]", j, ": settlement failed")
+                console.error("        expected", _balances[j], "but got", checkBalances[j])
+                console.error("        difference: ", Number(_balances[j] - checkBalances[j]).toFixed(CHECK_PRECISION))
                 success = false
             }
         }
