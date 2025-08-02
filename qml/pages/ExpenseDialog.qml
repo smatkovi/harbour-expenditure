@@ -285,7 +285,8 @@ Dialog {
                         }
                     }
                     EnterKey.onClicked: {
-                        if (_customExchangeRate) {
+                        if (_customExchangeRate &&
+                                currencyField.text !== appWindow.activeProject.baseCurrency) {
                             rateField.inputField.forceActiveFocus()
                         } else if (_customFees) {
                             feesItem.percentageFeesField.forceActiveFocus()
@@ -312,7 +313,8 @@ Dialog {
                         }
                     }
                     EnterKey.onClicked: {
-                        if (_customExchangeRate) {
+                        if (_customExchangeRate &&
+                                currencyField.text !== appWindow.activeProject.baseCurrency) {
                             rateField.inputField.forceActiveFocus()
                         } else if (_customFees) {
                             feesItem.percentageFeesField.forceActiveFocus()
