@@ -153,6 +153,8 @@ function _collectSumsAndPeople() {
         // collect balances: paid minus received
         _balances[p] = _payments[p].minus(_benefits[p])
     }
+
+    _peopleArr.sort()
 }
 
 function _convertToBase(expense) {
