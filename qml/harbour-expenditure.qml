@@ -11,6 +11,7 @@ import "js/storage.js" as Storage
 
 import Opal.About 1.0 as A
 import Opal.SupportMe 1.0 as M
+import Opal.LocalStorage 1.0 as L
 
 import "pages"
 import "components"
@@ -79,6 +80,8 @@ ApplicationWindow {
             MySupportDialog {}
         }
     }
+
+    L.MessageHandler {}
 
     Component.onCompleted: {
         activeProject.loaded.connect(function(){ appWindow.loading = false; })

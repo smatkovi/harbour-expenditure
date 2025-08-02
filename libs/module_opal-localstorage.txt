@@ -14,7 +14,7 @@
 #    to the "attributions" list property of the "About" page.
 
 module: Opal.LocalStorage (opal-localstorage)
-version: 0.1.0 (git:a0f4da2)
+version: 0.2.0 (git:c29272d)
 description: This module provides a set of tools for handling local databases safely and extensibly.
 maintainers: Mirian Margiani
 attribution: 2018-2025 Mirian Margiani
