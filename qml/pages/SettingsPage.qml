@@ -286,21 +286,17 @@ Dialog {
 
             Spacer { size: Theme.paddingMedium }
 
-            ProjectOptionCombo {
-                id: ratesModeCombo
-                label: qsTr("Exchange rate")
-                selectedProject: root.selectedProject
-                role: "ratesMode"
+            TextSwitch {
+                text: qsTr("Always show exchange rate")
+                description: qsTr("If this option is enabled, the field for " +
+                                  "entering exchange rates is always shown when adding a " +
+                                  "new transaction.")
+                automaticCheck: false
+                checked: selectedProject.ratesMode == RatesMode.shownByDefault
 
-                menu: ContextMenu {
-                    MenuItem {
-                        property int value: RatesMode.fixed
-                        text: qsTr("fixed per currency")
-                    }
-                    MenuItem {
-                        property int value: RatesMode.perTransaction
-                        text: qsTr("per transaction")
-                    }
+                onClicked: {
+                    if (checked) selectedProject.ratesMode = RatesMode.hiddenByDefault // toggled
+                    else selectedProject.ratesMode = RatesMode.shownByDefault
                 }
             }
 

@@ -34,7 +34,7 @@ QtObject {
     property string lastCurrency
     property string lastPayer
     property var lastBeneficiaries: ([])
-    property int ratesMode: RatesMode.fixed
+    property int ratesMode: RatesMode.hiddenByDefault
     property int feesMode: FeesMode.hiddenByDefault
     property int precision: 2
 
@@ -172,7 +172,7 @@ QtObject {
             lastCurrency = ''
             lastBeneficiaries = []
             lastPayer = ''
-            ratesMode = RatesMode.fixed
+            ratesMode = RatesMode.hiddenByDefault
             feesMode = FeesMode.hiddenByDefault
             precision = 2
             exchangeRates = {}

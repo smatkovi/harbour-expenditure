@@ -37,7 +37,7 @@ Dialog {
 
     property bool _editing: rowid > -1
     property bool _usingCustomTime: false
-    property bool _customExchangeRate: appWindow.activeProject.ratesMode === RatesMode.perTransaction || !isNaN(rate)
+    property bool _customExchangeRate: appWindow.activeProject.ratesMode === RatesMode.shownByDefault || !isNaN(rate)
     property bool _customFees: appWindow.activeProject.feesMode === FeesMode.shownByDefault || !isNaN(percentageFees) || !isNaN(fixedFees)
     property var initialValuesReadOnly: ({})
 
