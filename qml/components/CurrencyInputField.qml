@@ -29,6 +29,11 @@ TextField {
         value: isAcceptable()
     }
 
+    Binding on errorHighlight {
+        when: !root.allowEmpty && !acceptableInput
+        value: true
+    }
+
     function _textToValue(text) {
         return Number(text.trim().replace(Qt.locale().decimalPoint, '.')
                                  .replace(',', '.'))
