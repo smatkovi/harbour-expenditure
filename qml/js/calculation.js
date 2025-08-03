@@ -11,6 +11,8 @@
 .import "storage.js" as Storage
 .import "math.js" as M
 
+var _ZERO = M.value(0)
+
 var _project = null
 var _expenses = null
 var _members = []
@@ -21,7 +23,7 @@ var _settlementPrecision = 2
 var _payments = {}
 var _benefits = {}
 var _balances = {}
-var _totalPayments = M.value('0.00')
+var _totalPayments = _ZERO
 var _settlement = []
 var _missingRates = {}
 
@@ -97,7 +99,7 @@ function _reset(projectData) {
     _payments = {}
     _benefits = {}
     _balances = {}
-    _totalPayments = M.value('0.00')
+    _totalPayments = _ZERO
     _settlement = []
     _missingRates = {}
     _peopleMap = {}
@@ -111,7 +113,7 @@ function _collectSumsAndPeople() {
         var x = _expenses[i]
 
         if (!_payments.hasOwnProperty(x.payer)) {
-            _payments[x.payer] = M.value('0.00')
+            _payments[x.payer] = _ZERO
         }
 
         var convertedSum = _convertToBase(x)
@@ -123,7 +125,7 @@ function _collectSumsAndPeople() {
             var bb = x.beneficiaries_list[b]
 
             if (!_benefits.hasOwnProperty(bb)) {
-                _benefits[bb] = M.value('0.00')
+                _benefits[bb] = _ZERO
             }
 
             _benefits[bb] = _benefits[bb].plus(individualBenefit)
@@ -147,8 +149,8 @@ function _collectSumsAndPeople() {
         if (!_peopleMap.hasOwnProperty(p)) continue
         _peopleArr.push(p)
 
-        if (!_benefits.hasOwnProperty(p)) _benefits[p] = M.value('0.00')
-        if (!_payments.hasOwnProperty(p)) _payments[p] = M.value('0.00')
+        if (!_benefits.hasOwnProperty(p)) _benefits[p] = _ZERO
+        if (!_payments.hasOwnProperty(p)) _payments[p] = _ZERO
 
         // collect balances: paid minus received
         _balances[p] = _payments[p].minus(_benefits[p])
@@ -236,7 +238,7 @@ function _splitDuesDirectly() {
             }
 
             if (!debts[bb].hasOwnProperty(x.payer)) {
-                debts[bb][x.payer] = M.value('0.00')
+                debts[bb][x.payer] = _ZERO
             }
 
             debts[bb][x.payer] = debts[bb][x.payer].plus(individualDebt)
@@ -251,12 +253,12 @@ function _splitDuesDirectly() {
                 var reverseValue = debts[to][from]
 
                 if (value.eq(reverseValue)) {
-                    debts[from][to] = M.value('0.00')
-                    debts[to][from] = M.value('0.00')
-                    value = M.value('0.00')
+                    debts[from][to] = _ZERO
+                    debts[to][from] = _ZERO
+                    value = _ZERO
                 } else if (value.gt(reverseValue)) {
                     debts[from][to] = value.minus(reverseValue)
-                    debts[to][from] = M.value('0.00')
+                    debts[to][from] = _ZERO
                     value = debts[from][to]
                 } else if (reverseValue.gt(value)) {
                     continue
@@ -281,17 +283,17 @@ function _splitDuesOptimized() {
 
     // apply a (n-1) algorithm  to settle expenses (how much each person ows to whom)
 
-    var meanValue = M.value('0.00')
+    var meanValue = _ZERO
     var sortedNames = []
     var sortedValues = []
     var settlement = []
 
     function prepareArrays() {
         var pendingBalances = {}
-        var totalPending = M.value('0.00')
+        var totalPending = _ZERO
 
         for (var person in _peopleMap) {
-            pendingBalances[person] = (_payments[person] || M.value('0.00')).minus(_benefits[person] || M.value('0.00'))
+            pendingBalances[person] = (_payments[person] || _ZERO).minus(_benefits[person] || _ZERO)
             totalPending = totalPending.plus(pendingBalances[person])
         }
 
@@ -361,9 +363,9 @@ function _validate() {
         var set = _settlement[i]
 
         if (!checkBalances.hasOwnProperty(set.from))
-            checkBalances[set.from] = M.value('0.00')
+            checkBalances[set.from] = _ZERO
         if (!checkBalances.hasOwnProperty(set.to))
-            checkBalances[set.to] = M.value('0.00')
+            checkBalances[set.to] = _ZERO
 
         checkBalances[set.from] = checkBalances[set.from].minus(set.value)
         checkBalances[set.to] = checkBalances[set.to].plus(set.value)
