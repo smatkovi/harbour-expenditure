@@ -1,11 +1,11 @@
 /*
  * This file is part of harbour-expenditure.
  * SPDX-License-Identifier: GPL-3.0-or-later
- * SPDX-FileCopyrightText: 2018-2024 Mirian Margiani
+ * SPDX-FileCopyrightText: 2018-2025 Mirian Margiani
  */
 
 .pragma library
-.import "../modules/Opal/LocalStorage/StorageHelper.js" as DB
+.import "../modules/Opal/LocalStorage/LocalStorage.js" as LS
 .import "math.js" as M
 .import "dates.js" as Dates
 
@@ -13,16 +13,9 @@
 // BEGIN Database configuration
 //
 
-function dbOk() { return DB.dbOk }
-var isSameValue = DB.isSameValue
+var DB = new LS.Database("main", "main", "Main Expenditure database")
 
-// The name of the database is a historical relic
-// but it cannot be changed due to limitations in Qt.
-DB.dbName = "Bible_DB"
-DB.dbDescription = "BibleDatabaseComplete"
-DB.dbSize = 2000000
-
-DB.dbMigrations = [
+DB.migrations = [
     // Database versions do not correspond to app versions.
 
     [0.1, function(tx){
@@ -171,7 +164,7 @@ DB.dbMigrations = [
         }
 
         function formatBeneficiaries(oldString) {
-            var array = DB.defaultFor(oldString || '', '').split(' ||| ').filter(
+            var array = LS.defaultFor(oldString || '', '').split(' ||| ').filter(
                         function(e){return e});
 
             if (array.length > 0) {
@@ -495,14 +488,14 @@ function splitMembersList(string) {
     // Important: do not use this in migrations!
     // This function might change over time. However, migrations
     // must explicitly state what they do.
-    return DB.defaultFor(string || '', '').split(' ||| ').filter(function(e){return e});
+    return LS.defaultFor(string || '', '').split(' ||| ').filter(function(e){return e});
 }
 
 function joinMembersList(array) {
     // Important: do not use this in migrations!
     // This function might change over time. However, migrations
     // must explicitly state what they do.
-    array = DB.defaultFor(array, [])
+    array = LS.defaultFor(array, [])
 
     if (array.length > 0) {
         return ' ||| %1 ||| '.arg(array.sort().join(' ||| '))
@@ -516,14 +509,6 @@ function joinMembersList(array) {
 // BEGIN Settings
 //
 
-function setSetting(key, value) {
-    return DB.setSetting(key, value)
-}
-
-function getSetting(key, fallback) {
-    return DB.getSetting(key, fallback)
-}
-
 function getSortOrder(orderFlag) {
     // 0 = increasing
     // 1 = decreasing
@@ -536,7 +521,7 @@ function getSortOrder(orderFlag) {
     // .import Enums.SortOrder 1.0 as SortOrder
     // but the imported SortOrder is always null.
 
-    orderFlag = DB.defaultFor(orderFlag, 0)
+    orderFlag = LS.defaultFor(orderFlag, 0)
 
     if (orderFlag === 1) {
         return 'ASC'
@@ -552,7 +537,7 @@ function getSortOrder(orderFlag) {
 //
 
 function getActiveProjectId() {
-    var ident = getSetting('active_project', -1000)
+    var ident = DB.getSetting('active_project', -1000)
 
     if (!_projectExists(ident)) {
         return -1000
@@ -566,7 +551,7 @@ function setActiveProjectId(ident) {
         ident = -1000
     }
 
-    setSetting('active_project', ident)
+    DB.setSetting('active_project', ident)
 }
 
 function _projectExists(ident) {
@@ -740,7 +725,7 @@ function _updateProject(projectData) {
 }
 
 function _deleteProject(rowid) {
-    rowid = DB.defaultFor(rowid, -1)
+    rowid = LS.defaultFor(rowid, -1)
 
     if (rowid < 0) return
 
