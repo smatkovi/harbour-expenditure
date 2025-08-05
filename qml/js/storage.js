@@ -773,7 +773,7 @@ function getProjectMetadata(ident) {
             lastBeneficiaries: splitMembersList(item.last_beneficiaries),
             ratesMode: item.rates_mode,
             feesMode: item.fees_mode,
-            precision: item.precision
+            precision: item.precision || 2,
         }
     }
 
