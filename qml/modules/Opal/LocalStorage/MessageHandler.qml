@@ -20,8 +20,8 @@ _hideOverlay(handle)
 }__events[handle]=obj
 }function hideOverlay(handle){if(__events.hasOwnProperty(handle)){__events[handle].hide(true)
 delete __events[handle]
-}}function _register(force){if(!force&&!!StorageHelper.databaseStatusSignal){console.warn(_lc,"database status signal already set!")
-}else{StorageHelper.databaseStatusSignal=__databaseSignalReceived
+}}function allowDismissOverlay(handle){}function _register(force){if(!force&&!!LocalStorage._DB_STATUS_SIGNAL){console.warn(_lc,"database status signal already set!")
+}else{LocalStorage._DB_STATUS_SIGNAL=__databaseSignalReceived
 }}visible:false
 parent:__silica_applicationwindow_instance
 on__DatabaseSignalReceived:{if(/^user-/ .test(handle)){__userEvents[handle]=1
