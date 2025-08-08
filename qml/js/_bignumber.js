@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright (c) 2025 Michael Mclaughlin <M8ch88l@gmail.com>
+// SPDX-License-Identifier: MIT
+
 ;(function (globalObject) {
   'use strict';
 
