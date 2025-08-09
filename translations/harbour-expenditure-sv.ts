@@ -92,7 +92,7 @@
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="238"/>
         <source>Define base exchange rates below for the following currencies: %1. A one-to-one rate has been used in calculations</source>
-        <translation type="unfinished"></translation>
+        <translation>Definiera baskurser nedan för följande valutor: %1. En en-till-en-kurs har använts i beräkningar</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="247"/>
@@ -240,7 +240,7 @@
         <location filename="../qml/components/EditableTransactionsListDelegate.qml" line="54"/>
         <source>for %1</source>
         <comment>as in “this payment was for Jane, John, and Jim”, with plural based on the number of beneficiaries</comment>
-        <translation type="unfinished">
+        <translation>
             <numerusform>för %1</numerusform>
             <numerusform>för %1</numerusform>
         </translation>
@@ -715,48 +715,48 @@
     <message>
         <location filename="../qml/modules/Opal/LocalStorage/MessageHandler.qml" line="36"/>
         <source>Database upgrade failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Databasuppgradering misslyckades</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/LocalStorage/MessageHandler.qml" line="36"/>
         <source>An error occurred while upgrading the database from version %1 to version %2. Please report this issue.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ett fel inträffade när du uppgraderar databasen från version %1 till version %2. Vänligen rapportera detta problem.</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/LocalStorage/MessageHandler.qml" line="36"/>
         <location filename="../qml/modules/Opal/LocalStorage/MessageHandler.qml" line="42"/>
         <source>Developer information:</source>
-        <translation type="unfinished"></translation>
+        <translation>Utvecklarinformation:</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/LocalStorage/MessageHandler.qml" line="38"/>
         <source>Invalid database version</source>
-        <translation type="unfinished"></translation>
+        <translation>Ogiltig databasversion</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/LocalStorage/MessageHandler.qml" line="38"/>
         <source>The app cannot start because the database has version %1 but only version %2 is supported.</source>
-        <translation type="unfinished"></translation>
+        <translation>Appen kan inte starta eftersom databasen är version %1 men endast version %2 stöds.</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/LocalStorage/MessageHandler.qml" line="40"/>
         <source>Database Maintenance</source>
-        <translation type="unfinished"></translation>
+        <translation>Databasunderhåll</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/LocalStorage/MessageHandler.qml" line="40"/>
         <source>Please be patient and allow up to 30 seconds for this.</source>
-        <translation type="unfinished"></translation>
+        <translation>Var tålmodig och tillåt upp till 30 sekunder för detta.</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/LocalStorage/MessageHandler.qml" line="42"/>
         <source>Database issue</source>
-        <translation type="unfinished"></translation>
+        <translation>Databasproblem</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/LocalStorage/MessageHandler.qml" line="42"/>
         <source>An unexpected issue occurred in the database. Try restarting the app.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ett oväntat problem inträffade i databasen. Försök att starta om appen.</translation>
     </message>
 </context>
 <context>
@@ -765,12 +765,12 @@
         <location filename="../qml/components/PrecisionSelector.qml" line="16"/>
         <location filename="../qml/components/PrecisionSelector.qml" line="22"/>
         <source>Decimal precision</source>
-        <translation type="unfinished"></translation>
+        <translation>Decimalprecision</translation>
     </message>
     <message>
         <location filename="../qml/components/PrecisionSelector.qml" line="36"/>
         <source>Results are rounded to this number of decimal places. Set this to a value that makes sense with your currency.</source>
-        <translation type="unfinished"></translation>
+        <translation>Resultaten avrundas till detta antal decimaler. Ange ett värde som stämmer med din valuta.</translation>
     </message>
 </context>
 <context>
@@ -861,12 +861,12 @@ Starta om appen och kontrollera loggarna.</translation>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="290"/>
         <source>Always show exchange rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Visa alltid växelkurs</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="291"/>
         <source>If this option is enabled, the field for entering exchange rates is always shown when adding a new transaction.</source>
-        <translation type="unfinished"></translation>
+        <translation>Om det här alternativet är aktiverat visas alltid fältet för att ange växelkurser när du lägger till en ny transaktion.</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="304"/>
