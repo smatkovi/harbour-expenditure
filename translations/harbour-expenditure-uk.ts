@@ -92,7 +92,7 @@
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="238"/>
         <source>Define base exchange rates below for the following currencies: %1. A one-to-one rate has been used in calculations</source>
-        <translation type="unfinished"></translation>
+        <translation>Визначте базові обмінні курси нижче для наступних валют: %1. У розрахунках було використано курс один до одного</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="247"/>
@@ -240,7 +240,7 @@
         <location filename="../qml/components/EditableTransactionsListDelegate.qml" line="54"/>
         <source>for %1</source>
         <comment>as in “this payment was for Jane, John, and Jim”, with plural based on the number of beneficiaries</comment>
-        <translation type="unfinished">
+        <translation>
             <numerusform>для %1</numerusform>
             <numerusform>Для %1</numerusform>
             <numerusform>Для %1</numerusform>
@@ -719,48 +719,48 @@
     <message>
         <location filename="../qml/modules/Opal/LocalStorage/MessageHandler.qml" line="36"/>
         <source>Database upgrade failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося оновити базу даних</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/LocalStorage/MessageHandler.qml" line="36"/>
         <source>An error occurred while upgrading the database from version %1 to version %2. Please report this issue.</source>
-        <translation type="unfinished"></translation>
+        <translation>Під час оновлення бази даних з версії %1 до версії %2 сталася помилка. Будь ласка, повідомте про цю проблему.</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/LocalStorage/MessageHandler.qml" line="36"/>
         <location filename="../qml/modules/Opal/LocalStorage/MessageHandler.qml" line="42"/>
         <source>Developer information:</source>
-        <translation type="unfinished"></translation>
+        <translation>Інформація про розробника:</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/LocalStorage/MessageHandler.qml" line="38"/>
         <source>Invalid database version</source>
-        <translation type="unfinished"></translation>
+        <translation>Недійсна версія бази даних</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/LocalStorage/MessageHandler.qml" line="38"/>
         <source>The app cannot start because the database has version %1 but only version %2 is supported.</source>
-        <translation type="unfinished"></translation>
+        <translation>Програму неможливо запустити, оскільки база даних має версію %1, але підтримується лише версія %2.</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/LocalStorage/MessageHandler.qml" line="40"/>
         <source>Database Maintenance</source>
-        <translation type="unfinished">Обслуговування бази даних</translation>
+        <translation>Обслуговування бази даних</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/LocalStorage/MessageHandler.qml" line="40"/>
         <source>Please be patient and allow up to 30 seconds for this.</source>
-        <translation type="unfinished">Будь ласка, запасіться терпінням і дайте на це до 30 секунд.</translation>
+        <translation>Будь ласка, будьте терплячими та виділіть для цього до 30 секунд.</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/LocalStorage/MessageHandler.qml" line="42"/>
         <source>Database issue</source>
-        <translation type="unfinished"></translation>
+        <translation>Проблема з базою даних</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/LocalStorage/MessageHandler.qml" line="42"/>
         <source>An unexpected issue occurred in the database. Try restarting the app.</source>
-        <translation type="unfinished"></translation>
+        <translation>У базі даних виникла неочікувана проблема. Спробуйте перезапустити програму.</translation>
     </message>
 </context>
 <context>
@@ -769,12 +769,12 @@
         <location filename="../qml/components/PrecisionSelector.qml" line="16"/>
         <location filename="../qml/components/PrecisionSelector.qml" line="22"/>
         <source>Decimal precision</source>
-        <translation type="unfinished"></translation>
+        <translation>Десяткова точність</translation>
     </message>
     <message>
         <location filename="../qml/components/PrecisionSelector.qml" line="36"/>
         <source>Results are rounded to this number of decimal places. Set this to a value that makes sense with your currency.</source>
-        <translation type="unfinished"></translation>
+        <translation>Результати округляються до цієї кількості знаків після коми. Встановіть значення, яке відповідає вашій валюті.</translation>
     </message>
 </context>
 <context>
@@ -865,12 +865,12 @@ Please restart the app and check the logs.</source>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="290"/>
         <source>Always show exchange rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Завжди показувати обмінний курс</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="291"/>
         <source>If this option is enabled, the field for entering exchange rates is always shown when adding a new transaction.</source>
-        <translation type="unfinished"></translation>
+        <translation>Якщо ця опція увімкнена, поле для введення обмінних курсів завжди відображається під час додавання нової транзакції.</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="304"/>
