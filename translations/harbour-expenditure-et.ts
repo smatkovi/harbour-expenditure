@@ -92,7 +92,7 @@
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="238"/>
         <source>Define base exchange rates below for the following currencies: %1. A one-to-one rate has been used in calculations</source>
-        <translation type="unfinished"></translation>
+        <translation>Järgnevalt määra vahetuskursid antud vääringute jaoks: %1, Arvutustes oli kasutusel üks-ühele kurss</translation>
     </message>
     <message>
         <location filename="../qml/pages/CalcPage.qml" line="247"/>
@@ -240,7 +240,7 @@
         <location filename="../qml/components/EditableTransactionsListDelegate.qml" line="54"/>
         <source>for %1</source>
         <comment>as in “this payment was for Jane, John, and Jim”, with plural based on the number of beneficiaries</comment>
-        <translation type="unfinished">
+        <translation>
             <numerusform>saajale %1</numerusform>
             <numerusform>saajatele %1</numerusform>
         </translation>
@@ -715,48 +715,48 @@
     <message>
         <location filename="../qml/modules/Opal/LocalStorage/MessageHandler.qml" line="36"/>
         <source>Database upgrade failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Andmebaasi uuendamine ei õnnestunud</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/LocalStorage/MessageHandler.qml" line="36"/>
         <source>An error occurred while upgrading the database from version %1 to version %2. Please report this issue.</source>
-        <translation type="unfinished"></translation>
+        <translation>Andmebaasi uuendamine versioonist %1 versiooni %2 ei õnnestunud. Palun teata sellest veast arendajale.</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/LocalStorage/MessageHandler.qml" line="36"/>
         <location filename="../qml/modules/Opal/LocalStorage/MessageHandler.qml" line="42"/>
         <source>Developer information:</source>
-        <translation type="unfinished"></translation>
+        <translation>Teave arendajale:</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/LocalStorage/MessageHandler.qml" line="38"/>
         <source>Invalid database version</source>
-        <translation type="unfinished"></translation>
+        <translation>Vigane andmebaasiversioon</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/LocalStorage/MessageHandler.qml" line="38"/>
         <source>The app cannot start because the database has version %1 but only version %2 is supported.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kuna andmebaasiversioon on %1, aga toetatud on vaid %2, siis rakenduse käivitamine ei õnnestu.</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/LocalStorage/MessageHandler.qml" line="40"/>
         <source>Database Maintenance</source>
-        <translation type="unfinished">Andmebaasi hooldus</translation>
+        <translation>Andmebaasi hooldus</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/LocalStorage/MessageHandler.qml" line="40"/>
         <source>Please be patient and allow up to 30 seconds for this.</source>
-        <translation type="unfinished">Palun oota rahulikult kuni 30 sekundit selle tegevuse lõppemiseni.</translation>
+        <translation>Palun oota rahulikult kuni 30 sekundit selle tegevuse lõppemiseni.</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/LocalStorage/MessageHandler.qml" line="42"/>
         <source>Database issue</source>
-        <translation type="unfinished"></translation>
+        <translation>Andmebaasi viga</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/LocalStorage/MessageHandler.qml" line="42"/>
         <source>An unexpected issue occurred in the database. Try restarting the app.</source>
-        <translation type="unfinished"></translation>
+        <translation>Andmebaasis tekkis ootamatu viga. Proovi rakendust uuesti käivitada.</translation>
     </message>
 </context>
 <context>
@@ -765,12 +765,12 @@
         <location filename="../qml/components/PrecisionSelector.qml" line="16"/>
         <location filename="../qml/components/PrecisionSelector.qml" line="22"/>
         <source>Decimal precision</source>
-        <translation type="unfinished"></translation>
+        <translation>Komakoha täpsus</translation>
     </message>
     <message>
         <location filename="../qml/components/PrecisionSelector.qml" line="36"/>
         <source>Results are rounded to this number of decimal places. Set this to a value that makes sense with your currency.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tulemused ümardatakse selle kohakohtade arvuni. Sisesta midagi, mis sinu kasutatava vääringu puhul on mõistlik.</translation>
     </message>
 </context>
 <context>
@@ -861,12 +861,12 @@ Palun käivita rakendus uuesti ja vaata, mis logides kirjas on.</translation>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="290"/>
         <source>Always show exchange rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Näita alati vahetuskurssi</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="291"/>
         <source>If this option is enabled, the field for entering exchange rates is always shown when adding a new transaction.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kui see eelistus on valitud, siis uue tehingu lisamisel on alati näidatud vahetuskursi väli.</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="304"/>
