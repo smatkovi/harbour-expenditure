@@ -940,40 +940,70 @@ Please restart the app and check the logs.</source>
 <context>
     <name>dates</name>
     <message>
-        <location filename="../qml/js/dates.js" line="11"/>
         <source>hh&apos;:&apos;mm</source>
         <comment>time only format, as in “10:00 o&apos;clock”</comment>
-        <translation>HH &apos;:&apos; மிமீ</translation>
+        <translation type="vanished">HH &apos;:&apos; மிமீ</translation>
+    </message>
+    <message>
+        <source>d MMM yyyy, hh&apos;:&apos;mm</source>
+        <comment>date and time format, as in “Dec. 1st 2023, 10:00 o&apos;clock”</comment>
+        <translation type="vanished">டி Mmm yyyy, hh &apos;:&apos; மிமீ</translation>
+    </message>
+    <message>
+        <source>ddd d MMM yyyy, hh&apos;:&apos;mm</source>
+        <comment>full date and time format, as in “Fri., Dec. 1st 2023, 10:00 o&apos;clock”</comment>
+        <translation type="vanished">ddd டி mmm yyyy, hh &apos;:&apos; மிமீ</translation>
+    </message>
+    <message>
+        <source>ddd d MMM yyyy</source>
+        <comment>full date format, as in “Fri., Dec. 1st 2023”</comment>
+        <translation type="vanished">ddd டி mmm yyyy</translation>
+    </message>
+    <message>
+        <source>d MMM yyyy</source>
+        <comment>date format, as in “Dec. 1st 2023”</comment>
+        <translation type="vanished">டி எம்.எம்.எம்</translation>
+    </message>
+    <message>
+        <source>d MMM</source>
+        <comment>date format without year, as in “Dec. 1st”</comment>
+        <translation type="vanished">டி எம்.எம்</translation>
+    </message>
+    <message>
+        <location filename="../qml/js/dates.js" line="11"/>
+        <source>hh&apos;:&apos;mm</source>
+        <comment>time only format, as in “10:00 o&apos;clock”, see https://doc.qt.io/archives/qt-5.15/qml-qtqml-date.html#format-strings</comment>
+        <translation type="unfinished">HH &apos;:&apos; மிமீ</translation>
     </message>
     <message>
         <location filename="../qml/js/dates.js" line="13"/>
         <source>d MMM yyyy, hh&apos;:&apos;mm</source>
-        <comment>date and time format, as in “Dec. 1st 2023, 10:00 o&apos;clock”</comment>
-        <translation>டி Mmm yyyy, hh &apos;:&apos; மிமீ</translation>
+        <comment>date and time format, as in “Dec. 1st 2023, 10:00 o&apos;clock”, see https://doc.qt.io/archives/qt-5.15/qml-qtqml-date.html#format-strings</comment>
+        <translation type="unfinished">டி Mmm yyyy, hh &apos;:&apos; மிமீ</translation>
     </message>
     <message>
         <location filename="../qml/js/dates.js" line="15"/>
         <source>ddd d MMM yyyy, hh&apos;:&apos;mm</source>
-        <comment>full date and time format, as in “Fri., Dec. 1st 2023, 10:00 o&apos;clock”</comment>
-        <translation>ddd டி mmm yyyy, hh &apos;:&apos; மிமீ</translation>
+        <comment>full date and time format, as in “Fri., Dec. 1st 2023, 10:00 o&apos;clock”, see https://doc.qt.io/archives/qt-5.15/qml-qtqml-date.html#format-strings</comment>
+        <translation type="unfinished">ddd டி mmm yyyy, hh &apos;:&apos; மிமீ</translation>
     </message>
     <message>
         <location filename="../qml/js/dates.js" line="17"/>
         <source>ddd d MMM yyyy</source>
-        <comment>full date format, as in “Fri., Dec. 1st 2023”</comment>
-        <translation>ddd டி mmm yyyy</translation>
+        <comment>full date format, as in “Fri., Dec. 1st 2023”, see https://doc.qt.io/archives/qt-5.15/qml-qtqml-date.html#format-strings</comment>
+        <translation type="unfinished">ddd டி mmm yyyy</translation>
     </message>
     <message>
         <location filename="../qml/js/dates.js" line="19"/>
         <source>d MMM yyyy</source>
-        <comment>date format, as in “Dec. 1st 2023”</comment>
-        <translation>டி எம்.எம்.எம்</translation>
+        <comment>date format, as in “Dec. 1st 2023”, see https://doc.qt.io/archives/qt-5.15/qml-qtqml-date.html#format-strings</comment>
+        <translation type="unfinished">டி எம்.எம்.எம்</translation>
     </message>
     <message>
         <location filename="../qml/js/dates.js" line="21"/>
         <source>d MMM</source>
-        <comment>date format without year, as in “Dec. 1st”</comment>
-        <translation>டி எம்.எம்</translation>
+        <comment>date format without year, as in “Dec. 1st”, see https://doc.qt.io/archives/qt-5.15/qml-qtqml-date.html#format-strings</comment>
+        <translation type="unfinished">டி எம்.எம்</translation>
     </message>
     <message>
         <location filename="../qml/js/dates.js" line="64"/>

@@ -9,17 +9,17 @@
 var dbDateFormat = "yyyy-MM-dd hh:mm:ss"
 
 var timeFormat = qsTr("hh':'mm",
-    "time only format, as in “10:00 o'clock”")
+    "time only format, as in “10:00 o'clock”, see https://doc.qt.io/archives/qt-5.15/qml-qtqml-date.html#format-strings")
 var dateTimeFormat = qsTr("d MMM yyyy, hh':'mm",
-    "date and time format, as in “Dec. 1st 2023, 10:00 o'clock”")
+    "date and time format, as in “Dec. 1st 2023, 10:00 o'clock”, see https://doc.qt.io/archives/qt-5.15/qml-qtqml-date.html#format-strings")
 var fullDateTimeFormat = qsTr("ddd d MMM yyyy, hh':'mm",
-    "full date and time format, as in “Fri., Dec. 1st 2023, 10:00 o'clock”")
+    "full date and time format, as in “Fri., Dec. 1st 2023, 10:00 o'clock”, see https://doc.qt.io/archives/qt-5.15/qml-qtqml-date.html#format-strings")
 var fullDateFormat = qsTr("ddd d MMM yyyy",
-    "full date format, as in “Fri., Dec. 1st 2023”")
+    "full date format, as in “Fri., Dec. 1st 2023”, see https://doc.qt.io/archives/qt-5.15/qml-qtqml-date.html#format-strings")
 var dateFormat = qsTr("d MMM yyyy",
-    "date format, as in “Dec. 1st 2023”")
+    "date format, as in “Dec. 1st 2023”, see https://doc.qt.io/archives/qt-5.15/qml-qtqml-date.html#format-strings")
 var dateNoYearFormat = qsTr("d MMM",
-    "date format without year, as in “Dec. 1st”")
+    "date format without year, as in “Dec. 1st”, see https://doc.qt.io/archives/qt-5.15/qml-qtqml-date.html#format-strings")
 
 
 function getTimezone() {
