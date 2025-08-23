@@ -30,8 +30,7 @@ TextField {
     }
 
     function _getCleanText() {
-        return text.trim().replace(new RegExp(Qt.locale().decimalPoint, 'g'), '.')
-                          .replace(/,/g, '.').replace(/ /g, '')
+        return M.cleanNumberString(text)
     }
 
     function _textToValue() {
