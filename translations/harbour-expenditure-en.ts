@@ -44,27 +44,27 @@
         <translation>Swedish</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="105"/>
-        <source>Portuguese (Brazil)</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qml/pages/AboutPage.qml" line="131"/>
+        <source>Brazilian Portuguese</source>
+        <translation>Brazilian Portuguese</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="111"/>
+        <location filename="../qml/pages/AboutPage.qml" line="105"/>
         <source>Norwegian Bokmål</source>
         <translation>Norwegian (Bokmål)</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="117"/>
+        <location filename="../qml/pages/AboutPage.qml" line="111"/>
         <source>Indonesian</source>
         <translation>Indonesian</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="123"/>
+        <location filename="../qml/pages/AboutPage.qml" line="117"/>
         <source>German</source>
         <translation>German</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="131"/>
+        <location filename="../qml/pages/AboutPage.qml" line="125"/>
         <source>Estonian</source>
         <translation>Estonian</translation>
     </message>
@@ -939,36 +939,6 @@ Please restart the app and check the logs.</translation>
 </context>
 <context>
     <name>dates</name>
-    <message>
-        <source>hh&apos;:&apos;mm</source>
-        <comment>time only format, as in “10:00 o&apos;clock”</comment>
-        <translation type="vanished">hh&apos;:&apos;mm</translation>
-    </message>
-    <message>
-        <source>d MMM yyyy, hh&apos;:&apos;mm</source>
-        <comment>date and time format, as in “Dec. 1st 2023, 10:00 o&apos;clock”</comment>
-        <translation type="vanished">MMM d yyyy, hh&apos;:&apos;mm</translation>
-    </message>
-    <message>
-        <source>ddd d MMM yyyy, hh&apos;:&apos;mm</source>
-        <comment>full date and time format, as in “Fri., Dec. 1st 2023, 10:00 o&apos;clock”</comment>
-        <translation type="vanished">ddd MMM d yyyy, hh&apos;:&apos;mm</translation>
-    </message>
-    <message>
-        <source>ddd d MMM yyyy</source>
-        <comment>full date format, as in “Fri., Dec. 1st 2023”</comment>
-        <translation type="vanished">ddd MMM d yyyy</translation>
-    </message>
-    <message>
-        <source>d MMM yyyy</source>
-        <comment>date format, as in “Dec. 1st 2023”</comment>
-        <translation type="vanished">MMM d yyyy</translation>
-    </message>
-    <message>
-        <source>d MMM</source>
-        <comment>date format without year, as in “Dec. 1st”</comment>
-        <translation type="vanished">MMM d</translation>
-    </message>
     <message>
         <location filename="../qml/js/dates.js" line="11"/>
         <source>hh&apos;:&apos;mm</source>

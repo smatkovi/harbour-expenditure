@@ -44,27 +44,27 @@
         <translation>Schwedisch</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="105"/>
-        <source>Portuguese (Brazil)</source>
-        <translation type="unfinished"></translation>
+        <location filename="../qml/pages/AboutPage.qml" line="131"/>
+        <source>Brazilian Portuguese</source>
+        <translation>Brasilianisches Portugiesisch</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="111"/>
+        <location filename="../qml/pages/AboutPage.qml" line="105"/>
         <source>Norwegian Bokmål</source>
         <translation>Norwegisch (Bokmål)</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="117"/>
+        <location filename="../qml/pages/AboutPage.qml" line="111"/>
         <source>Indonesian</source>
         <translation>Indonesisch</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="123"/>
+        <location filename="../qml/pages/AboutPage.qml" line="117"/>
         <source>German</source>
         <translation>Deutsch</translation>
     </message>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="131"/>
+        <location filename="../qml/pages/AboutPage.qml" line="125"/>
         <source>Estonian</source>
         <translation>Estnisch</translation>
     </message>
@@ -240,7 +240,7 @@
         <location filename="../qml/components/EditableTransactionsListDelegate.qml" line="54"/>
         <source>for %1</source>
         <comment>as in “this payment was for Jane, John, and Jim”, with plural based on the number of beneficiaries</comment>
-        <translation type="unfinished">
+        <translation>
             <numerusform>für %1</numerusform>
             <numerusform>für %1</numerusform>
         </translation>
@@ -710,28 +710,28 @@
     <message>
         <location filename="../qml/modules/Opal/LocalStorage/MessageHandler.qml" line="36"/>
         <source>Database upgrade failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Datenbank-Aktualisierung fehlgeschlagen</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/LocalStorage/MessageHandler.qml" line="36"/>
         <source>An error occurred while upgrading the database from version %1 to version %2. Please report this issue.</source>
-        <translation type="unfinished"></translation>
+        <translation>Während der Datenbank-Aktualisierung von Version %1 auf Version %2 ist ein Fehler aufgetreten. Bitte melden Sie dieses Problem.</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/LocalStorage/MessageHandler.qml" line="36"/>
         <location filename="../qml/modules/Opal/LocalStorage/MessageHandler.qml" line="42"/>
         <source>Developer information:</source>
-        <translation type="unfinished"></translation>
+        <translation>Entwicklerinformationen:</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/LocalStorage/MessageHandler.qml" line="38"/>
         <source>Invalid database version</source>
-        <translation type="unfinished"></translation>
+        <translation>Ungültige Datenbankversion</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/LocalStorage/MessageHandler.qml" line="38"/>
         <source>The app cannot start because the database has version %1 but only version %2 is supported.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die App kann nicht gestartet werden, weil die Datenbankversion nicht unterstützt wird (%1 gefunden, aber %2 erwartet).</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/LocalStorage/MessageHandler.qml" line="40"/>
@@ -746,12 +746,12 @@
     <message>
         <location filename="../qml/modules/Opal/LocalStorage/MessageHandler.qml" line="42"/>
         <source>Database issue</source>
-        <translation type="unfinished"></translation>
+        <translation>Datenbankproblem</translation>
     </message>
     <message>
         <location filename="../qml/modules/Opal/LocalStorage/MessageHandler.qml" line="42"/>
         <source>An unexpected issue occurred in the database. Try restarting the app.</source>
-        <translation type="unfinished"></translation>
+        <translation>In der Datenbank ist ein unerwarteter Fehler aufgetreten. Versuchen Sie, die App neuzustarten.</translation>
     </message>
 </context>
 <context>
@@ -940,70 +940,40 @@ Bitte starten Sie die App neu und prüfen Sie die Logs.</translation>
 <context>
     <name>dates</name>
     <message>
-        <source>hh&apos;:&apos;mm</source>
-        <comment>time only format, as in “10:00 o&apos;clock”</comment>
-        <translation type="vanished">hh&apos;:&apos;mm &apos;Uhr&apos;</translation>
-    </message>
-    <message>
-        <source>d MMM yyyy, hh&apos;:&apos;mm</source>
-        <comment>date and time format, as in “Dec. 1st 2023, 10:00 o&apos;clock”</comment>
-        <translation type="vanished">d. MMM yyyy, hh&apos;:&apos;mm &apos;Uhr&apos;</translation>
-    </message>
-    <message>
-        <source>ddd d MMM yyyy, hh&apos;:&apos;mm</source>
-        <comment>full date and time format, as in “Fri., Dec. 1st 2023, 10:00 o&apos;clock”</comment>
-        <translation type="vanished">ddd, d. MMM yyyy, hh&apos;:&apos;mm &apos;Uhr&apos;</translation>
-    </message>
-    <message>
-        <source>ddd d MMM yyyy</source>
-        <comment>full date format, as in “Fri., Dec. 1st 2023”</comment>
-        <translation type="vanished">ddd, d. MMM yyyy</translation>
-    </message>
-    <message>
-        <source>d MMM yyyy</source>
-        <comment>date format, as in “Dec. 1st 2023”</comment>
-        <translation type="vanished">d. MMM yyyy</translation>
-    </message>
-    <message>
-        <source>d MMM</source>
-        <comment>date format without year, as in “Dec. 1st”</comment>
-        <translation type="vanished">d. MMM</translation>
-    </message>
-    <message>
         <location filename="../qml/js/dates.js" line="11"/>
         <source>hh&apos;:&apos;mm</source>
         <comment>time only format, as in “10:00 o&apos;clock”, see https://doc.qt.io/archives/qt-5.15/qml-qtqml-date.html#format-strings</comment>
-        <translation type="unfinished">hh&apos;:&apos;mm &apos;Uhr&apos;</translation>
+        <translation>hh&apos;:&apos;mm &apos;Uhr&apos;</translation>
     </message>
     <message>
         <location filename="../qml/js/dates.js" line="13"/>
         <source>d MMM yyyy, hh&apos;:&apos;mm</source>
         <comment>date and time format, as in “Dec. 1st 2023, 10:00 o&apos;clock”, see https://doc.qt.io/archives/qt-5.15/qml-qtqml-date.html#format-strings</comment>
-        <translation type="unfinished">d. MMM yyyy, hh&apos;:&apos;mm &apos;Uhr&apos;</translation>
+        <translation>d. MMM yyyy, hh&apos;:&apos;mm &apos;Uhr&apos;</translation>
     </message>
     <message>
         <location filename="../qml/js/dates.js" line="15"/>
         <source>ddd d MMM yyyy, hh&apos;:&apos;mm</source>
         <comment>full date and time format, as in “Fri., Dec. 1st 2023, 10:00 o&apos;clock”, see https://doc.qt.io/archives/qt-5.15/qml-qtqml-date.html#format-strings</comment>
-        <translation type="unfinished">ddd, d. MMM yyyy, hh&apos;:&apos;mm &apos;Uhr&apos;</translation>
+        <translation>ddd, d. MMM yyyy, hh&apos;:&apos;mm &apos;Uhr&apos;</translation>
     </message>
     <message>
         <location filename="../qml/js/dates.js" line="17"/>
         <source>ddd d MMM yyyy</source>
         <comment>full date format, as in “Fri., Dec. 1st 2023”, see https://doc.qt.io/archives/qt-5.15/qml-qtqml-date.html#format-strings</comment>
-        <translation type="unfinished">ddd, d. MMM yyyy</translation>
+        <translation>ddd, d. MMM yyyy</translation>
     </message>
     <message>
         <location filename="../qml/js/dates.js" line="19"/>
         <source>d MMM yyyy</source>
         <comment>date format, as in “Dec. 1st 2023”, see https://doc.qt.io/archives/qt-5.15/qml-qtqml-date.html#format-strings</comment>
-        <translation type="unfinished">d. MMM yyyy</translation>
+        <translation>d. MMM yyyy</translation>
     </message>
     <message>
         <location filename="../qml/js/dates.js" line="21"/>
         <source>d MMM</source>
         <comment>date format without year, as in “Dec. 1st”, see https://doc.qt.io/archives/qt-5.15/qml-qtqml-date.html#format-strings</comment>
-        <translation type="unfinished">d. MMM</translation>
+        <translation>d. MMM</translation>
     </message>
     <message>
         <location filename="../qml/js/dates.js" line="64"/>
