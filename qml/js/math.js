@@ -24,9 +24,9 @@ BigNumber.config({
         // decimal separator
         decimalSeparator: Qt.locale().decimalPoint,
         // grouping separator of the integer part
-        groupSeparator: Qt.locale().groupSeparator === '.' &&
-                        Qt.locale().decimalPoint === ',' ? "'" :
-                        Qt.locale().groupSeparator,
+        groupSeparator: (Qt.locale().groupSeparator === '.'
+                         && Qt.locale().decimalPoint === ',')
+                        ? "'" : Qt.locale().groupSeparator,
 
         // Qt provides no info about these settings so
         // we keep the defaults:
@@ -58,7 +58,7 @@ function expand(string) {
     var input = string.trim().replace(new RegExp(Qt.locale().decimalPoint, 'g'), '.')
                              .replace(/,/g, '.').replace(/ /g, '')
 
-    console.debug("[math] input:", input)
+    console.debug("[math] arithmetic input:", input)
 
     if (input === '') {
         return ''
@@ -99,7 +99,7 @@ function expand(string) {
         }
     }
 
-    console.debug("[math] result:", result)
+    console.debug("[math] arithmetic result:", result)
 
     return result.toString()
 }
