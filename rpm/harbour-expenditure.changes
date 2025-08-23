@@ -6,6 +6,11 @@
 # * date Author's Name <author's email> version-release
 # - Summary of changes
 
+* Sat Aug 23 2025 Mirian Margiani <mixosaurus+ichthyo@pm.me> 2.0.1-1
+- Fixed entering numbers in locales that use '.' as decimal point
+- Fixed an untranslatable string
+- Updated translations: Estonian, Swedish, Ukrainian, and more
+
 * Fri Aug 08 2025 Mirian Margiani <mixosaurus+ichthyo@pm.me> 2.0.0-1
 - Major change: switched to a library for handling high-precision numbers; this fixes many small issues caused by JavaScript's limitations
 - Improved handling of missing exchange rates: sums are now calculated properly using a 1:1 exchange rate and missing exchange rates are highlighted

@@ -9,6 +9,15 @@ import "modules/Opal/About"
 
 ChangelogList {
     ChangelogItem {
+        version: "2.0.1-1"
+        date: "2025-08-23"
+        paragraphs: [
+            "- Fixed entering numbers in locales that use '.' as decimal point<br>" +
+            "- Fixed an untranslatable string<br>" +
+            "- Updated translations: Estonian, Swedish, Ukrainian, and more"
+        ]
+    }
+    ChangelogItem {
         version: "2.0.0-1"
         date: "2025-08-08"
         paragraphs: [
