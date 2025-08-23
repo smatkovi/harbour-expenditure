@@ -102,12 +102,6 @@ A.AboutPageBase {
                     ]
                 },
                 A.ContributionGroup {
-                    title: qsTr("Portuguese (Brazil)")
-                    entries: [
-                        "Thiago Carmona"
-                    ]
-                },
-                A.ContributionGroup {
                     title: qsTr("Norwegian Bokmål")
                     entries: [
                         "Allan Nordhøy"
@@ -131,6 +125,12 @@ A.AboutPageBase {
                     title: qsTr("Estonian")
                     entries: [
                         "Priit Jõerüüt"
+                    ]
+                },
+                A.ContributionGroup {
+                    title: qsTr("Brazilian Portuguese")
+                    entries: [
+                        "Thiago Carmona"
                     ]
                 }
             ]
