@@ -2,6 +2,8 @@
  * This file is part of harbour-expenditure.
  * SPDX-License-Identifier: GPL-3.0-or-later
  * SPDX-FileCopyrightText: 2023-2024 Mirian Margiani
+ * 
+ * Modified to include Splitwise sync functionality
  */
 
 import QtQuick 2.6
@@ -11,7 +13,7 @@ import Opal.SmartScrollbar 1.0 as S
 
 import "../components"
 import "../js/dates.js" as Dates
-import "../js/math.js" as M
+import "../js/storage.js" as Storage
 
 Page {
     id: root
@@ -27,6 +29,27 @@ Page {
         }
     }
 
+    // Splitwise sync component
+    SplitwiseSync {
+        id: splitwiseSync
+        
+        // IMPORTANT: Set your Splitwise group ID here
+        groupId: 0  // Replace with your group ID
+        
+        onSyncProgress: {
+            console.log("Sync progress: " + message)
+        }
+        
+        onSyncCompleted: {
+            console.log(success ? "Sync success: " + message : "Sync failed: " + message)
+            
+            // Show notification
+            if (success) {
+                // Optional: Show success banner
+            }
+        }
+    }
+
     SilicaListView {
         id: listView
         anchors.fill: parent
@@ -36,10 +59,6 @@ Page {
 
         header: PageHeader {
             title: qsTr("Expenses")
-
-            // the description must never be empty because the
-            // header height is not properly recalculated if the
-            // description is added later
             description: appWindow.activeProject.active ?
                              "%1 [%2]".arg(appWindow.activeProject.name)
                                       .arg(appWindow.activeProject.baseCurrency) :
@@ -64,6 +83,15 @@ Page {
                 onClicked: pageStack.animatorPush(Qt.resolvedUrl("SettingsPage.qml"))
             }
             MenuItem {
+                text: qsTr("Sync with Splitwise")
+                enabled: appWindow.activeProject.active && !splitwiseSync.syncing
+                visible: appWindow.activeProject.active && splitwiseSync.groupId !== 0
+                onClicked: {
+                    console.log("Starting Splitwise sync")
+                    splitwiseSync.startSync()
+                }
+            }
+            MenuItem {
                 text: qsTr("Calculate")
                 enabled: visible
                 onClicked: pageStack.animatorPush(Qt.resolvedUrl("CalcPage.qml"))
@@ -73,7 +101,7 @@ Page {
 
         ViewPlaceholder {
             id: busyPlaceholder
-            enabled: appWindow.loading
+            enabled: appWindow.loading || splitwiseSync.syncing
             verticalOffset: -listView.originY - height
 
             BusyIndicator {
@@ -81,11 +109,21 @@ Page {
                 running: parent.enabled
                 size: BusyIndicatorSize.Large
             }
+            
+            Label {
+                anchors.centerIn: parent
+                anchors.verticalCenterOffset: Theme.itemSizeMedium
+                visible: splitwiseSync.syncing
+                text: splitwiseSync.statusMessage
+                color: Theme.secondaryHighlightColor
+                font.pixelSize: Theme.fontSizeSmall
+            }
         }
 
         ViewPlaceholder {
             id: emptyPlaceholder
             enabled: !appWindow.loading &&
+                     !splitwiseSync.syncing &&
                      appWindow.activeProject.active &&
                      listView.count == 0
             text: qsTr("No entries yet")
@@ -95,38 +133,32 @@ Page {
         ViewPlaceholder {
             id: noProjectPlaceholder
             enabled: !appWindow.loading &&
+                     !splitwiseSync.syncing &&
                      !appWindow.activeProject.active
             text: qsTr("Add a project")
             hintText: qsTr("Pull down to open the settings page.")
         }
 
         model: appWindow.activeProject.expenses
-
-        // this improves scrolling performance but at the
-        // cost of longer loading times...
         cacheBuffer: 100 * Screen.height
 
         delegate: D.ThreeLineDelegate {
             id: item
-            showOddEven: false
+            minContentHeight: Theme.itemSizeExtraLarge
 
             title: Dates.formatDate(local_time, Dates.timeFormat, local_tz)
             text: name
             description: {
-                // FIXME linebreak causes binding loop on "height"
-                (info + "\n" + qsTr(
-                     "for %1", "as in “this payment was for Jane, John, and Jim”, " +
-                     "with plural based on the number of beneficiaries",
-                     beneficiaries_list.count).arg(beneficiaries_string)).trim()
+                (info + "\nfor %1".arg(beneficiaries_string)).trim()
             }
 
-            readonly property string effectiveRate: {
+            property double effectiveRate: {
                 if (!!rate) {
                     rate
                 } else if (appWindow.activeProject.exchangeRates.hasOwnProperty(currency)) {
-                    appWindow.activeProject.exchangeRates[currency] || ''
+                    appWindow.activeProject.exchangeRates[currency] || NaN
                 } else {
-                    ''
+                    NaN
                 }
             }
 
@@ -138,7 +170,8 @@ Page {
 
             rightItem: D.DelegateInfoItem {
                 title: payer
-                text: M.format(sum, appWindow.activeProject.precision) + ((!!percentage_fees || !!fixed_fees) ? '*' : '')
+                text: Number(sum).toLocaleCurrencyString(Qt.locale("de_CH"), ' ') + (
+                          (!!percentage_fees || !!fixed_fees) ? '*' : '')
                 description: currency.toString()
                 textLabel.font.pixelSize: Theme.fontSizeMedium
                 alignment: Qt.AlignRight
@@ -150,49 +183,44 @@ Page {
                 ContextMenu {
                     MenuLabel {
                         visible: currency !== appWindow.activeProject.baseCurrency ||
-                                 (!M.isNotNum(item.effectiveRate) && !M.value(item.effectiveRate).eq(1))
+                                 item.effectiveRate !== 1.00
                         text: {
-                            if (M.isNotNum(item.effectiveRate)) {
+                            if (Storage.isSameValue(item.effectiveRate, NaN)) {
                                 qsTr("set %1 → %2 exchange rate in project settings")
                                     .arg(currency).arg(appWindow.activeProject.baseCurrency)
                             } else {
                                 '%1 %2 × %3 = %4 %5'
-                                    .arg(M.format(sum, appWindow.activeProject.precision))
+                                    .arg(Number(sum).toLocaleString(Qt.locale("de_CH")))
                                     .arg(currency)
-                                    .arg(M.format(item.effectiveRate, 4))
-                                    .arg(M.format(M.value(sum).times(item.effectiveRate).toString(),
-                                                  appWindow.activeProject.precision))
+                                    .arg(item.effectiveRate)
+                                    .arg(Number(sum * item.effectiveRate).toLocaleString(Qt.locale("de_CH")))
                                     .arg(appWindow.activeProject.baseCurrency)
                             }
                         }
                     }
                     MenuLabel {
-                        visible: !M.isNotNum(item.effectiveRate) && (!!fixed_fees || !!percentage_fees)
+                        visible: !isNaN(item.effectiveRate) && (!!fixed_fees || !!percentage_fees)
                         text: {
                             if (!visible) return ''
-
-                            var precision = appWindow.activeProject.precision
                             var text = ''
-                            var sumConv = M.value(sum).times(item.effectiveRate)
-                            var total = M.value(sum).times(item.effectiveRate)
+                            var total = sum * item.effectiveRate
 
                             if (!!percentage_fees) {
-                                var percentCalc = sumConv.times(M.value(percentage_fees).div(100))
-                                total = total.plus(percentCalc)
+                                total += total * (percentage_fees/100)
                                 text += "+ %1 %2 (%3%) "
-                                    .arg(M.format(percentCalc, precision))
+                                    .arg(sum * item.effectiveRate * (percentage_fees/100))
                                     .arg(appWindow.activeProject.baseCurrency)
-                                    .arg(M.format(percentage_fees, precision))
+                                    .arg(Number(percentage_fees).toLocaleString(Qt.locale("de_CH")))
                             }
                             if (!!fixed_fees) {
-                                total = total.plus(fixed_fees)
+                                total += fixed_fees
                                 text += "+ %1 %2 "
-                                    .arg(M.format(fixed_fees, precision))
+                                    .arg(Number(fixed_fees).toLocaleString(Qt.locale("de_CH")))
                                     .arg(appWindow.activeProject.baseCurrency)
                             }
 
                             text += "= %1 %2"
-                                .arg(M.format(total, precision))
+                                .arg(Number(total).toLocaleString(Qt.locale("de_CH")))
                                 .arg(appWindow.activeProject.baseCurrency)
                             return text
                         }
