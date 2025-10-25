@@ -19,6 +19,8 @@ Source0:    %{name}-%{version}.tar.bz2
 Source100:  harbour-expenditure.yaml
 Requires:   sailfishsilica-qt5 >= 0.10.9
 Requires:   pyotherside-qml-plugin-python3-qt5 >= 1.5.0
+Requires: python3-requests >= 2.25.0
+Requires: python3-requests-oauthlib >= 1.3.0
 BuildRequires:  pkgconfig(sailfishapp) >= 1.0.2
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)
