@@ -41,6 +41,149 @@ Expenditure requires the following permissions:
 
 - PublicDir, UserDirs, RemovableMedia: to save exported reports
 
+  # Splitwise Sync Setup Guide for Expenditure
+
+This guide will help you set up automatic synchronization between the Expenditure app and Splitwise.
+
+## What You'll Need
+
+- A Splitwise account (free at https://www.splitwise.com)
+- About 10 minutes
+- A computer or your Sailfish device with terminal access
+
+---
+
+## Part 1: Get Splitwise API Credentials
+
+### Step 1: Register Your Application
+
+1. **Open your web browser** and go to: https://secure.splitwise.com/apps
+
+
+2. **Log in** to your Splitwise account if prompted
+
+3. **Click** the button that says **"Register your application"**
+
+4. **Fill in the registration form:**
+
+| Field | What to Enter |
+|-------|---------------|
+| **Application name** | `Expenditure Sync` (or any name you prefer) |
+| **Description** | `Personal app to sync Expenditure with Splitwise` |
+| **Homepage URL** | `http://localhost` |
+| **Callback URL** | `http://localhost/callback` |
+
+> **Note:** The URLs above are correct! They're used for the OAuth flow and don't need to be real websites.
+
+5. **Click "Save" or "Register"**
+
+6. **Copy your credentials** - You'll see two values displayed:
+- **Consumer Key** (looks like: `AnZ0vBRE4XKrIbpIOOVmjXG2E4FEFw058Zi7EM3z`)
+- **Consumer Secret** (looks like: `zFasvrF0PaB0HuxoOF2jYDFPHTVGlGsXOQoCo2De`)
+
+⚠️ **IMPORTANT:** Keep these secret! Don't share them publicly.
+
+---
+
+## Part 2: Get OAuth Access Tokens
+
+### Step 1: Install Python Dependencies
+
+**On your computer:**
+
+
+pip3 install requests-oauthlib
+**OR on Sailfish device:**
+devel-su
+pkcon install python3-requests-oauthlib
+exit
+### Step 2: Download the Token Generator Script
+
+Download `get_splitwise_tokens.py` from the repository:
+curl -LO https://raw.githubusercontent.com/smatkovi/harbour-expenditure/main/tools/get_splitwise_tokens.py
+OR copy it from the `tools/` folder in the repository.
+
+### Step 3: Run the Script
+python3 get_splitwise_tokens.py
+### Step 4: Follow the Interactive Prompts
+
+The script will guide you through the following:
+
+#### Prompt 1: Enter Consumer Key
+→ **Paste** the Consumer Key from Step 1 (from the Splitwise website)
+
+#### Prompt 2: Enter Consumer Secret
+→ **Paste** the Consumer Secret from Step 1
+
+#### Prompt 3: Authorize in Browser
+The script will display a URL like:
+1. **Copy** this entire URL
+2. **Paste** it into your web browser
+3. **Click "Authorize"** on the Splitwise page
+4. You'll be redirected to a page that says "This site can't be reached" - **THIS IS NORMAL!**
+
+#### Prompt 4: Copy Redirect URL
+Look at your browser's address bar. It will show something like:
+http://localhost/callback?oauth_token=abc123&oauth_verifier=xyz789
+
+1. **Copy** this ENTIRE URL from the address bar
+2. **Paste** it into the script when prompted:
+### Step 5: Get Your Tokens
+
+The script will now display all your credentials:
+for example
+============================================================
+SUCCESS! Your OAuth tokens:
+
+CONSUMER_KEY = "AnZ0vBRE4XKrIbpIOOVmjXG2E4FEFw058Zi7EM3z"
+CONSUMER_SECRET = "zFasvrF0PaB0HuxoOF2jYDFPHTVGlGsXOQoCo2De"
+OAUTH_TOKEN = "a4ZVh7h9FvdFtiyfBmkEVPOAVW8KbLoSEsxTmlW2"
+OAUTH_TOKEN_SECRET = "HZ6czJhTHy6yfRXqosnzhRRXOYwkn4KYwxxMlFVS"
+**SAVE THESE!** You'll need them in the next step.
+
+The script will also show your Splitwise groups:
+**Note the Group ID** for the group you want to sync with Expenditure.
+
+---
+
+## Part 3: Configure Expenditure
+
+### Option A: Manual Installation (Most Users)
+
+#### Step 1: Copy Configuration File
+
+On your Sailfish device:
+devel-su
+cd /usr/share/harbour-expenditure/qml/py
+cp splitwise_config.py.example splitwise_config.py
+
+#### Step 2: Edit Configuration
+vim splitwise_config.py
+FROM THIS:
+
+CONSUMER_KEY = "YOUR_CONSUMER_KEY_HERE"
+CONSUMER_SECRET = "YOUR_CONSUMER_SECRET_HERE"
+OAUTH_TOKEN = "YOUR_OAUTH_TOKEN_HERE"
+OAUTH_TOKEN_SECRET = "YOUR_OAUTH_TOKEN_SECRET_HERE"
+GROUP_ID = 0
+TO THIS (with your actual values):
+
+CONSUMER_KEY = "AnZ0vBRE4XKrIbpIOOVmjXG2E4FEFw058Zi7EM3z"
+CONSUMER_SECRET = "zFasvrF0PaB0HuxoOF2jYDFPHTVGlGsXOQoCo2De"
+OAUTH_TOKEN = "a4ZVh7h9FvdFtiyfBmkEVPOAVW8KbLoSEsxTmlW2"
+OAUTH_TOKEN_SECRET = "HZ6czJhTHy6yfRXqosnzhRRXOYwkn4KYwxxMlFVS"
+GROUP_ID = 89224428 # Your group ID from Step 5
+Save and exit (`:wq` in vi).
+
+#### Step 3: Configure Group ID in QML (Optional)
+
+If you want to override the group ID in the QML component:
+vim /usr/share/harbour-expenditure/qml/components/SplitwiseSync.qml
+Find line 11:
+property int groupId: 0 // SET YOUR GROUP ID HERE
+Change to:
+property int groupId: 89224428 // Your actual group ID
+
 ## Acknowledgements
 
 This app was originally created by Tobias Planitzer since 2022 up until version
